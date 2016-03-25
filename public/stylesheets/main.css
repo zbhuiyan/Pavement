@@ -1,0 +1,175 @@
+@font-face { font-family: Gotham; src: url('Gotham-Book.ttf'); } 
+@font-face { font-family: Entypo; src: url('fontello.ttf'); } 
+
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+}
+
+#content {
+	width: 100%;
+}
+
+.contextParent{
+    font-family: Gotham, sans-serif;
+    padding:10px;
+    text-align: center;
+}
+
+.contextChild {
+    margin:50px;
+}
+
+.contextPic{
+    margin-left: -25%;
+}
+
+.contextWelcome{
+    margin-top: -120px;
+    margin-left: 20%;
+}
+
+.proPic{
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 1em auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  -webkit-border-radius: 99em;
+  -moz-border-radius: 99em;
+  border-radius: 99em;
+}
+
+
+a:link, a:visited, a:hover, a:active {
+    border-radius: 50px;
+    background-color: #23CF5F;
+    color: white;
+    font-family: Gotham, sans-serif;
+    font-size: 20px;
+    padding: 14px 25px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block;
+}
+
+.header {
+	font-size: 200%;
+	padding: 10px;
+	justify-content: center;
+	border-bottom: solid 1px gray;
+}
+
+.spotweather {
+	font-family: Gotham, sans-serif;
+    position: absolute;
+    margin-top: 7px;
+    margin-left: 10px;
+
+}
+.get-weather {
+    font-family: Gotham, sans-serif;
+	color: gray;
+    margin-top:110px;
+}
+
+.logoutButton{
+    float:right;
+}
+
+.toggleContext{
+    text-align: left;
+    margin-left: 20%;
+}
+
+.toggle{
+    float:right;
+    margin-right:25%;
+    margin-top: -55px;
+}
+
+/*the below stlying and idea for the toggle button is from https://bufferwall.com/petersirka/2015-03-12-tutorial-simple-html-toggle-button/*/
+
+.toggle-button { 
+    background-color: white; 
+    margin: 5px 0; 
+    border-radius: 20px;
+    border: 2px solid #D0D0D0;
+    height: 24px;
+    cursor: pointer;
+    width: 50px;
+    position: relative; 
+    display: inline-block;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none; -moz-user-select: none;
+}
+
+.toggle-button button { 
+    cursor: pointer; 
+    outline: 0; 
+    display:block; 
+    position: absolute; 
+    left: 0; 
+    top: 0; 
+    border-radius: 100%; 
+    width: 30px; 
+    height: 30px; 
+    background-color: white; 
+    float: left; 
+    margin: -3px 0 0 -3px; 
+    border: 2px solid #D0D0D0; 
+    transition: left 0.3s;
+}
+
+.toggle-button-selected {
+    background-color: white; 
+    margin: 5px 0; 
+    border-radius: 20px;
+    border: 2px solid #D0D0D0;
+    height: 24px;
+    cursor: pointer;
+    width: 50px;
+    position: relative; 
+    display: inline-block;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none; -moz-user-select: none;
+    background-color: orange;
+    border: 2px solid orange;
+}
+
+.toggle-button-selected button {
+    cursor: pointer; 
+    outline: 0; 
+    display:block; 
+    position: absolute; 
+    left: 26px; 
+    top: 0; 
+    border-radius: 100%; 
+    width: 30px; 
+    height: 30px; 
+    float: right; 
+    margin: -3px 0 0 -3px;  
+    border: 2px solid #D0D0D0; 
+    transition: left 0.3s;
+    background-color: white; 
+    box-shadow: 0 0 4px rgba(0,0,0,0.1); 
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
