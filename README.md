@@ -6,7 +6,7 @@ Week # | Date | Objective
 Week 1 | Tuesday 3/22 
 Week 1 | Friday 3/25 
 Week 2 | Tuesday 3/29 
-Week 2 | Friday 4/1 | Set up collaborative async chat and have an interactive canvas set up (Design Review #1)
+Week 2 | Friday 4/1 | Set up collaborative async chat (with authentication) and have an interactive canvas set up (Design Review #1)
 Week 3 | Tuesday 4/5 
 Week 3 | Friday 4/8 | Integrate backend with frontend
 Week 4 | Tuesday 4/12 | 
