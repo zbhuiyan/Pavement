@@ -4,7 +4,7 @@ var App = React.createClass({
     render: function () {
         return (
             <div className='app'>
-                <Logo src="./images/light-up.svg" user={this.state.user}/>
+                <Logo />
             </div>
         )
     }
