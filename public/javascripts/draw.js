@@ -14,7 +14,7 @@ var Canvas = React.createClass({
 		// 	fillColor: 'grey',
 		// 	radius: 10
 		// });
-		paper.setup('myCanvas');
+		// paper.setup('myCanvas');
 		var path;
 		function onMouseDown(event) {
 			path = new Path();
@@ -36,6 +36,9 @@ var Canvas = React.createClass({
 		tool2.onMouseDrag = function(event) {
 			// Use the arcTo command to draw cloudy lines
 			path.arcTo(event.point);
+			// var radius = event.delta.length/2;
+			// var circle = new Path.Circle(event.middlePoint, radius);
+			// circle.fillColor = 'black';
 		}
 
 		// render
