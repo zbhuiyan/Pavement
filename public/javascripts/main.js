@@ -5,6 +5,7 @@ var App = React.createClass({
         return (
             <div className='app'>
                 <Logo />
+                <Canvas />
             </div>
         )
     }

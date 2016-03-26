@@ -1,45 +1,57 @@
-var canvas = new fabric.Canvas('canvas');
+var Canvas = React.createClass({
+	componentDidMount: function () {
+		//instatiate the paperScope with the canvas element
+		var myCanvas = document.getElementById('myCanvas');
+		paper.install(window);
+		paper.setup(myCanvas);
+		var tool1, tool2;
 
-var rect = new fabric.Rect({
-	top: 100,
-	left: 100,
-	width: 50,
-	height: 60,
-	fill: 'blue'
+		// Draw a circle in the center
+		// var width = paper.view.size.width;
+		// var height = paper.view.size.height;
+		// var circle = new paper.Shape.Circle({
+		// 	center: [width / 2, height/2],
+		// 	fillColor: 'grey',
+		// 	radius: 10
+		// });
+		paper.setup('myCanvas');
+		var path;
+		function onMouseDown(event) {
+			path = new Path();
+			path.strokeColor = 'black';
+			path.add(event.point);
+		}
 
-});
+		tool1 = new Tool();
+		tool1.onMouseDown = onMouseDown;
 
-canvas.add(rect);
+		tool1.onMouseDrag = function(event) {
+			path.add(event.point);
+		}
 
-canvas.on('mouse:down', function(option){
-	console.log(option);
-	if (typeof option.target != "undefined") {
-		return;
-	} else{
-		var startY = option.e.offsetY,
-			startX = option.e.offsetX;
-		console.log(startX, startY);
+		tool2 = new Tool();
+		tool2.minDistance = 20;
+		tool2.onMouseDown = onMouseDown;
 
-		var rect2 = new fabric.Rect({
-			top: startY,
-			left: startX,
-			width: 0,
-			height: 0,
-			fill: 'transparent',
-			stroke: 'red',
-			strokewidth: 4
-		});
-		canvas.add(rect2);
-		console.log(" added rect to canvas");
-		
-		canvas.on('mouse:move', function (option){
-			var e = option.e;
-			rect2.set('width', e.offsetX - e.offsetY); //width 
-			rect2.set('height', e.offsetY - e.offsetX);
-			rect2.setCoords();
-		});
+		tool2.onMouseDrag = function(event) {
+			// Use the arcTo command to draw cloudy lines
+			path.arcTo(event.point);
+		}
+
+		// render
+		// paper.view.draw();
+	},
+
+	render: function () {
+		return (
+			<div>
+				<a href="#" onclick="tool1.activate();">Lines</a>
+    			<a href="#" onclick="tool2.activate();">Clouds</a>
+				<canvas id="myCanvas" data-paper-resize></canvas>
+			</div>
+		);
 	}
+
 });
-canvas.on('mouse:up', function(){
-	canvas.off('mouse:move');
-});
+
+window.Canvas = Canvas;
