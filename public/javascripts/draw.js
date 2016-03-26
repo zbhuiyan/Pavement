@@ -31,12 +31,12 @@ canvas.on('mouse:down', function(option){
 		});
 		canvas.add(rect2);
 		console.log(" added rect to canvas");
-
+		
 		canvas.on('mouse:move', function (option){
 			var e = option.e;
 			rect2.set('width', e.offsetX - e.offsetY); //width 
 			rect2.set('height', e.offsetY - e.offsetX);
-			rect2.saveState();
+			rect2.setCoords();
 		});
 	}
 });
