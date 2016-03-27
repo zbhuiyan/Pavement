@@ -2,6 +2,8 @@ var Chat = require('../models/chatModel.js');
 
 var chatMethods = {};
 
+// THIS IS NOT A ROUTE IT WILL BE USED BY THE SOCKET
+
 chatMethods.addMessage = function(chatObj) {
 	/*
 		chatObj should look something like:
