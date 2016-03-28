@@ -7,9 +7,9 @@ module.exports.canAccessBoard = function(req, res, next) {
 	// GET BOARD AND CHECK IF IT IS PUBLIC HERE
 	Board.findOne({_id:boardId}, function(err, board) {
 		if(!err) {
-			if(board) {
+			if(board != null) {
 				if(board.isPublic) {
-					return next(req, res);
+					next(req, res);
 				} else {
 					// IF BOARD IS NOT PUBLIC
 					if(req.user != null) {
@@ -17,7 +17,7 @@ module.exports.canAccessBoard = function(req, res, next) {
 
 						// check to see if req.user._id is in board ids
 						if(board.users.indexOf(req.user._id) > -1) {
-							return next(req, res);
+							next(req, res);
 						} else {
 							res.redirect('/');
 						}
@@ -28,6 +28,7 @@ module.exports.canAccessBoard = function(req, res, next) {
 				res.redirect('/');
 			}
 		} else {
+			console.log(err);
 			res.redirect('/');
 		}
 	});

@@ -36,10 +36,10 @@ var board = require('./routes/board.js');
 var accessor = require('./passport/accessor.js');
 
 app.get('/', index.home);
-app.get('/draw/:board_id', accessor.canAccessBoard, index.draw);
-app.get('/users/me', user.currentUser);
+app.get('/draw/:boardId', accessor.canAccessBoard, index.draw);
+app.get('/me', user.currentUser);
 app.get('/users/:username', user.getUser);
-app.get('/messages/:board_id', chat.getChat);
+app.get('/messages/:boardId', chat.getChat);
 
 app.post('/login', passport.authenticate('signin', {
 	// WE SHOULD PROBABLY DO SOMETHING ABOUT THIS
@@ -51,6 +51,8 @@ app.post('/signup', passport.authenticate('signup', {
 	successRedirect:'/',
 	failureRedirect:'/'
 }));
+
+app.post('/board/add', board.add);
 
 // DO SOCKET STUFF HERE
 var openConnections = {};

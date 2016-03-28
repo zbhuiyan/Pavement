@@ -3,7 +3,7 @@ var Board = require('../models/boardModel.js');
 // wrapping up all the methods
 var boardRoutes = {};
 
-boardRoutes.addUser = function(res,req) {
+boardRoutes.addUser = function(req,res) {
 	var board = req.params.board;
 	var user = req.params.userId;
 	Board.findOneAndUpdate({_id:BoardId}, {$push: {users: user}}, {new:true}, function (err, board) {
@@ -17,17 +17,17 @@ boardRoutes.addUser = function(res,req) {
 	res.json(board.users.append(user));
 };
 
-boardRoutes.add = function(res,req) {
-	dbBoard = new Board(req.body);
+boardRoutes.add = function(req,res) {
+	dbBoardReq = req.body;
 	var user = req.user._id;
-	dbBoard = {
+	dbBoard = new Board({
 		users: [user], 
 		owner: user, 
-		name: dbBoard.name, 
-		isPublic: dbBoard.isPublic,
-		tags: dbBoard.tags,
+		name: dbBoardReq.name, 
+		isPublic: dbBoardReq.isPublic,
+		tags: dbBoardReq.tags,
 		timestamp: new Date()
-	};
+	});
 
 	dbBoard.save(function(err) {
 		if (err) {

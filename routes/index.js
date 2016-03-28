@@ -5,6 +5,7 @@ routes.home = function(req, res) {
 }
 
 routes.draw = function(req, res) {
+	console.log('hello');
 	res.send('I feel like something should happen here');
 }
 
