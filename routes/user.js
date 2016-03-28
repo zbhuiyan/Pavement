@@ -2,6 +2,14 @@ var User = require('../models/userModel.js');
 
 userRoutes = {};
 
+userRoutes.currentUser = function(req, res) {
+	if(req.user != null) {
+		res.json(req.user);
+	} else {
+		res.status(404).send('not currently logged in');
+	}
+}
+
 userRoutes.getUser = function(req, res) {
 	var usernameRegex = req.params.username;
 
