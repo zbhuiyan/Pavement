@@ -26,8 +26,8 @@ boardRoutes.add = function(res,req) {
 		name: dbBoard.name, 
 		isPublic: dbBoard.isPublic,
 		tags: dbBoard.tags,
-		timestamp: Date();
-	}
+		timestamp: new Date()
+	};
 
 	dbBoard.save(function(err) {
 		if (err) {

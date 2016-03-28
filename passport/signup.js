@@ -2,7 +2,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var User = require('../models/userModel.js');
-var hasher = require('hasher.js');
+var hasher = require('./hasher.js');
 
 module.exports = function(passport) {
 	passport.use('signup', new LocalStrategy({
@@ -15,7 +15,7 @@ module.exports = function(passport) {
 					// no user with that user name exists
 					newUser = new User({
 						username:username,
-						password:password
+						password:hashedPassword
 					});
 
 					newUser.save(function(err, user) {

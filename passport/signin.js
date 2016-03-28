@@ -2,7 +2,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var User = require('../models/userModel.js');
-var hasher = require('hasher.js');
+var hasher = require('./hasher.js');
 
 module.exports = function(passport) {
 	passport.use('signin', new LocalStrategy({
