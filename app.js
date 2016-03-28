@@ -53,6 +53,28 @@ app.post('/signup', passport.authenticate('signup', {
 }));
 
 // DO SOCKET STUFF HERE
+var openConnections = {};
+
+io.on('connection', function(socket) {
+	socket.on('setup', function(userInfo) {
+		openConnections[socket.id] = userInfo;
+
+		socket.join(openConnections[socket.id].boardId);
+	});
+
+	socket.on('chat', function(message) {
+		var socketInfo = openConnections[socket.id];
+
+		socket.broadcast.to(socketInfo.boardId).emit(message);
+
+		var chatObj = {};
+		chatObj.boardId = socketInfo.boardId;
+		chatObj.user = socketInfo.userId;
+		chatObj.message = message;
+
+		chat.addMessage(chatObj);
+	});
+});
 
 var PORT = process.env.PORT || 3000;
 
