@@ -81,6 +81,31 @@ var Canvas = React.createClass({
 			path.arcTo(event.point);
 		}
 	},
+
+
+	useCircle: function() {
+		this.tool.activate();
+		this.tool.onMouseDown = this.onMouseDown;
+		
+
+		this.tool.onMouseDrag = function(event){
+			var x = event.middlePoint.x;
+			var y = event.middlePoint.y;
+			var radius = event.delta.length/2;
+			var color = {
+						red: 0,
+						green: Math.random(),
+						blue: Math.random(),
+						alpha: ( Math.random() * 0.25 ) + 0.05
+						};
+
+			var circle = new Path.Circle(new Point(x, y), radius);
+		    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
+		    // Refresh the view, so we always get an update, even if the tab is not in focus
+		    view.draw();
+		}
+		
+	},
 	// setTool: function (tool) {
 	// 	tool.activate();
 	// },
@@ -91,6 +116,8 @@ var Canvas = React.createClass({
 				<canvas id="myCanvas" data-paper-resize></canvas>
 				<Button setTool={this.usePencil} tool={"Pencil"}/>
 				<Button setTool={this.useCloud} tool={"Cloud"}/>
+				<Button setTool={this.useCircle} tool={"Circle"}/>
+				
 			</div>
 		);
 	}
