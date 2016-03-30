@@ -1,5 +1,3 @@
-var socket = io();
-
 var ChatBox = React.createClass({displayName:'ChatBox',
 	getInitialState: function() {
 		return {
@@ -22,31 +20,14 @@ var ChatBox = React.createClass({displayName:'ChatBox',
 			}.bind(this)
 		});
 	},
-	sendSetupToSocket: function() {
-		$.ajax({
-			url:'/me',
-			dataType:'json',
-			cache:false,
-			success: function(data) {
-				socket.emit('setup', {
-					boardId:this.props.boardId,
-					userId:data.username
-				});
-			}.bind(this),
-			error: function(xhr, status, err) {
-				console.log('error occurred');
-			}.bind(this)
-		});
-	},
 	setupSocketHandlers: function() {
-		socket.on('send_message', this.handleSocketData);
+		this.props.socket.on('send_message', this.handleSocketData);
 	},
 	handleSocketData: function(payload) {
 		this.setState({data:this.state.data.concat([payload])});
 	},
 	componentDidMount: function() {
 		this.getOldMessages();
-		this.sendSetupToSocket();
 		this.setupSocketHandlers();
 	},
 	render:function() {
@@ -54,7 +35,7 @@ var ChatBox = React.createClass({displayName:'ChatBox',
 			<div className='chatBox'>
 				<h1>Chat</h1>
 				<ChatList data={this.state.data} />
-				<ChatForm />
+				<ChatForm socket={this.props.socket} />
 			</div>
 		);
 	}
@@ -85,7 +66,7 @@ var ChatForm = React.createClass({displayName:'ChatForm',
 	handleSubmit: function(e) {
 		e.preventDefault();
 
-		socket.emit('chat', this.state.message);
+		this.props.socket.emit('chat', this.state.message);
 
 		this.setState({message:''});
 	},
