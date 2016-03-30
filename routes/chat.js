@@ -16,11 +16,11 @@ chatMethods.addMessage = function(chatObj) {
 
 	dbChat = new Chat(chatObj);
 
-	dbChat.save(function(err) {
+	dbChat.save(function(err, addedChat) {
 		if(!err) {
-			return 201; // resource created
+			return addedChat; // resource created
 		} else {
-			return 500; // Internal server error
+			return null; // Internal server error
 		}
 	});
 };
@@ -28,7 +28,7 @@ chatMethods.addMessage = function(chatObj) {
 chatMethods.getChat = function(req, res) {
 	var boardId = req.params.boardId;
 
-	Chat.find({boardId:boardId}).sort({timestamp:-1}).exec(function(err, messages) {
+	Chat.find({boardId:boardId}).sort({timestamp:1}).exec(function(err, messages) {
 		if(!err) {
 			if(messages) {
 				res.json(messages);

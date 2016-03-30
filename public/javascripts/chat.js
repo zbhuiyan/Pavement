@@ -1,8 +1,10 @@
+var socket = io();
+
 var ChatBox = React.createClass({displayName:'ChatBox',
 	getInitialState: function() {
 		return {data:[]};
 	},
-	componentDidMount: function() {
+	getOldMessages: function() {
 		$.ajax({
 			url: this.props.url,
 			dataType:'json',
@@ -14,6 +16,33 @@ var ChatBox = React.createClass({displayName:'ChatBox',
 				console.log(this.props.url, status, err.toString());
 			}.bind(this)
 		});
+	},
+	sendSetupToSocket: function() {
+		$.ajax({
+			url:'/me',
+			dataType:'json',
+			cache:false,
+			success: function(data) {
+				socket.emit('setup', {
+					boardId:this.props.boardId,
+					userId:data.username
+				});
+			}.bind(this),
+			error: function(xhr, status, err) {
+				console.log('error occurred');
+			}.bind(this)
+		});
+	},
+	setupSocketHandlers: function() {
+		socket.on('send_message', this.handleSocketData);
+	},
+	handleSocketData: function(payload) {
+		this.setState({data:this.state.data.concat([payload])});
+	},
+	componentDidMount: function() {
+		this.getOldMessages();
+		this.sendSetupToSocket();
+		this.setupSocketHandlers();
 	},
 	render:function() {
 		return (
@@ -42,9 +71,30 @@ var ChatList = React.createClass({displayName:'ChatList',
 });
 
 var ChatForm = React.createClass({displayName:'ChatForm',
+	getInitialState: function() {
+		return {message:''};
+	},
+	handleMessageChange: function(e) {
+		this.setState({message: e.target.value});
+	},
+	handleSubmit: function(e) {
+		e.preventDefault();
+
+		socket.emit('chat', this.state.message);
+
+		this.setState({message:''});
+	},
 	render:function() {
-		return React.createElement('div', {className:'chatForm'},
-			'This is a chat form');
+		return (
+			<form className='chatForm' onSubmit={this.handleSubmit} >
+				<input type='text' 
+				placeholder='message' 
+				value={this.state.message}
+				onChange={this.handleMessageChange} />
+
+				<input type='submit' value='Send' />
+			</form>
+		);
 	}
 });
 

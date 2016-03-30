@@ -8,6 +8,7 @@ var passport = require('passport');
 var initPassport = require('./passport/initPassport.js');
 var expressSession = require('express-session');
 var auth = require('./auth.js');
+var hasher = require('./passport/hasher.js');
 
 var app = express();
 var http = require('http').Server(app);
@@ -59,20 +60,29 @@ var openConnections = {};
 
 io.on('connection', function(socket) {
 	socket.on('setup', function(userInfo) {
+		console.log('Setting up for ', userInfo);
 		openConnections[socket.id] = userInfo;
 
 		socket.join(openConnections[socket.id].boardId);
 	});
 
 	socket.on('chat', function(message) {
-		var socketInfo = openConnections[socket.id];
 
-		socket.broadcast.to(socketInfo.boardId).emit(message);
+		var socketInfo = openConnections[socket.id];
+		var sendMsg = {user:socketInfo.userId,
+			msg:message,
+			_id:hasher(message+socketInfo.userId)};
+
+
+		console.log('socketConnected', socketInfo);
+
+		//socket.to(socketInfo.boardId).emit('send_message', sendMsg);
+		io.to(socketInfo.boardId).emit('send_message', sendMsg);
 
 		var chatObj = {};
 		chatObj.boardId = socketInfo.boardId;
 		chatObj.user = socketInfo.userId;
-		chatObj.message = message;
+		chatObj.msg = message;
 
 		chat.addMessage(chatObj);
 	});
