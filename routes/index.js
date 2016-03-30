@@ -1,3 +1,5 @@
+var path = require('path');
+
 var routes = {};
 
 routes.home = function(req, res) {
@@ -5,8 +7,7 @@ routes.home = function(req, res) {
 }
 
 routes.draw = function(req, res) {
-	console.log(req.params);
-	res.send('I feel like something should happen here');
+	res.sendFile('drawing.html', { root: path.join(__dirname, '../public/') });
 }
 
 module.exports = routes;

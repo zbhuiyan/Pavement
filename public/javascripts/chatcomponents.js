@@ -2,18 +2,23 @@ var socket = io();
 
 var ChatBox = React.createClass({displayName:'ChatBox',
 	getInitialState: function() {
-		return {data:[]};
+		return {
+			data:[]
+		};
 	},
 	getOldMessages: function() {
+		var url = '../messages/' + this.props.boardId;
 		$.ajax({
-			url: this.props.url,
+			url: url,
 			dataType:'json',
 			cache:false,
 			success: function(data) {
+				console.log(data);
 				this.setState({data:data});
 			}.bind(this),
 			error: function(xhr, status, err) {
-				console.log(this.props.url, status, err.toString());
+				console.log(xhr);
+				//console.log('../messages/' + this.state.boardId, status, err.toString());
 			}.bind(this)
 		});
 	},
