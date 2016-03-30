@@ -1,9 +1,25 @@
 var ChatBox = React.createClass({displayName:'ChatBox',
+	getInitialState: function() {
+		return {data:[]};
+	},
+	componentDidMount: function() {
+		$.ajax({
+			url: this.props.url,
+			dataType:'json',
+			cache:false,
+			success: function(data) {
+				this.setState({data:data});
+			}.bind(this),
+			error: function(xhr, status, err) {
+				console.log(this.props.url, status, err.toString());
+			}.bind(this)
+		});
+	},
 	render:function() {
 		return (
 			<div className='chatBox'>
 				<h1>Chat</h1>
-				<ChatList data={this.props.data} />
+				<ChatList data={this.state.data} />
 				<ChatForm />
 			</div>
 		);
@@ -14,7 +30,7 @@ var ChatList = React.createClass({displayName:'ChatList',
 	render:function() {
 		var nodes = this.props.data.map(function(chat) {
 			return (
-				<ChatMessage author={chat.author} text={chat.text} key={chat.id} />
+				<ChatMessage user={chat.user} msg={chat.msg} key={chat._id} />
 			);
 		});
 		return (
@@ -37,10 +53,10 @@ var ChatMessage = React.createClass({displayName:'ChatMessage',
 		return (
 			<div className='chatMessage'>
 				<h2 className='chatText'>
-					{this.props.text}
+					{this.props.msg}
 				</h2>
 				<h5 className='chatAuthor'>
-					-- {this.props.author}
+					-- {this.props.user}
 				</h5>
 			</div>
 		);

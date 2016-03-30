@@ -26,12 +26,12 @@ chatMethods.addMessage = function(chatObj) {
 };
 
 chatMethods.getChat = function(req, res) {
-	var boardId = req.params.board_id;
+	var boardId = req.params.boardId;
 
 	Chat.find({boardId:boardId}).sort({timestamp:-1}).exec(function(err, messages) {
 		if(!err) {
 			if(messages) {
-				res.json(message);
+				res.json(messages);
 			} else {
 				res.status(404).send('could not find any messages for that board');
 			}
