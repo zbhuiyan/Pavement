@@ -104,6 +104,29 @@ var Canvas = React.createClass({
 		    // Refresh the view, so we always get an update, even if the tab is not in focus
 		    view.draw();
 		}
+	},
+
+	useRectangle: function() {
+		this.tool.activate();
+		this.tool.onMouseDown = this.onMouseDown;
+		
+		this.tool.onMouseDrag = function(event){
+			var x = event.point.x;
+			var y = event.point.y;
+			// var radius = event.delta.length/2; //the further your mouse movement the bigger the circle
+			var color = {
+						red: 0,
+						green: Math.random(),
+						blue: Math.random(),
+						alpha: ( Math.random() * 0.25 ) + 0.05
+						};
+
+			var rectangle = new Rectangle(new Point(x, y), new Point(x+60,y+80));
+			var path = new Path.Rectangle(rectangle);
+		    path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
+		    // Refresh the view, so we always get an update, even if the tab is not in focus
+		    view.draw();
+		}
 		
 	},
 	// setTool: function (tool) {
@@ -117,6 +140,7 @@ var Canvas = React.createClass({
 				<Button setTool={this.usePencil} tool={"Pencil"}/>
 				<Button setTool={this.useCloud} tool={"Cloud"}/>
 				<Button setTool={this.useCircle} tool={"Circle"}/>
+				<Button setTool={this.useRectangle} tool={"Rectangle"}/>
 				
 			</div>
 		);
