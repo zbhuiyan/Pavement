@@ -78,6 +78,7 @@ var Canvas = React.createClass({
 		this.tool.onMouseDrag = function(event) {
 			// Use the arcTo command to draw cloudy lines
 			console.log('on onMouseDrag');
+			path.strokeWidth = 5;
 			path.arcTo(event.point);
 		}
 	},
