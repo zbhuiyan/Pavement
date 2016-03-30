@@ -91,7 +91,7 @@ var Canvas = React.createClass({
 		this.tool.onMouseDrag = function(event){
 			var x = event.middlePoint.x;
 			var y = event.middlePoint.y;
-			var radius = event.delta.length/2;
+			var radius = event.delta.length/2; //the further your mouse movement the bigger the circle
 			var color = {
 						red: 0,
 						green: Math.random(),
