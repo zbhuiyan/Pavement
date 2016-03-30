@@ -1,20 +1,17 @@
+var windowPathComponents = window.location.pathname.split('/');
+var boardId = windowPathComponents[windowPathComponents.length-1];
 
 var App = React.createClass({
-	getBoardInformation: function() {
-		var windowPathComponents = window.location.pathname.split('/');
-		return windowPathComponents[windowPathComponents.length-1];
-	},
     render: function () {
-    	var boardId = this.getBoardInformation();
         return (
             <div className='app'>
-                <ChatBox boardId={boardId} />
+                <ChatBox boardId={this.props.boardId} />
             </div>
         )
     }
 });
 
 ReactDOM.render(
-  <App />,
+  <App boardId={boardId} />,
   document.getElementById('content')
 );
