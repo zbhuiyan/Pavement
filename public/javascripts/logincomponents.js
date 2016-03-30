@@ -1,9 +1,25 @@
 var FormViewControl = React.createClass({
 	displayName:'FormViewControl',
+	render: function() {
+		return (
+			<div className='FormViewControl'>
+				<h1>Sign Up</h1>
+				<SignUpForm />
+
+				<h1>Sign In</h1>
+				<SignInForm />
+			</div>
+		)
+	}
+});
+
+var SignUpForm = React.createClass({
+	displayName:'SignUpForm',
 	getInitialState: function() {
-		userId:'',
-		username:'',
-		password:''
+		return {
+			username:'',
+			password:''
+		};
 	},
 	handleUsernameChange: function(e) {
 		this.setState({username:e.target.value});
@@ -11,38 +27,66 @@ var FormViewControl = React.createClass({
 	handlePasswordChange: function(e) {
 		this.setState({password:e.target.value});
 	},
-	handleSignUp: function() {
-		// TODO handle signup
-	},
-	handleSignIn: function() {
-		// TODO handle signin
-	},
 	render: function() {
-		if(userId === '') {
-			return (
-				<div className='FormViewControl'>
-					<h1>Sign Up</h1>
-					<form>
-						<input type='text'
-								placeholder='Desired Username'
-								onChange={this.handleUsernameChange} /><br />
+		return (
+			<div className='SignUpForm'>
+				<form method='POST' action='/signup'>
+					<input type='text'
+							placeholder='desired username'
+							name='username'
+							value={this.state.username}
+							onChange={this.handleUsernameChange} /><br />
 
-						<input type='password'
-								placeholder='Password'
-								onChange={this.handlePasswordChange} /><br />
+					<input type='password'
+							placeholder='password'
+							name='password'
+							value={this.state.password}
+							onChange={this.handlePasswordChange} /><br />
 
-						// TODO: combine signup and signin
-						<button onClick={this.handleSignUp}>Sign Up</button>
-						<button onClick={this.handleSignIn}>Sign In</button>
-					</form>
-				</div>
-			)
-		} else {
-			return (
-				<div className='FormViewControl'>
-					<BoardList />
-				</div>
-			)
-		}
+					<input type='submit'
+							value='Sign Up' />
+				</form>
+			</div>
+		)
 	}
 });
+
+var SignInForm = React.createClass({
+	displayName:'SignInForm',
+	getInitialState: function() {
+		return {
+			username:'',
+			password:''
+		};
+	},
+	handleUsernameChange: function(e) {
+		this.setState({username:e.target.value});
+	},
+	handlePasswordChange: function(e) {
+		this.setState({password:e.target.value});
+	},
+	render: function() {
+		return (
+			<div className='SignInForm'>
+				<form method='POST' action='login' onSubmit={this.handleSubmit}>
+					<input type='text'
+							placeholder='username'
+							name='username'
+							value={this.state.username}
+							onChange={this.handleUsernameChange} /><br />
+
+					<input type='password'
+							placeholder='password'
+							name='password'
+							value={this.state.password}
+							onChange={this.handlePasswordChange} /><br />
+
+					<input type='submit'
+							value='Sign In' />
+				</form>
+			</div>
+		)
+	}
+});
+
+window.FormViewControl = FormViewControl;

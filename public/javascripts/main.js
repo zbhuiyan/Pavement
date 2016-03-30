@@ -5,7 +5,7 @@ var App = React.createClass({
     render: function () {
         return (
             <div className='app'>
-                Some stuff will go here
+                <FormViewControl />
             </div>
         )
     }

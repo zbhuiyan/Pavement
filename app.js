@@ -41,19 +41,21 @@ app.get('/draw/:boardId', accessor.canAccessBoard, index.draw);
 app.get('/me', user.currentUser);
 app.get('/users/:username', user.getUser);
 app.get('/messages/:boardId', chat.getChat);
+app.get('/dashboard', index.dashboard);
 
 app.post('/login', passport.authenticate('signin', {
 	// WE SHOULD PROBABLY DO SOMETHING ABOUT THIS
-	successRedirect:'/',
+	successRedirect:'/dashboard',
 	failureRedirect:'/'
 }));
 
 app.post('/signup', passport.authenticate('signup', {
-	successRedirect:'/',
+	successRedirect:'/dashboard',
 	failureRedirect:'/'
 }));
 
 app.post('/board/add', board.add);
+app.post('/dashboard', index.dashboard);
 
 // DO SOCKET STUFF HERE
 var openConnections = {};

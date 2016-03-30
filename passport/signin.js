@@ -12,11 +12,14 @@ module.exports = function(passport) {
 		User.findOne({username:username, password:hashedPassword}, function(err, user) {
 			if(!err) {
 				if(user) {
+					console.log('login succeeded');
 					return done(null, user);
 				} else {
+					console.log('login failed');
 					return done(null, false);
 				}
 			} else {
+				console.log('error occurred');
 				return done(err);
 			}
 		});
