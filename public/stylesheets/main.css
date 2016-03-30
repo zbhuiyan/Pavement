@@ -1,6 +1,10 @@
 /*@font-face { font-family: Gotham; src: url('Gotham-Book.ttf'); } 
 @font-face { font-family: Entypo; src: url('fontello.ttf'); } */
-
+canvas{
+        height: 400px;
+        width: 400px;
+        border: 1px solid black;
+}
 
 /*body {
     display: flex;
@@ -64,18 +68,6 @@ a:link, a:visited, a:hover, a:active {
 	border-bottom: solid 1px gray;
 }
 
-/*.spotweather {
-	font-family: Gotham, sans-serif;
-    position: absolute;
-    margin-top: 7px;
-    margin-left: 10px;
-
-}*/
-.get-weather {
-    font-family: Gotham, sans-serif;
-	color: gray;
-    margin-top:110px;
-}
 
 
 
