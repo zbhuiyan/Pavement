@@ -55,7 +55,7 @@ var Canvas = React.createClass({
 
 	usePencil: function () {
 		// this.setState({tool: "Pencil"});
-		console.log("pencil");
+		// console.log("pencil");
 		this.tool = new Tool();
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
@@ -161,7 +161,17 @@ var Canvas = React.createClass({
 	// setTool: function (tool) {
 	// 	tool.activate();
 	// },
+	useEraser: function() {
+		this.tool.activate();
+		this.tool.onMouseDown = this.onMouseDown;
 
+		this.tool.onMouseDrag = function(event){
+			console.log('eraser is being called')
+			path.strokeColor = 'white';
+			path.strokeWidth = 30;
+			path.add(event.point);
+		}
+	},
 
 	render: function () {
 		return (
@@ -172,8 +182,7 @@ var Canvas = React.createClass({
 				<Button setTool={this.useCircle} tool={"Circle"}/>
 				<Button setTool={this.useRectangle} tool={"Rectangle"}/>
 				<Button setTool={this.useEllipse} tool={"Ellipse"}/>
-
-				
+				<Button setTool={this.useEraser} tool={"Erase"}/>
 			</div>
 		);
 	}
