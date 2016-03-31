@@ -140,7 +140,7 @@ var Canvas = React.createClass({
 			var y = event.point.y;
 			// var radius = event.delta.length/2; //the further your mouse movement the bigger the circle
 			var color = {
-						red: 0,
+						red: Math.random(),
 						green: Math.random(),
 						blue: Math.random(),
 						alpha: ( Math.random() * 0.25 ) + 0.05
@@ -149,7 +149,7 @@ var Canvas = React.createClass({
 			var ellipse = new Shape.Ellipse({
 				point: [x,y],
 				size: [180,60],
-				fillColor: new Color(color.blue, color.blue, color.green, color.alpha)
+				fillColor: new Color(color.green, color.red, color.blue, color.alpha)
 			});
 			// var path = new Path.Rectangle(rectangle);
 		    // path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
