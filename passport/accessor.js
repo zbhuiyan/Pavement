@@ -34,3 +34,11 @@ module.exports.canAccessBoard = function(req, res, next) {
 		res.redirect('/');
 	}
 };
+
+module.exports.isLoggedIn = function(req, res, next) {
+	if(req.user != null) {
+		return next();
+	} else {
+		res.redirect('/');
+	}
+};

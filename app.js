@@ -41,7 +41,9 @@ app.get('/draw/:boardId', accessor.canAccessBoard, index.draw);
 app.get('/me', user.currentUser);
 app.get('/users/:username', user.getUser);
 app.get('/messages/:boardId', chat.getChat);
-app.get('/dashboard', index.dashboard);
+app.get('/dashboard', accessor.isLoggedIn, index.dashboard);
+app.get('/myBoards', board.getAvailablePrivateBoards);
+app.get('/publicBoards', board.getPublic);
 
 app.post('/login', passport.authenticate('signin', {
 	// WE SHOULD PROBABLY DO SOMETHING ABOUT THIS

@@ -55,9 +55,35 @@ boardRoutes.getUserBoards = function(req,res) {
 	});
 };
 
+boardRoutes.getAvailablePrivateBoards = function(req, res) {
+	if(req.user != null) {
+		Board.find({users:{'$in':[req.user._id]}}, function(err, boards) {
+			if(!err) {
+				if(boards) {
+					res.json(boards);
+				} else {
+					res.status(404).send('could not find boards');
+				}
+			} else {
+				res.status(500).send('error finding all boards');
+			}
+		});
+	} else {
+		res.status(403).send('not logged in');
+	}
+}
+
 boardRoutes.getPublic = function(req,res) {
 	Board.find({"isPublic": true}, function (err, publicBoards) {
-		res.json(publicBoards);
+		if(!err) {
+			if(publicBoards) {
+				res.json(publicBoards);
+			} else {
+				res.status(404).send('could not find any boards');
+			}
+		} else {
+			res.status(500).send('error on finding public boards');
+		}
 	});
 
 
