@@ -76,8 +76,7 @@ var BoardElement = React.createClass({
 	render:function() {
 		return (
 			<div className='BoardElement'>
-				<h3>{this.props.name}</h3>
-				<h6>Created by {this.props.owner}</h6>
+				<h3>Board: {this.props.name}</h3>
 				<button onClick={this.handleClick}>Join</button>
 			</div>
 		)
