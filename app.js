@@ -90,6 +90,11 @@ io.on('connection', function(socket) {
 
 		chat.addMessage(chatObj);
 	});
+
+	socket.on('disconnect', function() {
+		console.log('disconnecting...');
+		delete openConnections[socket.id];
+	});
 });
 
 var PORT = process.env.PORT || 3000;
