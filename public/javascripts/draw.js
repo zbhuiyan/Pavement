@@ -2,6 +2,7 @@ var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
 paper.setup(myCanvas);
 var path;
+// var DomParser = bundle.require('DomParser');
 // var svgString = myCanvas.innerHTML;
 var Canvas = React.createClass({
 	getInitialState: function() {
@@ -189,10 +190,12 @@ var Canvas = React.createClass({
 	importSVG: function(){
 		this.tool.activate();
 		var svgReader = new FileReader();
-		// var contentAsObject = new xmldom.DomParser().parseFromString(svgContent, 'image/svg+xml');
+		parser = new DOMParser();
+		var contentAsObject = parser.parseFromString(svgContent, 'image/svg+xml');
 		paper.project.clear();
-		// paper.project.importSVG(contentAsObject);
+		paper.project.importSVG(contentAsObject);
 
+		//not yet working, it gives a reference error for DomParser... 
 
 	},
 

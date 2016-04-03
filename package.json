@@ -15,6 +15,7 @@
     "body-parser": "^1.15.0",
     "browserify": "^13.0.0",
     "cookie-parser": "^1.4.1",
+    "domparser": "^0.1.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "filereader": "^0.10.3",
