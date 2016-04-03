@@ -175,67 +175,8 @@ var Canvas = React.createClass({
 	download: function(fileName) {
 
 		this.tool.activate();
-	// 	// this.tool.onMouseDown = this.onMouseDown;
 
-	// 	// if (!fileName){
-	// 	// 	fileName = 'paperjs_test.svg'
-	// 	// }
-
-
-		// var link = document.createElement('a');
-		// console.log('link', link);
-		// fileName = "paperjs_example.svg";
 		var svg = paper.project.exportSVG({asString:true});
-		// console.log('svg',svg);
-		// var url = 'data:image/svg+xmll;utf8,' + encodeURIComponent(paper.project.exportSVG({asString:true}));
-		// console.log('url', url);
-	// 	this.tool.onKeyUp = function(event){
-	// 		if(event.character == "S") { //shift + S
-		// link.download = fileName;
-		// link.type = 'image/svg+xml';
-		// var blob = new Blob([svg], {"type":'image/svg+xml'});
-	// 	console.log(blob);
-		// link.href = (window.URL || webkitURL).createObjectURL(blob);
-	// 	console.log(link.href);
-	// 	console.log('trynna save');
-		// link.href = url;
-		// link.click();
-
-		// saveSvgAsPng(myCanvas, "test.png")
-
-
-		// var impoRt = importSVG(localhost:3000/d5443215-61c3-455f-9673-90b88557373e, console.log('ya?'));
-		
-	
-		// ctx.fillText('click link below', 15, myCanvas.height/2+35);
-		// this.tool.onMouseDown = function(link, canvasId, filename){
-		// 	link.href = document.getElementById(canvasId).toDataURL();
-			// link.download = filename;
-		// }
-		// var myCanvas = document.getElementById('myCanvas');
-// 
-		// var ctx = myCanvas.getContext('2d');
-
-		// console.log('im in download');
-		// // var serializer = new XMLSerializer();
-	
-		// // console.log(svg);
-		// myCanvas.toBlob(function(blob){
-		// 	saveAs(new Blob([svg],{type:"application/svg+xml"}), "test.svg");
-		// })
-		// var blob = new Blob([svg], {type: "image/svg+xml;charset=utf-8"});
-		// var folders = {images: './images'};
-		// filesaver = new FileSaver({ folders: folders, safenames: true });
-		// filesaver.add('images', ./path/to/file.jpg, 'photo.jpg', function(err, data){
-		// 	console.log(data);
-		// });
-		// var canavas = document.getElementById('c');
-		// var cxt = canavas.getContext('2d');
-		// var downloadLink = document.getElementById('download-canavas');
-		// cxt.fillRect(100, 100,200,200);
-		// cxt.clearRect(150,150,100,100);
-		// downloadLink.href = canavas.toDataURL();
-		// downloadLink.download = "squares.png";
 		var a = document.createElement('a');
 		a.download = 'mySvg.svg';
 		a.type = 'image/svg+xml';
@@ -245,7 +186,21 @@ var Canvas = React.createClass({
 
 	},
 
-				// <a id="download-canvas" href = "#"> Download </a>
+	importSVG: function(){
+		this.tool.activate();
+		var svgReader = new FileReader();
+		// var contentAsObject = new xmldom.DomParser().parseFromString(svgContent, 'image/svg+xml');
+		paper.project.clear();
+		// paper.project.importSVG(contentAsObject);
+
+
+	},
+
+	clearCanvas: function(){
+
+		this.tool.activate();
+		paper.project.clear();
+	},
 
 
 
@@ -260,6 +215,8 @@ var Canvas = React.createClass({
 				<Button setTool={this.useEllipse} tool={"Ellipse"}/>
 				<Button setTool={this.useEraser} tool={"Erase"}/>
 				<Button setTool={this.download} tool={'Download'}/>
+				<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
+				<Button setTool={this.importSVG} tool={'Import SVG'}/>
 			</div>
 		);
 	}
