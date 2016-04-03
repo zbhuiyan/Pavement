@@ -11,12 +11,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "BlobBuilder": "^0.10.0",
     "body-parser": "^1.15.0",
     "browserify": "^13.0.0",
     "cookie-parser": "^1.4.1",
     "crypto": "0.0.3",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "domparser": "^0.1.1",
+    "filereader": "^0.10.3",
+    "filesaver": "0.0.13",
     "mongoose": "^4.4.10",
     "morgan": "^1.7.0",
     "paper": "^0.9.25",
@@ -24,8 +28,12 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "react": "^0.14.7",
+    "react-jade": "^2.5.0",
     "react-router": "^2.0.1",
     "request": "^2.69.0",
-    "socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "save-svg-as-png": "^1.0.2",
+    "socket.io": "^1.4.5",
+    "xmldom": "^0.1.22"
   }
 }
