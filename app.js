@@ -91,8 +91,8 @@ io.on('connection', function(socket) {
 		chat.addMessage(chatObj);
 	});
 
-	socket.on('drawCircle', function(data) {
-		io.to(openConnections[socket.id].boardId).emit('drawCircle', data);
+	socket.on('draw', function(data) {
+		io.to(openConnections[socket.id].boardId).emit(data.method, data);
 	});
 
 	socket.on('disconnect', function() {
