@@ -91,6 +91,10 @@ io.on('connection', function(socket) {
 		chat.addMessage(chatObj);
 	});
 
+	socket.on('draw', function(data) {
+		io.to(openConnections[socket.id].boardId).emit(data.method, data);
+	});
+
 	socket.on('disconnect', function() {
 		console.log('disconnecting...');
 		delete openConnections[socket.id];

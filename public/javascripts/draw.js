@@ -6,7 +6,7 @@ var path;
 // var svgString = myCanvas.innerHTML;
 var Canvas = React.createClass({
 	getInitialState: function() {
-		return {tool: this.usePencil()};
+		return {tool: this.usePencil(), lastPoint:[0, 0]};
 	},
 	componentDidMount: function () {
 		//instatiate the paperScope with the canvas element
@@ -29,6 +29,9 @@ var Canvas = React.createClass({
 		this.tool.onMouseDrag = function(event) {
 			path.add(event.point);
 		}
+
+
+		this.setupReceiver();
 
 		// tool2 = new Tool();
 		// tool2.minDistance = 20;
@@ -54,6 +57,7 @@ var Canvas = React.createClass({
 			path = new Path();
 			path.strokeColor = 'black';
 			path.add(event.point);
+			this.setState({lastPoint:event.point});
 	},
 
 	usePencil: function () {
@@ -64,8 +68,16 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event) {
+			var data = {};
+			data.toPoint = event.point;
+			data.lastPoint = this.state.lastPoint;
+
+			this.setState({lastPoint:event.point});
+
+			this.emitEvent('drawPencil', data);
+
 			path.add(event.point);
-		}
+		}.bind(this);
 		
 	},
 
@@ -77,10 +89,21 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event) {
-			// Use the arcTo command to draw cloudy lines
-			path.strokeWidth = 5;
-			path.arcTo(event.point);
-		}
+			// Use the arcTo command to draw cloudy lines;
+			// path.strokeWidth = 5;
+			// path.arcTo(event.point);
+
+			// console.log(event.point);
+
+			var data = {};
+			data.toPoint = event.point;
+			data.lastPoint = this.state.lastPoint;
+
+			this.setState({lastPoint:event.point});
+
+			this.emitEvent('drawCloud', data)
+
+		}.bind(this);
 	},
 
 
@@ -90,21 +113,21 @@ var Canvas = React.createClass({
 		
 
 		this.tool.onMouseDrag = function(event){
-			var x = event.middlePoint.x;
-			var y = event.middlePoint.y;
-			var radius = event.delta.length/2; //the further your mouse movement the bigger the circle
-			var color = {
+			var data = {}
+
+			data.x = event.middlePoint.x;
+			data.y = event.middlePoint.y;
+			data.radius = event.delta.length/2; //the further your mouse movement the bigger the circle
+			data.color = {
 						red: 0,
 						green: Math.random(),
 						blue: Math.random(),
 						alpha: ( Math.random() * 0.25 ) + 0.05
 						};
 
-			var circle = new Path.Circle(new Point(x, y), radius);
-		    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
-		    // Refresh the view, so we always get an update, even if the tab is not in focus
-		    view.draw();
-		}
+			this.emitEvent('drawCircle', data);
+
+		}.bind(this);
 	},
 
 	useRectangle: function() {
@@ -112,22 +135,21 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 		
 		this.tool.onMouseDrag = function(event){
-			var x = event.point.x;
-			var y = event.point.y;
+			var data = {};
+
+			data.x = event.point.x;
+			data.y = event.point.y;
 			// var radius = event.delta.length/2; //the further your mouse movement the bigger the circle
-			var color = {
+			data.color = {
 						red: 0,
 						green: Math.random(),
 						blue: Math.random(),
 						alpha: ( Math.random() * 0.25 ) + 0.05
 						};
 
-			var rectangle = new Rectangle(new Point(x, y), new Point(x+60,y+80));
-			var path = new Path.Rectangle(rectangle);
-		    path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
-		    // Refresh the view, so we always get an update, even if the tab is not in focus
-		    view.draw();
-		}
+			this.emitEvent('drawRectangle', data);
+
+		}.bind(this);
 		
 	},
 
@@ -136,26 +158,30 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 		
 		this.tool.onMouseDrag = function(event){
-			var x = event.point.x;
-			var y = event.point.y;
+			var data = {};
+
+			data.x = event.point.x;
+			data.y = event.point.y;
 			// var radius = event.delta.length/2; //the further your mouse movement the bigger the circle
-			var color = {
+			data.color = {
 						red: Math.random(),
 						green: Math.random(),
 						blue: Math.random(),
 						alpha: ( Math.random() * 0.25 ) + 0.05
 						};
 
-			var ellipse = new Shape.Ellipse({
-				point: [x,y],
-				size: [180,60],
-				fillColor: new Color(color.green, color.red, color.blue, color.alpha)
-			});
-			// var path = new Path.Rectangle(rectangle);
-		    // path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
-		    // Refresh the view, so we always get an update, even if the tab is not in focus
-		    view.draw();
-		}
+			this.emitEvent('drawEllipse', data);
+
+			// var ellipse = new Shape.Ellipse({
+			// 	point: [x,y],
+			// 	size: [180,60],
+			// 	fillColor: new Color(color.green, color.red, color.blue, color.alpha)
+			// });
+			// // var path = new Path.Rectangle(rectangle);
+		 //    // path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
+		 //    // Refresh the view, so we always get an update, even if the tab is not in focus
+		 //    view.draw();
+		}.bind(this);
 		
 	},
 	// setTool: function (tool) {
@@ -206,6 +232,81 @@ var Canvas = React.createClass({
 	},
 
 
+	drawCircle: function(data) {
+		var x = data.x;
+		var y = data.y;
+		var radius = data.radius;
+		var color = data.color;
+
+		var circle = new Path.Circle(new Point(x, y), radius);
+	    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
+	    // Refresh the view, so we always get an update, even if the tab is not in focus
+	    view.draw();
+	},
+
+	drawRectangle: function(data) {
+		var x = data.x;
+		var y = data.y;
+		var color = data.color;
+
+		var rectangle = new Rectangle(new Point(x, y), new Point(x+60,y+80));
+		var path = new Path.Rectangle(rectangle);
+	    path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
+
+	    view.draw();
+	},
+
+	drawEllipse: function(data) {
+		var x = data.x;
+		var y = data.y;
+		var color = data.color;
+
+		var ellipse = new Shape.Ellipse({
+			point: [x,y],
+			size: [180,60],
+			fillColor: new Color(color.green, color.red, color.blue, color.alpha)
+		});
+		// var path = new Path.Rectangle(rectangle);
+	    // path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
+	    // Refresh the view, so we always get an update, even if the tab is not in focus
+	    view.draw();
+	},
+
+	drawCloud: function(data) {
+		var path = new Path();
+		path.strokeColor = 'black';
+		path.strokeWidth = 5;
+		path.add({x:data.lastPoint[1], y:data.lastPoint[2]});
+		path.arcTo({x:data.toPoint[1], y:data.toPoint[2]});
+
+		// console.log(path);
+
+		view.draw();
+	},
+
+	drawPencil: function(data) {
+		var path = new Path();
+		path.strokeColor = 'black';
+		path.add({x:data.lastPoint[1], y:data.lastPoint[2]});
+		path.add({x:data.toPoint[1], y:data.toPoint[2]});
+
+		// console.log(path);
+
+		view.draw();
+	},
+
+	emitEvent: function(eventName, data) {
+		data.method = eventName;
+		this.props.socket.emit('draw', data);
+	},
+
+	setupReceiver: function(data) {
+		this.props.socket.on('drawCircle', this.drawCircle);
+		this.props.socket.on('drawRectangle', this.drawRectangle);
+		this.props.socket.on('drawEllipse', this.drawEllipse);
+		this.props.socket.on('drawCloud', this.drawCloud);
+		this.props.socket.on('drawPencil', this.drawPencil);
+	},
 
 	render: function () {
 		return (
