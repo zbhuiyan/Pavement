@@ -68,8 +68,16 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event) {
+			var data = {};
+			data.toPoint = event.point;
+			data.lastPoint = this.state.lastPoint;
+
+			this.setState({lastPoint:event.point});
+
+			this.emitEvent('drawPencil', data);
+
 			path.add(event.point);
-		}
+		}.bind(this);
 		
 	},
 
@@ -82,8 +90,10 @@ var Canvas = React.createClass({
 
 		this.tool.onMouseDrag = function(event) {
 			// Use the arcTo command to draw cloudy lines;
-			path.strokeWidth = 5;
-			path.arcTo(event.point);
+			// path.strokeWidth = 5;
+			// path.arcTo(event.point);
+
+			// console.log(event.point);
 
 			var data = {};
 			data.toPoint = event.point;
@@ -263,15 +273,24 @@ var Canvas = React.createClass({
 	},
 
 	drawCloud: function(data) {
-		// Not working?
-
 		var path = new Path();
 		path.strokeColor = 'black';
 		path.strokeWidth = 5;
-		path.add(data.lastPoint);
-		path.arcTo(data.toPoint);
+		path.add({x:data.lastPoint[1], y:data.lastPoint[2]});
+		path.arcTo({x:data.toPoint[1], y:data.toPoint[2]});
 
-		console.log(path);
+		// console.log(path);
+
+		view.draw();
+	},
+
+	drawPencil: function(data) {
+		var path = new Path();
+		path.strokeColor = 'black';
+		path.add({x:data.lastPoint[1], y:data.lastPoint[2]});
+		path.add({x:data.toPoint[1], y:data.toPoint[2]});
+
+		// console.log(path);
 
 		view.draw();
 	},
@@ -286,6 +305,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('drawRectangle', this.drawRectangle);
 		this.props.socket.on('drawEllipse', this.drawEllipse);
 		this.props.socket.on('drawCloud', this.drawCloud);
+		this.props.socket.on('drawPencil', this.drawPencil);
 	},
 
 	render: function () {
