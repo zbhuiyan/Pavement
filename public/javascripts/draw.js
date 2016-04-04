@@ -30,6 +30,9 @@ var Canvas = React.createClass({
 			path.add(event.point);
 		}
 
+
+		this.setupReceiver();
+
 		// tool2 = new Tool();
 		// tool2.minDistance = 20;
 		// tool2.onMouseDown = onMouseDown;
@@ -90,21 +93,26 @@ var Canvas = React.createClass({
 		
 
 		this.tool.onMouseDrag = function(event){
-			var x = event.middlePoint.x;
-			var y = event.middlePoint.y;
-			var radius = event.delta.length/2; //the further your mouse movement the bigger the circle
-			var color = {
+			var data = {}
+
+			data.x = event.middlePoint.x;
+			data.y = event.middlePoint.y;
+			data.radius = event.delta.length/2; //the further your mouse movement the bigger the circle
+			data.color = {
 						red: 0,
 						green: Math.random(),
 						blue: Math.random(),
 						alpha: ( Math.random() * 0.25 ) + 0.05
 						};
 
-			var circle = new Path.Circle(new Point(x, y), radius);
-		    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
-		    // Refresh the view, so we always get an update, even if the tab is not in focus
-		    view.draw();
-		}
+			//this.drawCircle(data);
+			this.emitEvent('drawCircle', data);
+
+			// var circle = new Path.Circle(new Point(x, y), radius);
+		 //    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
+		 //    // Refresh the view, so we always get an update, even if the tab is not in focus
+		 //    view.draw();
+		}.bind(this);
 	},
 
 	useRectangle: function() {
@@ -206,6 +214,25 @@ var Canvas = React.createClass({
 	},
 
 
+	drawCircle: function(data) {
+		var x = data.x;
+		var y = data.y;
+		var radius = data.radius;
+		var color = data.color;
+
+		var circle = new Path.Circle(new Point(x, y), radius);
+	    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
+	    // Refresh the view, so we always get an update, even if the tab is not in focus
+	    view.draw();
+	},
+
+	emitEvent: function(eventName, data) {
+		this.props.socket.emit(eventName, data);
+	},
+
+	setupReceiver: function(data) {
+		this.props.socket.on('drawCircle', this.drawCircle);
+	},
 
 	render: function () {
 		return (

@@ -24,7 +24,7 @@ var App = React.createClass({
             <div className='app'>
                 <ChatBox socket={socket} boardId={this.props.boardId} />
                 <Logo />
-                <Canvas />
+                <Canvas socket={socket} />
             </div>
         )
     }
