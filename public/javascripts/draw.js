@@ -40,6 +40,7 @@ var Canvas = React.createClass({
 			path = new Path();
 			path.strokeColor = 'black';
 			path.add(event.point);
+			path.simplify(300);
 			this.setState({lastPoint:event.point});
 	},
 
