@@ -2,6 +2,9 @@ var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
 paper.setup(myCanvas);
 var path;
+
+var colorPicked = 'black'; // default color used
+
 // var DomParser = bundle.require('DomParser');
 // var svgString = myCanvas.innerHTML;
 var Canvas = React.createClass({
@@ -20,7 +23,7 @@ var Canvas = React.createClass({
 		// this.path;
 		function onMouseDown(event) {
 			path = new Path();
-			path.strokeColor = 'black';
+			path.strokeColor = colorPicked;
 			path.add(event.point);
 		}
 		this.tool = new Tool();
@@ -38,7 +41,7 @@ var Canvas = React.createClass({
 
 	onMouseDown: function (event) {
 			path = new Path();
-			path.strokeColor = 'black';
+			path.strokeColor = colorPicked;
 			path.add(event.point);
 			this.setState({lastPoint:event.point});
 	},
@@ -214,6 +217,14 @@ var Canvas = React.createClass({
 		paper.project.clear();
 	},
 
+	pickColor: function(){
+		this.tool.activate();
+		var input = prompt("Please enter a hex color", "#12A8B3");
+		if (input != null) {
+			colorPicked = input;
+		}
+	},
+
 
 	drawCircle: function(data) {
 		var x = data.x;
@@ -269,7 +280,7 @@ var Canvas = React.createClass({
 
 	drawPencil: function(data) {
 		var path = new Path();
-		path.strokeColor = 'black';
+		path.strokeColor = colorPicked;
 		path.add({x:data.lastPoint[1], y:data.lastPoint[2]});
 		path.add({x:data.toPoint[1], y:data.toPoint[2]});
 
@@ -301,6 +312,7 @@ var Canvas = React.createClass({
 				<Button setTool={this.useRectangle} tool={"Rectangle"}/>
 				<Button setTool={this.useEllipse} tool={"Ellipse"}/>
 				<Button setTool={this.useEraser} tool={"Erase"}/>
+				<Button setTool={this.pickColor} tool={"Pick Color"}/>
 				<Button setTool={this.download} tool={'Download'}/>
 				<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 				<Button setTool={this.importSVG} tool={'Import SVG'}/>
