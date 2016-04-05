@@ -233,7 +233,8 @@ var Canvas = React.createClass({
 	clearCanvas: function(){
 
 		this.tool.activate();
-		paper.project.clear();
+		
+		this.emitEvent('clear', {});
 	},
 
 
@@ -280,7 +281,6 @@ var Canvas = React.createClass({
 	drawCloud: function(data) {
 		paths[data.id].strokeColor = 'black';
 		paths[data.id].strokeWidth = 5;
-		paths[data.id].add({x:data.lastPoint[1], y:data.lastPoint[2]});
 		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
 
 		// console.log(path);
@@ -311,6 +311,10 @@ var Canvas = React.createClass({
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 	},
 
+	receiveClear: function(data) {
+		paper.project.clear();
+	},
+
 	emitEvent: function(eventName, data) {
 		data.method = eventName;
 		this.props.socket.emit('draw', data);
@@ -324,6 +328,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('drawPencil', this.drawPencil);
 		this.props.socket.on('erase', this.erase);
 		this.props.socket.on('setPath', this.setPath);
+		this.props.socket.on('clear', this.receiveClear);
 	},
 
 	render: function () {
