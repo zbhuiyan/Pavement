@@ -192,11 +192,19 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event){
-			console.log('eraser is being called')
-			path.strokeColor = 'white';
-			path.strokeWidth = 30;
-			path.add(event.point);
-		}
+			//console.log('eraser is being called')
+			// path.strokeColor = 'white';
+			// path.strokeWidth = 30;
+			// path.add(event.point);
+
+			var data = {};
+			data.lastPoint = this.state.lastPoint;
+			data.toPoint = event.point;
+
+			this.emitEvent('erase', data);
+
+			this.setState({lastPoint:event.point});
+		}.bind(this);
 	},
 
 	download: function(fileName) {
@@ -295,6 +303,16 @@ var Canvas = React.createClass({
 		view.draw();
 	},
 
+	erase: function(data) {
+		var path = new Path();
+		path.strokeColor = 'white';
+		path.strokeWidth = 30;
+		path.add({x:data.lastPoint[1], y:data.lastPoint[2]});
+		path.add({x:data.toPoint[1], y:data.toPoint[2]});
+
+		view.draw();
+	},
+
 	emitEvent: function(eventName, data) {
 		data.method = eventName;
 		this.props.socket.emit('draw', data);
@@ -306,6 +324,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('drawEllipse', this.drawEllipse);
 		this.props.socket.on('drawCloud', this.drawCloud);
 		this.props.socket.on('drawPencil', this.drawPencil);
+		this.props.socket.on('erase', this.erase);
 	},
 
 	render: function () {
