@@ -76,7 +76,7 @@ var Canvas = React.createClass({
 
 			this.emitEvent('drawPencil', data);
 
-			path.add(event.point);
+			//path.add(event.point);
 		}.bind(this);
 		
 	},
