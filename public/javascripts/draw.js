@@ -17,7 +17,7 @@ var Canvas = React.createClass({
 
 		paper.setup('myCanvas');
 		
-		// this.path;
+		
 		function onMouseDown(event) {
 			path = new Path();
 			path.strokeColor = 'black';
@@ -74,10 +74,6 @@ var Canvas = React.createClass({
 
 		this.tool.onMouseDrag = function(event) {
 			// Use the arcTo command to draw cloudy lines;
-			// path.strokeWidth = 5;
-			// path.arcTo(event.point);
-
-			// console.log(event.point);
 
 			var data = {};
 			data.toPoint = event.point;
@@ -101,7 +97,7 @@ var Canvas = React.createClass({
 
 			data.x = event.middlePoint.x;
 			data.y = event.middlePoint.y;
-			data.radius = event.delta.length/2; //the further your mouse movement the bigger the circle
+			data.radius = event.delta.length/2; //the faster your mouse speed the bigger the circle
 			data.color = {
 						red: 0,
 						green: Math.random(),
@@ -123,7 +119,6 @@ var Canvas = React.createClass({
 
 			data.x = event.point.x;
 			data.y = event.point.y;
-			// var radius = event.delta.length/2; //the further your mouse movement the bigger the circle
 			data.color = {
 						red: 0,
 						green: Math.random(),
@@ -156,21 +151,10 @@ var Canvas = React.createClass({
 
 			this.emitEvent('drawEllipse', data);
 
-			// var ellipse = new Shape.Ellipse({
-			// 	point: [x,y],
-			// 	size: [180,60],
-			// 	fillColor: new Color(color.green, color.red, color.blue, color.alpha)
-			// });
-			// // var path = new Path.Rectangle(rectangle);
-		 //    // path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
-		 //    // Refresh the view, so we always get an update, even if the tab is not in focus
-		 //    view.draw();
 		}.bind(this);
 		
 	},
-	// setTool: function (tool) {
-	// 	tool.activate();
-	// },
+	
 	useEraser: function() {
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
@@ -199,13 +183,18 @@ var Canvas = React.createClass({
 
 	importSVG: function(){
 		this.tool.activate();
+		// paper.project.clear();
 		var svgReader = new FileReader();
-		parser = new DOMParser();
-		var contentAsObject = parser.parseFromString(svgContent, 'image/svg+xml');
-		paper.project.clear();
+		var parser = new DOMParser();
+		var d;
+
+		var stringContainingXMLSource = 'file:///home/zarin/Downloads/mySvg%20(5).svg';
+		// d = document.getElementById('stringContainingXMLSource');
+		// var svgText = d.innerHTML;
+		var contentAsObject = parser.parseFromString(stringContainingXMLSource, 'image/svg+xml');
+		console.log(contentAsObject);
 		paper.project.importSVG(contentAsObject);
 
-		//not yet working, it gives a reference error for DomParser... 
 
 	},
 
@@ -250,8 +239,7 @@ var Canvas = React.createClass({
 			size: [180,60],
 			fillColor: new Color(color.green, color.red, color.blue, color.alpha)
 		});
-		// var path = new Path.Rectangle(rectangle);
-	    // path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
+		
 	    // Refresh the view, so we always get an update, even if the tab is not in focus
 	    view.draw();
 	},
