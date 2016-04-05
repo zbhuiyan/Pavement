@@ -1,12 +1,12 @@
 var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
 paper.setup(myCanvas);
-var path;
+var paths = {};
 // var DomParser = bundle.require('DomParser');
 // var svgString = myCanvas.innerHTML;
 var Canvas = React.createClass({
 	getInitialState: function() {
-		return {tool: this.usePencil(), lastPoint:[0, 0]};
+		return {tool: this.usePencil()};
 	},
 	componentDidMount: function () {
 		//instatiate the paperScope with the canvas element
@@ -54,10 +54,14 @@ var Canvas = React.createClass({
 	},
 
 	onMouseDown: function (event) {
-			path = new Path();
-			path.strokeColor = 'black';
-			path.add(event.point);
-			this.setState({lastPoint:event.point});
+			// paths.me = new Path();
+			// paths.me.strokeColor = 'black';
+			// paths.me.add(event.point);
+
+			var data = {};
+			data.toPoint = event.point;
+
+			this.emitEvent('setPath', data);
 	},
 
 	usePencil: function () {
@@ -70,9 +74,6 @@ var Canvas = React.createClass({
 		this.tool.onMouseDrag = function(event) {
 			var data = {};
 			data.toPoint = event.point;
-			data.lastPoint = this.state.lastPoint;
-
-			this.setState({lastPoint:event.point});
 
 			this.emitEvent('drawPencil', data);
 
@@ -97,9 +98,6 @@ var Canvas = React.createClass({
 
 			var data = {};
 			data.toPoint = event.point;
-			data.lastPoint = this.state.lastPoint;
-
-			this.setState({lastPoint:event.point});
 
 			this.emitEvent('drawCloud', data)
 
@@ -197,13 +195,12 @@ var Canvas = React.createClass({
 			// path.strokeWidth = 30;
 			// path.add(event.point);
 
+			// console.log('path: ', path);
+
 			var data = {};
-			data.lastPoint = this.state.lastPoint;
 			data.toPoint = event.point;
 
 			this.emitEvent('erase', data);
-
-			this.setState({lastPoint:event.point});
 		}.bind(this);
 	},
 
@@ -281,11 +278,10 @@ var Canvas = React.createClass({
 	},
 
 	drawCloud: function(data) {
-		var path = new Path();
-		path.strokeColor = 'black';
-		path.strokeWidth = 5;
-		path.add({x:data.lastPoint[1], y:data.lastPoint[2]});
-		path.arcTo({x:data.toPoint[1], y:data.toPoint[2]});
+		paths[data.id].strokeColor = 'black';
+		paths[data.id].strokeWidth = 5;
+		paths[data.id].add({x:data.lastPoint[1], y:data.lastPoint[2]});
+		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
 
 		// console.log(path);
 
@@ -293,10 +289,9 @@ var Canvas = React.createClass({
 	},
 
 	drawPencil: function(data) {
-		var path = new Path();
-		path.strokeColor = 'black';
-		path.add({x:data.lastPoint[1], y:data.lastPoint[2]});
-		path.add({x:data.toPoint[1], y:data.toPoint[2]});
+		paths[data.id].strokeWidth = 30;
+		paths[data.id].strokeColor = 'black';
+		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 
 		// console.log(path);
 
@@ -304,13 +299,16 @@ var Canvas = React.createClass({
 	},
 
 	erase: function(data) {
-		var path = new Path();
-		path.strokeColor = 'white';
-		path.strokeWidth = 30;
-		path.add({x:data.lastPoint[1], y:data.lastPoint[2]});
-		path.add({x:data.toPoint[1], y:data.toPoint[2]});
+		paths[data.id].strokeWidth = 30;
+		paths[data.id].strokeColor = 'white';
+		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 
 		view.draw();
+	},
+
+	setPath: function(data) {
+		paths[data.id] = new Path();
+		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 	},
 
 	emitEvent: function(eventName, data) {
@@ -325,6 +323,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('drawCloud', this.drawCloud);
 		this.props.socket.on('drawPencil', this.drawPencil);
 		this.props.socket.on('erase', this.erase);
+		this.props.socket.on('setPath', this.setPath);
 	},
 
 	render: function () {
