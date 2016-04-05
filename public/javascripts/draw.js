@@ -60,15 +60,19 @@ var Canvas = React.createClass({
 			this.emitEvent('setPath', data);
 	},
 
+	// ***** EMITTING EVENTS *****
+
 	usePencil: function () {
 		this.tool = new Tool();
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event) {
+			// packing the data
 			var data = {};
 			data.toPoint = event.point;
 
+			// emiting the data
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
 		
@@ -80,9 +84,11 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event) {
+			// packing the data
 			var data = {};
 			data.toPoint = event.point;
 
+			// emitting the data
 			this.emitEvent('drawCloud', data)
 
 		}.bind(this);
@@ -95,6 +101,7 @@ var Canvas = React.createClass({
 		
 
 		this.tool.onMouseDrag = function(event){
+			// packing the data
 			var data = {}
 
 			data.x = event.middlePoint.x;
@@ -107,6 +114,7 @@ var Canvas = React.createClass({
 						alpha: ( Math.random() * 0.25 ) + 0.05
 						};
 
+			// emitting the data
 			this.emitEvent('drawCircle', data);
 
 		}.bind(this);
@@ -117,6 +125,7 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 		
 		this.tool.onMouseDrag = function(event){
+			// packing the data
 			var data = {};
 
 			data.x = event.point.x;
@@ -128,6 +137,7 @@ var Canvas = React.createClass({
 						alpha: ( Math.random() * 0.25 ) + 0.05
 						};
 
+			// emitting the data
 			this.emitEvent('drawRectangle', data);
 
 		}.bind(this);
@@ -139,6 +149,7 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 		
 		this.tool.onMouseDrag = function(event){
+			// packing the data
 			var data = {};
 
 			data.x = event.point.x;
@@ -150,6 +161,7 @@ var Canvas = React.createClass({
 						alpha: ( Math.random() * 0.25 ) + 0.05
 						};
 
+			// emitting the data
 			this.emitEvent('drawEllipse', data);
 		}.bind(this);
 		
@@ -160,12 +172,22 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event){
+			// packing the data
 			var data = {};
 			data.toPoint = event.point;
 
+			// emitting the data
 			this.emitEvent('erase', data);
 		}.bind(this);
 	},
+
+	clearCanvas: function(){
+		this.tool.activate();
+		
+		this.emitEvent('clear', {});
+	},
+
+	// ***** ADDITIONAL NON-COLLABORATIVE FUNCTIONALITY *****
 
 	download: function(fileName) {
 
@@ -193,43 +215,81 @@ var Canvas = React.createClass({
 
 	},
 
-	clearCanvas: function(){
 
-		this.tool.activate();
-		
-		this.emitEvent('clear', {});
+	// ***** RECEIVING FUNCTIONALITY *****
+
+	setPath: function(data) {
+		// This function adds to the path drawn by a user
+		// This allows for a smoother continuous line
+
+		paths[data.id] = new Path();
+
+		// Add the initial point
+		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 	},
 
+	drawPencil: function(data) {
+		// This function adds a pencil point
+		paths[data.id].strokeColor = 'black';
+		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
+
+		// this refreshes the view
+		view.draw();
+	},
+
+	drawCloud: function(data) {
+		// This function adds a cloud to the path
+		paths[data.id].strokeColor = 'black';
+		paths[data.id].strokeWidth = 5;
+		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
+
+		// this refreshes the view
+		view.draw();
+	},
 
 	drawCircle: function(data) {
+		// This function adds a circle, it does not need a user's path
+
+		// unpack the data
 		var x = data.x;
 		var y = data.y;
 		var radius = data.radius;
 		var color = data.color;
 
+		// create the object
 		var circle = new Path.Circle(new Point(x, y), radius);
 	    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
+	    
 	    // Refresh the view, so we always get an update, even if the tab is not in focus
 	    view.draw();
 	},
 
 	drawRectangle: function(data) {
+		// This function adds a rectangle, it does not need a user's path
+
+		// unpack the data
 		var x = data.x;
 		var y = data.y;
 		var color = data.color;
 
+		// create the object
 		var rectangle = new Rectangle(new Point(x, y), new Point(x+60,y+80));
 		var path = new Path.Rectangle(rectangle);
 	    path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
 
+	    // refresh the view
 	    view.draw();
 	},
 
 	drawEllipse: function(data) {
+		// This functions adds an ellipse, it does not need a user's path
+
+		// unpack the data
 		var x = data.x;
 		var y = data.y;
 		var color = data.color;
 
+		// create the object
 		var ellipse = new Shape.Ellipse({
 			point: [x,y],
 			size: [180,60],
@@ -240,52 +300,43 @@ var Canvas = React.createClass({
 	    view.draw();
 	},
 
-	drawCloud: function(data) {
-		paths[data.id].strokeColor = 'black';
-		paths[data.id].strokeWidth = 5;
-		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
-
-		view.draw();
-	},
-
-	drawPencil: function(data) {
-		paths[data.id].strokeWidth = 30;
-		paths[data.id].strokeColor = 'black';
-		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-
-		view.draw();
-	},
-
 	erase: function(data) {
+		// This function "erases," right now it adds a white line over things
+		// It requires a user's path to make a continuous line
+
+		// Adds to the path object
 		paths[data.id].strokeWidth = 30;
 		paths[data.id].strokeColor = 'white';
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 
+		// Refreshes the view
 		view.draw();
 	},
 
-	setPath: function(data) {
-		paths[data.id] = new Path();
-		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-	},
-
 	receiveClear: function(data) {
+		// This function clears the project
 		paper.project.clear();
 	},
 
+	// ***** SOCKET FUNCTIONALITY *****
+
 	emitEvent: function(eventName, data) {
+		// This passes the event to the server 
+		// the server repackages it so that I didn't have to write a bunch of functions that all did the same thing
+
 		data.method = eventName;
 		this.props.socket.emit('draw', data);
 	},
 
 	setupReceiver: function(data) {
+		// These are all of the receiver functions
+		this.props.socket.on('setPath', this.setPath);
+		this.props.socket.on('drawPencil', this.drawPencil);
+		this.props.socket.on('drawCloud', this.drawCloud);
 		this.props.socket.on('drawCircle', this.drawCircle);
 		this.props.socket.on('drawRectangle', this.drawRectangle);
 		this.props.socket.on('drawEllipse', this.drawEllipse);
-		this.props.socket.on('drawCloud', this.drawCloud);
-		this.props.socket.on('drawPencil', this.drawPencil);
 		this.props.socket.on('erase', this.erase);
-		this.props.socket.on('setPath', this.setPath);
 		this.props.socket.on('clear', this.receiveClear);
 	},
 
