@@ -1,7 +1,11 @@
 var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
 paper.setup(myCanvas);
+
+var colorPicked = 'black'; // default color used
+
 var paths = {};
+
 // var DomParser = bundle.require('DomParser');
 // var svgString = myCanvas.innerHTML;
 var Canvas = React.createClass({
@@ -20,7 +24,7 @@ var Canvas = React.createClass({
 		// this.path;
 		function onMouseDown(event) {
 			path = new Path();
-			path.strokeColor = 'black';
+			path.strokeColor = colorPicked;
 			path.add(event.point);
 		}
 		this.tool = new Tool();
@@ -37,10 +41,10 @@ var Canvas = React.createClass({
 	},
 
 	onMouseDown: function (event) {
-			var data = {};
-			data.toPoint = event.point;
+		var data = {};
+		data.toPoint = event.point;
 
-			this.emitEvent('setPath', data);
+		this.emitEvent('setPath', data);
 	},
 
 	// ***** EMITTING EVENTS *****
@@ -54,7 +58,7 @@ var Canvas = React.createClass({
 			// packing the data
 			var data = {};
 			data.toPoint = event.point;
-
+			data.strokeColor = colorPicked;
 			// emiting the data
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
@@ -70,6 +74,7 @@ var Canvas = React.createClass({
 			// packing the data
 			var data = {};
 			data.toPoint = event.point;
+			data.strokeColor = colorPicked;
 
 			// emitting the data
 			this.emitEvent('drawCloud', data)
@@ -195,7 +200,6 @@ var Canvas = React.createClass({
 		paper.project.importSVG(contentAsObject);
 
 		//not yet working, it gives a reference error for DomParser... 
-
 	},
 
 
@@ -213,16 +217,24 @@ var Canvas = React.createClass({
 
 	drawPencil: function(data) {
 		// This function adds a pencil point
-		paths[data.id].strokeColor = 'black';
+		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 
 		// this refreshes the view
 		view.draw();
 	},
 
+	pickColor: function(){
+		this.tool.activate();
+		var input = prompt("Please enter a hex color", "#12A8B3");
+		if (input != null) {
+			colorPicked = input;
+		}
+	},
+
 	drawCloud: function(data) {
 		// This function adds a cloud to the path
-		paths[data.id].strokeColor = 'black';
+		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].strokeWidth = 5;
 		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
 
@@ -333,6 +345,7 @@ var Canvas = React.createClass({
 				<Button setTool={this.useRectangle} tool={"Rectangle"}/>
 				<Button setTool={this.useEllipse} tool={"Ellipse"}/>
 				<Button setTool={this.useEraser} tool={"Erase"}/>
+				<Button setTool={this.pickColor} tool={"Pick Color"}/>
 				<Button setTool={this.download} tool={'Download'}/>
 				<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 				<Button setTool={this.importSVG} tool={'Import SVG'}/>
