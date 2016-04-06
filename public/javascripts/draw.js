@@ -224,6 +224,12 @@ var Canvas = React.createClass({
 		view.draw();
 	},
 
+	/*
+	pickColor takes a hex color in via a js popup prompt and saves it to colorPicked
+
+	When a tool is selected, it pack the color into the data which is then used in the 
+	`draw` functions 	
+	*/
 	pickColor: function(){
 		this.tool.activate();
 		var input = prompt("Please enter a hex color", "#12A8B3");
