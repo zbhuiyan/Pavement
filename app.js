@@ -92,6 +92,7 @@ io.on('connection', function(socket) {
 	});
 
 	socket.on('draw', function(data) {
+		data.id = openConnections[socket.id].userId;
 		io.to(openConnections[socket.id].boardId).emit(data.method, data);
 	});
 
