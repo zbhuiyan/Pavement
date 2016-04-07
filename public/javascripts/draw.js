@@ -2,9 +2,11 @@ var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
 paper.setup(myCanvas);
 
+
 var colorPicked = 'black'; // default color used
 
 var paths = {};
+
 
 // var DomParser = bundle.require('DomParser');
 // var svgString = myCanvas.innerHTML;
@@ -21,7 +23,7 @@ var Canvas = React.createClass({
 
 		paper.setup('myCanvas');
 		
-		// this.path;
+		
 		function onMouseDown(event) {
 			path = new Path();
 			path.strokeColor = colorPicked;
@@ -45,6 +47,7 @@ var Canvas = React.createClass({
 		data.toPoint = event.point;
 
 		this.emitEvent('setPath', data);
+
 	},
 
 	// ***** EMITTING EVENTS *****
@@ -71,7 +74,7 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event) {
-			// packing the data
+
 			var data = {};
 			data.toPoint = event.point;
 			data.strokeColor = colorPicked;
@@ -94,7 +97,7 @@ var Canvas = React.createClass({
 
 			data.x = event.middlePoint.x;
 			data.y = event.middlePoint.y;
-			data.radius = event.delta.length/2; //the further your mouse movement the bigger the circle
+			data.radius = event.delta.length/2; //the faster your mouse speed the bigger the circle
 			data.color = {
 						red: 0,
 						green: Math.random(),
@@ -151,6 +154,7 @@ var Canvas = React.createClass({
 
 			// emitting the data
 			this.emitEvent('drawEllipse', data);
+
 		}.bind(this);
 		
 	},
@@ -171,7 +175,7 @@ var Canvas = React.createClass({
 
 	clearCanvas: function(){
 		this.tool.activate();
-		
+		paper.project.clear();
 		this.emitEvent('clear', {});
 	},
 
@@ -192,14 +196,26 @@ var Canvas = React.createClass({
 	},
 
 	importSVG: function(){
-		this.tool.activate();
-		var svgReader = new FileReader();
-		parser = new DOMParser();
-		var contentAsObject = parser.parseFromString(svgContent, 'image/svg+xml');
-		paper.project.clear();
-		paper.project.importSVG(contentAsObject);
+		var _this = this;
+		var myCanvas = document.getElementById('myCanvas');
 
-		//not yet working, it gives a reference error for DomParser... 
+		$("#upload").on('change',function(){
+			_this.tool.activate();
+			paper.project.clear();
+	        var fs = $("#upload")[0].files;	
+			console.log(fs[0].name);
+			paper.project.clear();
+			var reader = new FileReader(); 
+	        reader.onloadend = function (e) {  //called after a read completes
+	          myCanvas.innerHTML = e.target.result;
+	          var svg = myCanvas.querySelector('svg');
+	          console.log('svg', svg);
+	          project.importSVG(svg);
+	          myCanvas.innerHTML = "";
+	        };  
+	        reader.readAsText(fs[0]); 
+    	});
+		$('#upload').trigger('click');
 	},
 
 
@@ -213,6 +229,7 @@ var Canvas = React.createClass({
 
 		// Add the initial point
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
+
 	},
 
 	drawPencil: function(data) {
@@ -354,7 +371,9 @@ var Canvas = React.createClass({
 				<Button setTool={this.pickColor} tool={"Pick Color"}/>
 				<Button setTool={this.download} tool={'Download'}/>
 				<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
-				<Button setTool={this.importSVG} tool={'Import SVG'}/>
+				<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
+				<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
+			
 			</div>
 		);
 	}
