@@ -2,6 +2,7 @@ var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
 paper.setup(myCanvas);
 var path;
+
 // var DomParser = bundle.require('DomParser');
 // var svgString = myCanvas.innerHTML;
 var Canvas = React.createClass({
@@ -182,20 +183,28 @@ var Canvas = React.createClass({
 	},
 
 	importSVG: function(){
-		this.tool.activate();
-		// paper.project.clear();
-		var svgReader = new FileReader();
-		var parser = new DOMParser();
-		var d;
+		var _this = this;
+		var myCanvas = document.getElementById('myCanvas');
 
-		var stringContainingXMLSource = 'file:///home/zarin/Downloads/mySvg%20(5).svg';
-		// d = document.getElementById('stringContainingXMLSource');
-		// var svgText = d.innerHTML;
-		var contentAsObject = parser.parseFromString(stringContainingXMLSource, 'image/svg+xml');
-		console.log(contentAsObject);
-		paper.project.importSVG(contentAsObject);
+		$("#upload").on('change',function(){
+			_this.tool.activate();
+	        var fs = $("#upload")[0].files;
+			console.log(fs[0].name);
+			paper.project.clear();
+			var reader = new FileReader(); 
+	        reader.onloadend = function (e) {  //called after a read completes
+	          myCanvas.innerHTML = e.target.result;
+	          var svg = myCanvas.querySelector('svg');
+	          console.log('svg', svg);
+	          project.importSVG(svg);
+	          myCanvas.innerHTML = "";
+	        };  
+	        reader.readAsText(fs[0]); 
+    	});
+		$('#upload').trigger('click');
 
-
+		
+		
 	},
 
 	clearCanvas: function(){
@@ -292,7 +301,9 @@ var Canvas = React.createClass({
 				<Button setTool={this.useEraser} tool={"Erase"}/>
 				<Button setTool={this.download} tool={'Download'}/>
 				<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
-				<Button setTool={this.importSVG} tool={'Import SVG'}/>
+				<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
+				<input id="upload" type="file" name="upload" setTool={this.importSVG}/>
+			
 			</div>
 		);
 	}
