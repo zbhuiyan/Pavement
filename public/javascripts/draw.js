@@ -1,28 +1,19 @@
 var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
 paper.setup(myCanvas);
-
-
 var colorPicked = 'black'; // default color used
-
 var paths = {};
 
 
-// var DomParser = bundle.require('DomParser');
-// var svgString = myCanvas.innerHTML;
 var Canvas = React.createClass({
+
 	getInitialState: function() {
 		return {tool: this.usePencil()};
 	},
+
 	componentDidMount: function () {
 		//instatiate the paperScope with the canvas element
-		// var myCanvas = document.getElementById('myCanvas');
-		// paper.install(window);
-		// paper.setup(myCanvas);
-		// var tool1, tool2;
-
 		paper.setup('myCanvas');
-		
 		
 		function onMouseDown(event) {
 			path = new Path();
@@ -35,17 +26,13 @@ var Canvas = React.createClass({
 		this.tool.onMouseDrag = function(event) {
 			path.add(event.point);
 		}
-
-
 		this.setupReceiver();
-
-	
 	},
+
 
 	onMouseDown: function (event) {
 		var data = {};
 		data.toPoint = event.point;
-
 		this.emitEvent('setPath', data);
 
 	},
@@ -111,6 +98,7 @@ var Canvas = React.createClass({
 		}.bind(this);
 	},
 
+
 	useRectangle: function() {
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
@@ -135,6 +123,7 @@ var Canvas = React.createClass({
 		
 	},
 
+
 	useEllipse: function() {
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
@@ -158,6 +147,7 @@ var Canvas = React.createClass({
 		}.bind(this);
 		
 	},
+
 
 	useEraser: function() {
 		this.tool.activate();
@@ -232,13 +222,12 @@ var Canvas = React.createClass({
 
 	},
 
+
 	drawPencil: function(data) {
 		// This function adds a pencil point
 		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-
-		// this refreshes the view
-		view.draw();
+		view.draw(); // this refreshes the view
 	},
 
 	/*
@@ -282,6 +271,7 @@ var Canvas = React.createClass({
 	    view.draw();
 	},
 
+
 	drawRectangle: function(data) {
 		// This function adds a rectangle, it does not need a user's path
 
@@ -298,6 +288,7 @@ var Canvas = React.createClass({
 	    // refresh the view
 	    view.draw();
 	},
+
 
 	drawEllipse: function(data) {
 		// This functions adds an ellipse, it does not need a user's path
@@ -326,9 +317,7 @@ var Canvas = React.createClass({
 		paths[data.id].strokeWidth = 30;
 		paths[data.id].strokeColor = 'white';
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-
-		// Refreshes the view
-		view.draw();
+		view.draw(); // Refreshes the view
 	},
 
 	receiveClear: function(data) {
