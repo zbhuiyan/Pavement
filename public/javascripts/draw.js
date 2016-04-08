@@ -314,9 +314,13 @@ var Canvas = React.createClass({
 		// It requires a user's path to make a continuous line
 
 		// Adds to the path object
+
+		// set up path object
+		paths[data.id].strokeWidth = 30;
 		paths[data.id].strokeColor = 'black';
 		paths[data.id].blendMode = 'destination-out';
-		paths[data.id].strokeWidth = 30;
+
+		// add the point
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 		view.draw(); // Refreshes the view
 	},
@@ -363,7 +367,7 @@ var Canvas = React.createClass({
 				<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 				<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
 				<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
-			
+				
 			</div>
 		);
 	}
