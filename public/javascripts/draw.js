@@ -8,7 +8,7 @@ var paths = {};
 var Canvas = React.createClass({
 
 	getInitialState: function() {
-		return {tool: this.usePencil()};
+		return {tool: this.usePencil(), strokeWidth:1};
 	},
 
 	componentDidMount: function () {
@@ -37,6 +37,12 @@ var Canvas = React.createClass({
 
 	},
 
+	// ***** STATE EVENTS *****
+
+	setStrokeWidth: function(e) {
+		this.setState({strokeWidth:e.target.value});
+	},
+
 	// ***** EMITTING EVENTS *****
 
 	usePencil: function () {
@@ -49,6 +55,8 @@ var Canvas = React.createClass({
 			var data = {};
 			data.toPoint = event.point;
 			data.strokeColor = colorPicked;
+			data.strokeWidth = this.state.strokeWidth;
+
 			// emiting the data
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
@@ -65,6 +73,7 @@ var Canvas = React.createClass({
 			var data = {};
 			data.toPoint = event.point;
 			data.strokeColor = colorPicked;
+			data.strokeWidth = this.state.strokeWidth;
 
 			// emitting the data
 			this.emitEvent('drawCloud', data)
@@ -225,6 +234,7 @@ var Canvas = React.createClass({
 
 	drawPencil: function(data) {
 		// This function adds a pencil point
+		paths[data.id].strokeWidth = data.strokeWidth;
 		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 		view.draw(); // this refreshes the view
@@ -247,7 +257,7 @@ var Canvas = React.createClass({
 	drawCloud: function(data) {
 		// This function adds a cloud to the path
 		paths[data.id].strokeColor = data.strokeColor;
-		paths[data.id].strokeWidth = 5;
+		paths[data.id].strokeWidth = data.strokeWidth;
 		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
 
 		// this refreshes the view
@@ -366,8 +376,8 @@ var Canvas = React.createClass({
 				<Button setTool={this.download} tool={'Download'}/>
 				<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 				<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
-				<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
-				
+				<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/><br />
+				<span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth} />
 			</div>
 		);
 	}
