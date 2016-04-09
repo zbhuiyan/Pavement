@@ -2,7 +2,6 @@ var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
 paper.setup(myCanvas);
 var colorPicked = 'black'; // default color used
-var sizePicked = 50; //default size used
 var paths = {};
 
 
@@ -98,30 +97,32 @@ var Canvas = React.createClass({
 
 		}.bind(this);
 	},
+	calculateDistance: function(){
+		var x1 = firstPoint.x;
+		var y1 = firstPoint.y;
+		var x2 = endPoint.x;
+		var y2 = endPoint.y;
+
+		var distance = Math.sqrt((Math.pow((x2-x1),2)) + (Math.pow((y2-y1), 2)));
+		return distance;
+
+	},
 
 	useCircle: function() {
 		this.tool.activate();
-		// this.tool.onMouseDown = this.onMouseDown;
-		var input = prompt("Please enter a radius", "20");
-		if (input != null) {
-			sizePicked = input;
-		}
+		this.tool.onMouseDown = this.onMouseDown;
 
-		this.tool.onMouseDown = function(event){
-			// packing the data
-			var data = {}
-
+		this.tool.onMouseDrag = function(event){
+			var data = {};
 			data.x = event.middlePoint.x;
 			data.y = event.middlePoint.y;
-			data.radius = event.sizePicked;
+			data.radius = (data.x-data.y)/2;
+			console.log(data.radius);
 			data.color = colorPicked;
-
-			// emitting the data
 			this.emitEvent('drawCircle', data);
-
 		}.bind(this);
-	},
 
+	},
 
 
 	usePrettyRectangle: function() {
@@ -310,9 +311,8 @@ var Canvas = React.createClass({
 
 		// create the object
 		// var size = new Size(radius);
-		var circle = new Path.Circle(new Point(x, y), radius);
-
-	    circle.fillColor = new Color(color);
+		var circle = new Path.Circle(new Point(x,y), radius);
+	    circle.strokeColor = new Color(color);
 	    
 	    // Refresh the view, so we always get an update, even if the tab is not in focus
 	    view.draw();
