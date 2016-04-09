@@ -2,6 +2,7 @@ var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
 paper.setup(myCanvas);
 var colorPicked = 'black'; // default color used
+var sizePicked = 50; //default size used
 var paths = {};
 
 
@@ -73,7 +74,7 @@ var Canvas = React.createClass({
 	},
 
 
-	useCircle: function() {
+	usePrettyCircle: function() {
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -93,13 +94,37 @@ var Canvas = React.createClass({
 						};
 
 			// emitting the data
+			this.emitEvent('drawPrettyCircle', data);
+
+		}.bind(this);
+	},
+
+	useCircle: function() {
+		this.tool.activate();
+		// this.tool.onMouseDown = this.onMouseDown;
+		var input = prompt("Please enter a radius", "20");
+		if (input != null) {
+			sizePicked = input;
+		}
+
+		this.tool.onMouseDown = function(event){
+			// packing the data
+			var data = {}
+
+			data.x = event.middlePoint.x;
+			data.y = event.middlePoint.y;
+			data.radius = event.sizePicked;
+			data.color = colorPicked;
+
+			// emitting the data
 			this.emitEvent('drawCircle', data);
 
 		}.bind(this);
 	},
 
 
-	useRectangle: function() {
+
+	usePrettyRectangle: function() {
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -117,14 +142,14 @@ var Canvas = React.createClass({
 						};
 
 			// emitting the data
-			this.emitEvent('drawRectangle', data);
+			this.emitEvent('drawPrettyRectangle', data);
 
 		}.bind(this);
 		
 	},
 
 
-	useEllipse: function() {
+	usePrettyEllipse: function() {
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -142,7 +167,7 @@ var Canvas = React.createClass({
 						};
 
 			// emitting the data
-			this.emitEvent('drawEllipse', data);
+			this.emitEvent('drawPrettyEllipse', data);
 
 		}.bind(this);
 		
@@ -202,10 +227,14 @@ var Canvas = React.createClass({
 	          console.log('svg', svg);
 	          project.importSVG(svg);
 	          myCanvas.innerHTML = "";
+	          _this.emitEvent('importSVG', svg);
 	        };  
 	        reader.readAsText(fs[0]); 
+
+
     	});
 		$('#upload').trigger('click');
+		
 	},
 
 
@@ -254,7 +283,7 @@ var Canvas = React.createClass({
 		view.draw();
 	},
 
-	drawCircle: function(data) {
+	drawPrettyCircle: function(data) {
 		// This function adds a circle, it does not need a user's path
 
 		// unpack the data
@@ -270,9 +299,27 @@ var Canvas = React.createClass({
 	    // Refresh the view, so we always get an update, even if the tab is not in focus
 	    view.draw();
 	},
+	drawCircle: function(data) {
+		// This function adds a circle, it does not need a user's path
+
+		// unpack the data
+		var x = data.x;
+		var y = data.y;
+		var radius = data.radius;
+		var color = data.color;
+
+		// create the object
+		// var size = new Size(radius);
+		var circle = new Path.Circle(new Point(x, y), radius);
+
+	    circle.fillColor = new Color(color);
+	    
+	    // Refresh the view, so we always get an update, even if the tab is not in focus
+	    view.draw();
+	},
 
 
-	drawRectangle: function(data) {
+	drawPrettyRectangle: function(data) {
 		// This function adds a rectangle, it does not need a user's path
 
 		// unpack the data
@@ -290,7 +337,7 @@ var Canvas = React.createClass({
 	},
 
 
-	drawEllipse: function(data) {
+	drawPrettyEllipse: function(data) {
 		// This functions adds an ellipse, it does not need a user's path
 
 		// unpack the data
@@ -341,11 +388,13 @@ var Canvas = React.createClass({
 		this.props.socket.on('setPath', this.setPath);
 		this.props.socket.on('drawPencil', this.drawPencil);
 		this.props.socket.on('drawCloud', this.drawCloud);
-		this.props.socket.on('drawCircle', this.drawCircle);
-		this.props.socket.on('drawRectangle', this.drawRectangle);
-		this.props.socket.on('drawEllipse', this.drawEllipse);
+		this.props.socket.on('drawPrettyCircle', this.drawPrettyCircle);
+		this.props.socket.on('drawPrettyRectangle', this.drawPrettyRectangle);
+		this.props.socket.on('drawPrettyEllipse', this.drawPrettyEllipse);
 		this.props.socket.on('erase', this.erase);
 		this.props.socket.on('clear', this.receiveClear);
+		this.props.socket.on('importSVG', this.importSVG);
+		this.props.socket.on('drawCircle', this.drawCircle);
 	},
 
 	render: function () {
@@ -354,9 +403,10 @@ var Canvas = React.createClass({
 				<canvas id="myCanvas" data-paper-resize></canvas>
 				<Button setTool={this.usePencil} tool={"Pencil"}/>
 				<Button setTool={this.useCloud} tool={"Cloud"}/>
+				<Button setTool={this.usePrettyCircle} tool={"Pretty Circles"}/>
+				<Button setTool={this.usePrettyRectangle} tool={"Pretty Rectangles"}/>
+				<Button setTool={this.usePrettyEllipse} tool={"Pretty Ellipses"}/>
 				<Button setTool={this.useCircle} tool={"Circle"}/>
-				<Button setTool={this.useRectangle} tool={"Rectangle"}/>
-				<Button setTool={this.useEllipse} tool={"Ellipse"}/>
 				<Button setTool={this.useEraser} tool={"Erase"}/>
 				<Button setTool={this.pickColor} tool={"Pick Color"}/>
 				<Button setTool={this.download} tool={'Download'}/>
