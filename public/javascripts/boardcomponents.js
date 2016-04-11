@@ -237,7 +237,8 @@ var CreateBoardForm = React.createClass({
 							value={this.state.isPublic}
 							onChange={this.handlePublicChange} />
 					<input type='submit'
-							value='Create' />
+							value='Create'
+							className='submitButton' />
 				</form>
 			</div>
 		);
