@@ -22,9 +22,11 @@ var App = React.createClass({
     render: function () {
         return (
             <div className='app'>
-                <ChatBox socket={socket} boardId={this.props.boardId} />
                 <Logo />
-                <Canvas socket={socket} />
+                <div id='content'>
+                	<Canvas socket={socket} />
+	                <ChatBox socket={socket} boardId={this.props.boardId} />
+                </div>
             </div>
         )
     }

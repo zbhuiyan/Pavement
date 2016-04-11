@@ -44,7 +44,8 @@ var SignUpForm = React.createClass({
 							onChange={this.handlePasswordChange} /><br />
 
 					<input type='submit'
-							value='Sign Up' />
+							value='Sign Up'
+							className='submitButton' />
 				</form>
 			</div>
 		)
@@ -82,7 +83,8 @@ var SignInForm = React.createClass({
 							onChange={this.handlePasswordChange} /><br />
 
 					<input type='submit'
-							value='Sign In' />
+							value='Sign In'
+							className='submitButton' />
 				</form>
 			</div>
 		)

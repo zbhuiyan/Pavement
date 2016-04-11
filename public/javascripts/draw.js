@@ -293,17 +293,21 @@ var Canvas = React.createClass({
 
 	render: function () {
 		return (
-			<div>
-				<canvas id="myCanvas" data-paper-resize></canvas>
-				<Button setTool={this.usePencil} tool={"Pencil"}/>
-				<Button setTool={this.useCloud} tool={"Cloud"}/>
-				<Button setTool={this.useCircle} tool={"Circle"}/>
-				<Button setTool={this.useRectangle} tool={"Rectangle"}/>
-				<Button setTool={this.useEllipse} tool={"Ellipse"}/>
-				<Button setTool={this.useEraser} tool={"Erase"}/>
-				<Button setTool={this.download} tool={'Download'}/>
-				<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
-				<Button setTool={this.importSVG} tool={'Import SVG'}/>
+			<div id="pavementDiv">
+				<nav id="toolBar">
+					<Button setTool={this.usePencil} tool={"Pencil"}/>
+					<Button setTool={this.useCloud} tool={"Cloud"}/>
+					<Button setTool={this.useCircle} tool={"Circle"}/>
+					<Button setTool={this.useRectangle} tool={"Rectangle"}/>
+					<Button setTool={this.useEllipse} tool={"Ellipse"}/>
+					<Button setTool={this.useEraser} tool={"Erase"}/>
+					<Button setTool={this.download} tool={'Download'}/>
+					<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
+					<Button setTool={this.importSVG} tool={'Import SVG'}/>
+				</nav>
+				<div id="canvasDiv">
+					<canvas id="myCanvas" data-paper-resize></canvas>
+				</div>
 			</div>
 		);
 	}

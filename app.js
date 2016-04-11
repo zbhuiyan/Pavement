@@ -36,7 +36,10 @@ var chat = require('./routes/chat.js');
 var board = require('./routes/board.js');
 var accessor = require('./passport/accessor.js');
 
-app.get('/', index.home);
+
+
+app.get('/', accessor.isLoggedIn, index.home);
+app.get('/currentUser', user.currentUser);
 app.get('/draw/:boardId', accessor.canAccessBoard, index.draw);
 app.get('/me', user.currentUser);
 app.get('/users/:username', user.getUser);
@@ -47,17 +50,19 @@ app.get('/publicBoards', board.getPublic);
 
 app.post('/login', passport.authenticate('signin', {
 	// WE SHOULD PROBABLY DO SOMETHING ABOUT THIS
-	successRedirect:'/dashboard',
+	successRedirect:'/',
 	failureRedirect:'/'
 }));
 
 app.post('/signup', passport.authenticate('signup', {
-	successRedirect:'/dashboard',
+	successRedirect:'/',
 	failureRedirect:'/'
 }));
 
 app.post('/board/add', board.add);
 app.post('/dashboard', index.dashboard);
+
+app.delete('/board/:name/:owner', board.deleteBoard);
 
 // DO SOCKET STUFF HERE
 var openConnections = {};
