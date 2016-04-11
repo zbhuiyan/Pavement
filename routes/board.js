@@ -29,13 +29,14 @@ boardRoutes.add = function(req,res) {
 		timestamp: new Date()
 	});
 
-	dbBoard.save(function(err) {
+	dbBoard.save(function (err) {
 		if (err) {
-			return 500; // internal server error
-		} else {
-			return 201; // resource created
-		}
-	})
+			res.status(500).send('could not add board');
+		// } else {
+		// 	return 201; // resource created
+		// }
+	}});
+	res.json(dbBoard);
 
 };
 
@@ -109,13 +110,20 @@ boardRoutes.getByName = function(req,res) {
 };
 
 boardRoutes.deleteBoard = function(req,res) {
-	var board = req.params.name;
-	var owner = req.params.owner;
-	Board.findOneAndRemove({
-		$and: [{'name':board}, {'owner':owner}]
-	}).exec(function (err, done) {
-		res.status(200).send(); // not sure what to do here/send here
-	})
+	// var board = req.params.name;
+	// var owner = req.params.owner;
+	var board = req.params;
+	Board.remove({name: board.name, owner: board.owner}, function (err) {
+        if (err) res.status(500).send('Error deleting page');
+    });
+    res.end();
+
+	// Board.findOneAndRemove({
+	// 	$and: [{'name':board}, {'owner':owner}]
+	// }).exec(function (err, done) {
+	// 	// res.status(200).send(); // not sure what to do here/send here
+	// 	res.end();
+	// })
 };
 
 module.exports = boardRoutes;

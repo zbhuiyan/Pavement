@@ -3,7 +3,7 @@ var path = require('path');
 var routes = {};
 
 routes.home = function(req, res) {
-	res.sendFile(__dirname + 'public/main.html');
+	res.sendFile(__dirname + 'public/index.html');
 }
 
 routes.draw = function(req, res) {

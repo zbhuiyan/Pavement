@@ -3,11 +3,12 @@ var User = require('../models/userModel.js');
 userRoutes = {};
 
 userRoutes.currentUser = function(req, res) {
-	if(req.user != null) {
+	console.log(req.user)
+	// if(req.user != null) {
 		res.json(req.user);
-	} else {
-		res.status(404).send('not currently logged in');
-	}
+	// } else {
+	// 	res.status(404).send('not currently logged in');
+	// }
 }
 
 userRoutes.getUser = function(req, res) {

@@ -403,21 +403,24 @@ var Canvas = React.createClass({
 
 	render: function () {
 		return (
-			<div>
-				<canvas id="myCanvas" data-paper-resize></canvas>
-				<Button setTool={this.usePencil} tool={"Pencil"}/>
-				<Button setTool={this.useCloud} tool={"Cloud"}/>
-				<Button setTool={this.usePrettyCircle} tool={"Pretty Circles"}/>
-				<Button setTool={this.usePrettyRectangle} tool={"Pretty Rectangles"}/>
-				<Button setTool={this.usePrettyEllipse} tool={"Pretty Ellipses"}/>
-				<Button setTool={this.useCircle} tool={"Circle"}/>
-				<Button setTool={this.useEraser} tool={"Erase"}/>
-				<Button setTool={this.pickColor} tool={"Pick Color"}/>
-				<Button setTool={this.download} tool={'Download'}/>
-				<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
-				<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
-				<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
-				
+			<div id="pavementDiv">
+				<nav id="toolBar">
+					<Button setTool={this.usePencil} tool={"Pencil"}/>
+					<Button setTool={this.useCloud} tool={"Cloud"}/>
+					<Button setTool={this.useCircle} tool={"Circle"}/>
+					<Button setTool={this.usePrettyCircle} tool={"Pretty Circles"}/>
+					<Button setTool={this.usePrettyRectangle} tool={"Pretty Rectangles"}/>
+					<Button setTool={this.usePrettyEllipse} tool={"Pretty Ellipses"}/>
+					<Button setTool={this.pickColor} tool={"Pick Color"}/>
+					<Button setTool={this.useEraser} tool={"Erase"}/>
+					<Button setTool={this.download} tool={'Download'}/>
+					<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
+					<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
+					<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
+				</nav>
+				<div id="canvasDiv">
+					<canvas id="myCanvas" data-paper-resize></canvas>
+				</div>
 			</div>
 		);
 	}
