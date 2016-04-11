@@ -364,7 +364,6 @@ var Canvas = React.createClass({
 					<Button setTool={this.useEraser} tool={"Erase"}/>
 					<Button setTool={this.download} tool={'Download'}/>
 					<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
-					<Button setTool={this.importSVG} tool={'Import SVG'}/>
 					<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
 					<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
 				</nav>
