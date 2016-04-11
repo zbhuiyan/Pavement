@@ -14,7 +14,8 @@ body {
     justify-content: center;*/
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
     width:20%;
     min-width: 150px;
     /*display:block;
@@ -48,6 +49,7 @@ input[type="text"].focus {
     border: none;
     /*color: white;*/
     color: gray;
+    padding: 12px 20px;
     padding: px 3px;
     text-align: center;
     text-decoration: none;
@@ -55,6 +57,7 @@ input[type="text"].focus {
     /*font-size: 16px;*/
     margin: 2px 2px;
     cursor: pointer;
+    font-size: 100%;
 }
 
 /***************
