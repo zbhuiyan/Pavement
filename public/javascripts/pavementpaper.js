@@ -149,6 +149,16 @@ var PavementWrapper = function(canvas) {
 	this.clearProject = function() {
 		paper.project.clear();
 	}
+
+	/**
+	* Returns the svg
+	* @param {null}
+	* @return {String} svg
+	*/
+
+	this.exportSVG = function() {
+		return paper.project.exportSVG({asString:true});
+	}
 }
 
 // This will throw an error but work anyway
