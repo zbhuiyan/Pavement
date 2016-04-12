@@ -1,3 +1,7 @@
+if(typeof require !== 'undefined') {
+	var paper = require('paper');
+}
+
 var PavementWrapper = function(canvas) {
 	paper.setup(canvas);
 
@@ -10,7 +14,11 @@ var PavementWrapper = function(canvas) {
 	*/
 
 	this.setPath = function(data) {
-		paths[data.id] = new Path();
+		if(typeof Path !== 'undefined') {
+			paths[data.id] = new Path();
+		} else {
+			paths[data.id] = new paper.Path();
+		}
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 	};
 
@@ -52,11 +60,19 @@ var PavementWrapper = function(canvas) {
 
 		// create the object
 		// var size = new Size(radius);
-		var circle = new Path.Circle(new Point(x,y), radius);
-	    circle.strokeColor = new Color(color);
-	    
-	    // Refresh the view, so we always get an update, even if the tab is not in focus
-	    view.draw();
+		if(typeof Path !== 'undefined') {
+			var circle = new Path.Circle(new Point(x,y), radius);
+		    circle.strokeColor = new Color(color);
+
+		    // Refresh the view, so we always get an update, even if the tab is not in focus
+		    view.draw();
+		} else {
+			var circle = new paper.Path.Circle(new paper.Point(x,y), radius);
+		    circle.strokeColor = new paper.Color(color);
+
+		    // Refresh the view, so we always get an update, even if the tab is not in focus
+		    paper.view.draw();
+		}
 	}
 
 	/**
@@ -73,10 +89,17 @@ var PavementWrapper = function(canvas) {
 		var color = data.color;
 
 		// create the object
-		var circle = new Path.Circle(new Point(x, y), radius);
-	    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
+		if(typeof Path !== 'undefined') {
+			var circle = new Path.Circle(new Point(x, y), radius);
+		    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
 
-	    view.draw();
+		    view.draw();
+		} else {
+			var circle = new paper.Path.Circle(new paper.Point(x, y), radius);
+		    circle.fillColor = new paper.Color(color.red, color.green, color.blue, color.alpha);
+
+		    paper.view.draw();
+		}
 	}
 
 	/**
@@ -92,12 +115,19 @@ var PavementWrapper = function(canvas) {
 		var color = data.color;
 
 		// create the object
-		var rectangle = new Rectangle(new Point(x, y), new Point(x+60,y+80));
-		var path = new Path.Rectangle(rectangle);
-	    path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
+		if(typeof Path !== 'undefined') {
+			var rectangle = new Rectangle(new Point(x, y), new Point(x+60,y+80));
+			var path = new Path.Rectangle(rectangle);
+		    path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
 
-	    // refresh the view
-	    view.draw();
+		    view.draw();
+		} else {
+			var rectangle = new paper.Rectangle(new paper.Point(x, y), new paper.Point(x+60,y+80));
+			var path = new paper.Path.Rectangle(rectangle);
+		    path.fillColor = new paper.Color(color.green, color.red, color.blue, color.alpha);
+
+		    paper.view.draw();
+		}
 	}
 
 	/**
@@ -113,14 +143,23 @@ var PavementWrapper = function(canvas) {
 		var color = data.color;
 
 		// create the object
-		var ellipse = new Shape.Ellipse({
-			point: [x,y],
-			size: [180,60],
-			fillColor: new Color(color.green, color.red, color.blue, color.alpha)
-		});
+		if(typeof Path !== 'undefined') {
+			var ellipse = new Shape.Ellipse({
+				point: [x,y],
+				size: [180,60],
+				fillColor: new Color(color.green, color.red, color.blue, color.alpha)
+			});
 
-	    // Refresh the view, so we always get an update, even if the tab is not in focus
-	    view.draw();
+			view.draw();
+		} else {
+			var ellipse = new paper.Shape.Ellipse({
+				point: [x,y],
+				size: [180,60],
+				fillColor: new paper.Color(color.green, color.red, color.blue, color.alpha)
+			});
+
+			paper.view.draw();
+		}
 	}
 
 	/**
@@ -137,7 +176,12 @@ var PavementWrapper = function(canvas) {
 
 		// add the point
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-		view.draw(); // Refreshes the view
+
+		if(typeof Path !== 'undefined') {
+			view.draw();
+		} else {
+			paper.view.draw();
+		}
 	}
 
 	/**
@@ -162,7 +206,7 @@ var PavementWrapper = function(canvas) {
 }
 
 // This will throw an error but work anyway
-if(typeof module !== undefined && typeof module.exports !== undefined) {
+if(typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 	module.exports = PavementWrapper;
 } else {
 	window.PavementWrapper = PavementWrapper;

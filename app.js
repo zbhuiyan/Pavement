@@ -14,8 +14,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-// var paper = require('paper');
-// var pavementWrapper = require('./routes/wrapper.js');
+var paper = require('paper');
+var pavementWrapper = require('./public/javascripts/pavementpaper.js');
 
 app.use(expressSession({secret: "notReallyASecret",
 	resave:false,
@@ -38,8 +38,6 @@ var user = require('./routes/user.js');
 var chat = require('./routes/chat.js');
 var board = require('./routes/board.js');
 var accessor = require('./passport/accessor.js');
-
-
 
 app.get('/', accessor.isLoggedIn, index.home);
 app.get('/currentUser', user.currentUser);
@@ -73,8 +71,8 @@ app.delete('/board/:name/:owner', board.deleteBoard);
 
 // DO SOCKET STUFF HERE
 var openConnections = {};
-// var canvas = new paper.Canvas(350, 170);
-// var wrapper = new pavementWrapper(canvas);
+var canvas = new paper.Canvas(350, 170);
+var wrapper = new pavementWrapper(canvas);
 
 io.on('connection', function(socket) {
 	socket.on('setup', function(userInfo) {
@@ -109,7 +107,7 @@ io.on('connection', function(socket) {
 		data.id = openConnections[socket.id].userId;
 		io.to(openConnections[socket.id].boardId).emit(data.method, data);
 
-		// // This is all testing
+		// // // This is all testing
 		// if(data.method === 'setPath') {
 		// 	wrapper.setPath(data);
 		// }
@@ -121,12 +119,16 @@ io.on('connection', function(socket) {
 		// if(data.method === 'drawCloud') {
 		// 	wrapper.drawCloud(data);
 		// }
+
+		// if(data.method === 'drawCircle') {
+		// 	wrapper.drawCircle(data);
+		// }
 	});
 
 	socket.on('disconnect', function() {
 		console.log('disconnecting...');
 		delete openConnections[socket.id];
-		// console.log(wrapper.exportSVG());
+		console.log(wrapper.exportSVG());
 	});
 });
 
