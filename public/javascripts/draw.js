@@ -1,9 +1,8 @@
-var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
-paper.setup(myCanvas);
+var myCanvas = document.getElementById('myCanvas');
 var colorPicked = 'black'; // default color used
-var paths = {};
 
+var pavement = new PavementWrapper(myCanvas);
 
 var Canvas = React.createClass({
 
@@ -14,18 +13,6 @@ var Canvas = React.createClass({
 	componentDidMount: function () {
 		//instatiate the paperScope with the canvas element
 		paper.setup('myCanvas');
-		
-		function onMouseDown(event) {
-			path = new Path();
-			path.strokeColor = colorPicked;
-			path.add(event.point);
-		}
-		this.tool = new Tool();
-		this.tool.onMouseDown = onMouseDown;
-
-		this.tool.onMouseDrag = function(event) {
-			path.add(event.point);
-		}
 		this.setupReceiver();
 	},
 
@@ -241,25 +228,6 @@ var Canvas = React.createClass({
 
 	// ***** RECEIVING FUNCTIONALITY *****
 
-	setPath: function(data) {
-		// This function adds to the path drawn by a user
-		// This allows for a smoother continuous line
-
-		paths[data.id] = new Path();
-
-		// Add the initial point
-		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-
-	},
-
-
-	drawPencil: function(data) {
-		// This function adds a pencil point
-		paths[data.id].strokeColor = data.strokeColor;
-		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-		view.draw(); // this refreshes the view
-	},
-
 	/*
 	pickColor takes a hex color in via a js popup prompt and saves it to colorPicked
 
@@ -274,108 +242,6 @@ var Canvas = React.createClass({
 		}
 	},
 
-	drawCloud: function(data) {
-		// This function adds a cloud to the path
-		paths[data.id].strokeColor = data.strokeColor;
-		paths[data.id].strokeWidth = 5;
-		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
-
-		// this refreshes the view
-		view.draw();
-	},
-
-	drawPrettyCircle: function(data) {
-		// This function adds a circle, it does not need a user's path
-
-		// unpack the data
-		var x = data.x;
-		var y = data.y;
-		var radius = data.radius;
-		var color = data.color;
-
-		// create the object
-		var circle = new Path.Circle(new Point(x, y), radius);
-	    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
-	    
-	    // Refresh the view, so we always get an update, even if the tab is not in focus
-	    view.draw();
-	},
-	drawCircle: function(data) {
-		// This function adds a circle, it does not need a user's path
-
-		// unpack the data
-		var x = data.x;
-		var y = data.y;
-		var radius = data.radius;
-		var color = data.color;
-
-		// create the object
-		// var size = new Size(radius);
-		var circle = new Path.Circle(new Point(x,y), radius);
-	    circle.strokeColor = new Color(color);
-	    
-	    // Refresh the view, so we always get an update, even if the tab is not in focus
-	    view.draw();
-	},
-
-
-	drawPrettyRectangle: function(data) {
-		// This function adds a rectangle, it does not need a user's path
-
-		// unpack the data
-		var x = data.x;
-		var y = data.y;
-		var color = data.color;
-
-		// create the object
-		var rectangle = new Rectangle(new Point(x, y), new Point(x+60,y+80));
-		var path = new Path.Rectangle(rectangle);
-	    path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
-
-	    // refresh the view
-	    view.draw();
-	},
-
-
-	drawPrettyEllipse: function(data) {
-		// This functions adds an ellipse, it does not need a user's path
-
-		// unpack the data
-		var x = data.x;
-		var y = data.y;
-		var color = data.color;
-
-		// create the object
-		var ellipse = new Shape.Ellipse({
-			point: [x,y],
-			size: [180,60],
-			fillColor: new Color(color.green, color.red, color.blue, color.alpha)
-		});
-
-	    // Refresh the view, so we always get an update, even if the tab is not in focus
-	    view.draw();
-	},
-
-	erase: function(data) {
-		// This function "erases," right now it adds a white line over things
-		// It requires a user's path to make a continuous line
-
-		// Adds to the path object
-
-		// set up path object
-		paths[data.id].strokeWidth = 30;
-		paths[data.id].strokeColor = 'black';
-		paths[data.id].blendMode = 'destination-out';
-
-		// add the point
-		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-		view.draw(); // Refreshes the view
-	},
-
-	receiveClear: function(data) {
-		// This function clears the project
-		paper.project.clear();
-	},
 
 	// ***** SOCKET FUNCTIONALITY *****
 
@@ -389,16 +255,16 @@ var Canvas = React.createClass({
 
 	setupReceiver: function(data) {
 		// These are all of the receiver functions
-		this.props.socket.on('setPath', this.setPath);
-		this.props.socket.on('drawPencil', this.drawPencil);
-		this.props.socket.on('drawCloud', this.drawCloud);
-		this.props.socket.on('drawPrettyCircle', this.drawPrettyCircle);
-		this.props.socket.on('drawPrettyRectangle', this.drawPrettyRectangle);
-		this.props.socket.on('drawPrettyEllipse', this.drawPrettyEllipse);
-		this.props.socket.on('erase', this.erase);
-		this.props.socket.on('clear', this.receiveClear);
+		this.props.socket.on('setPath', pavement.setPath);
+		this.props.socket.on('drawPencil', pavement.drawPencil);
+		this.props.socket.on('drawCloud', pavement.drawCloud);
+		this.props.socket.on('drawCircle', pavement.drawCircle);
+		this.props.socket.on('drawPrettyCircle', pavement.drawPrettyCircle);
+		this.props.socket.on('drawPrettyRectangle', pavement.drawPrettyRectangle);
+		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipse);
+		this.props.socket.on('erase', pavement.erase);
+		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', this.importSVG);
-		this.props.socket.on('drawCircle', this.drawCircle);
 	},
 
 	render: function () {
