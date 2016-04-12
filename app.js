@@ -14,9 +14,6 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-var paper = require('paper');
-var pavementWrapper = require('./public/javascripts/pavementpaper.js');
-
 app.use(expressSession({secret: "notReallyASecret",
 	resave:false,
 	saveUninitialized:false}));
@@ -71,8 +68,6 @@ app.delete('/board/:name/:owner', board.deleteBoard);
 
 // DO SOCKET STUFF HERE
 var openConnections = {};
-var canvas = new paper.Canvas(350, 170);
-var wrapper = new pavementWrapper(canvas);
 
 io.on('connection', function(socket) {
 	socket.on('setup', function(userInfo) {
@@ -106,23 +101,6 @@ io.on('connection', function(socket) {
 	socket.on('draw', function(data) {
 		data.id = openConnections[socket.id].userId;
 		io.to(openConnections[socket.id].boardId).emit(data.method, data);
-
-		// // // This is all testing
-		// if(data.method === 'setPath') {
-		// 	wrapper.setPath(data);
-		// }
-
-		// if(data.method === 'drawPencil') {
-		// 	wrapper.drawPencil(data);
-		// }
-
-		// if(data.method === 'drawCloud') {
-		// 	wrapper.drawCloud(data);
-		// }
-
-		// if(data.method === 'drawCircle') {
-		// 	wrapper.drawCircle(data);
-		// }
 	});
 
 	socket.on('disconnect', function() {
