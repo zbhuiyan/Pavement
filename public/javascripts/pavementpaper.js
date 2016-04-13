@@ -50,7 +50,7 @@ var PavementWrapper = function(canvas) {
 
 		var x = data.x1;
 		var y = data.y1;
-		var radius = data.radius;
+		var radius = parseInt(data.radius);
 		var color = data.color;
 
 		if(typeof Path !== 'undefined') {

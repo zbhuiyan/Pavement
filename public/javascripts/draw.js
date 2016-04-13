@@ -222,6 +222,7 @@ var Canvas = React.createClass({
 			data.y1 = y1;
 			data.radius = this.state.strokeWidth;
 			data.color = colorPicked;
+			
 			this.emitEvent('drawSingleCircle', data);
 		}.bind(this);
 	},
