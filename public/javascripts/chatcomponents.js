@@ -87,12 +87,8 @@ var ChatMessage = React.createClass({displayName:'ChatMessage',
 	render:function() {
 		return (
 			<div className='chatMessage'>
-				<h2 className='chatText'>
-					{this.props.msg}
-				</h2>
-				<h5 className='chatAuthor'>
-					-- {this.props.user}
-				</h5>
+				<p className='chatAuthor'>{this.props.user}: </p>
+				<p className='chatText'> {this.props.msg}</p>
 			</div>
 		);
 	}
