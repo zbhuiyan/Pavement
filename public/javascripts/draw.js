@@ -53,6 +53,7 @@ var Canvas = React.createClass({
 			data.startX = event.point.x;
 			data.startY = event.point.y;
 			data.strokeColor = colorPicked;
+			data.text = prompt("Text!");
 			// emitting all the data
 			this.emitEvent('drawText', data);
 		}.bind(this);
@@ -249,41 +250,6 @@ var Canvas = React.createClass({
 
 	// ***** RECEIVING FUNCTIONALITY *****
 
-	setPath: function(data) {
-		// This function adds to the path drawn by a user
-		// This allows for a smoother continuous line
-
-		paths[data.id] = new Path();
-
-		// Add the initial point
-		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-
-	},
-
-
-	drawPencil: function(data) {
-		// This function adds a pencil point
-		paths[data.id].strokeColor = data.strokeColor;
-		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-		view.draw(); // this refreshes the view
-	},
-
-	/* drawText will add text starting at the point clicked */
-	drawText: function(data) {
-		this.tool.activate();
-
-		var text = new PointText(new Point (data.startX, data.startY));
-		var input = prompt("Text");
-		text.fillColor = data.strokeColor;
-		console.log('in drawText');
-		if (input != null) {
-			text.content = input;
-		}
-
-		view.draw();
-
-	},
-
 	/*
 	pickColor takes a hex color in via a js popup prompt and saves it to colorPicked
 
@@ -296,110 +262,6 @@ var Canvas = React.createClass({
 		if (input != null) {
 			colorPicked = input;
 		}
-	},
-
-	drawCloud: function(data) {
-		// This function adds a cloud to the path
-		paths[data.id].strokeColor = data.strokeColor;
-		paths[data.id].strokeWidth = 5;
-		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
-
-		// this refreshes the view
-		view.draw();
-	},
-
-	drawPrettyCircle: function(data) {
-		// This function adds a circle, it does not need a user's path
-
-		// unpack the data
-		var x = data.x;
-		var y = data.y;
-		var radius = data.radius;
-		var color = data.color;
-
-		// create the object
-		var circle = new Path.Circle(new Point(x, y), radius);
-	    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
-	    
-	    // Refresh the view, so we always get an update, even if the tab is not in focus
-	    view.draw();
-	},
-
-	drawCircle: function(data) {
-		// This function adds a circle, it does not need a user's path
-
-		// unpack the data
-		var x = data.x;
-		var y = data.y;
-		var radius = data.radius;
-		var color = data.color;
-
-		// create the object
-		// var size = new Size(radius);
-		var circle = new Path.Circle(new Point(x,y), radius);
-	    circle.strokeColor = new Color(color);
-	    
-	    // Refresh the view, so we always get an update, even if the tab is not in focus
-	    view.draw();
-	},
-
-
-	drawPrettyRectangle: function(data) {
-		// This function adds a rectangle, it does not need a user's path
-
-		// unpack the data
-		var x = data.x;
-		var y = data.y;
-		var color = data.color;
-
-		// create the object
-		var rectangle = new Rectangle(new Point(x, y), new Point(x+60,y+80));
-		var path = new Path.Rectangle(rectangle);
-	    path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
-
-	    // refresh the view
-	    view.draw();
-	},
-
-
-	drawPrettyEllipse: function(data) {
-		// This functions adds an ellipse, it does not need a user's path
-
-		// unpack the data
-		var x = data.x;
-		var y = data.y;
-		var color = data.color;
-
-		// create the object
-		var ellipse = new Shape.Ellipse({
-			point: [x,y],
-			size: [180,60],
-			fillColor: new Color(color.green, color.red, color.blue, color.alpha)
-		});
-
-	    // Refresh the view, so we always get an update, even if the tab is not in focus
-	    view.draw();
-	},
-
-	erase: function(data) {
-		// This function "erases," right now it adds a white line over things
-		// It requires a user's path to make a continuous line
-
-		// Adds to the path object
-
-		// set up path object
-		paths[data.id].strokeWidth = 30;
-		paths[data.id].strokeColor = 'black';
-		paths[data.id].blendMode = 'destination-out';
-
-		// add the point
-		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-		view.draw(); // Refreshes the view
-	},
-
-	receiveClear: function(data) {
-		// This function clears the project
-		paper.project.clear();
 	},
 
 

@@ -203,6 +203,20 @@ var PavementWrapper = function(canvas) {
 	this.exportSVG = function() {
 		return paper.project.exportSVG({asString:true});
 	}
+
+	/* drawText will add text starting at the point clicked */
+	this.drawText = function(data) {
+		var text = new PointText(new Point (data.startX, data.startY));
+		var input = data.text;
+		text.fillColor = data.strokeColor;
+		console.log('in drawText');
+		if (input != null) {
+			text.content = input;
+		}
+
+		view.draw();
+
+	}
 }
 
 // This will throw an error but work anyway
