@@ -1,31 +1,18 @@
-var myCanvas = document.getElementById('myCanvas');
 paper.install(window);
-paper.setup(myCanvas);
+var myCanvas = document.getElementById('myCanvas');
 var colorPicked = 'black'; // default color used
-var paths = {};
 
+var pavement = new PavementWrapper(myCanvas);
 
 var Canvas = React.createClass({
 
 	getInitialState: function() {
-		return {tool: this.usePencil()};
+		return {tool: this.usePencil(), activeIndex: 0};
 	},
 
 	componentDidMount: function () {
 		//instatiate the paperScope with the canvas element
 		paper.setup('myCanvas');
-		
-		function onMouseDown(event) {
-			path = new Path();
-			path.strokeColor = colorPicked;
-			path.add(event.point);
-		}
-		this.tool = new Tool();
-		this.tool.onMouseDown = onMouseDown;
-
-		this.tool.onMouseDrag = function(event) {
-			path.add(event.point);
-		}
 		this.setupReceiver();
 	},
 
@@ -40,6 +27,7 @@ var Canvas = React.createClass({
 	// ***** EMITTING EVENTS *****
 
 	usePencil: function () {
+		this.setState({activeIndex: 0});
 		this.tool = new Tool();
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
@@ -70,6 +58,7 @@ var Canvas = React.createClass({
 	},
 
 	useCloud: function () {
+		this.setState({activeIndex: 1});
 		this.tool.activate();
 		this.tool.minDistance = 20;
 		this.tool.onMouseDown = this.onMouseDown;
@@ -88,6 +77,7 @@ var Canvas = React.createClass({
 
 
 	usePrettyCircle: function() {
+		this.setState({activeIndex: 3});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -123,6 +113,7 @@ var Canvas = React.createClass({
 	},
 
 	useCircle: function() {
+		this.setState({activeIndex: 2});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
@@ -139,6 +130,7 @@ var Canvas = React.createClass({
 	},
 
 	usePrettyRectangle: function() {
+		this.setState({activeIndex: 4});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -164,6 +156,7 @@ var Canvas = React.createClass({
 
 
 	usePrettyEllipse: function() {
+		this.setState({activeIndex: 5});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -189,6 +182,7 @@ var Canvas = React.createClass({
 
 
 	useEraser: function() {
+		this.setState({activeIndex: 6});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
@@ -254,6 +248,7 @@ var Canvas = React.createClass({
 
 	// ***** RECEIVING FUNCTIONALITY *****
 
+<<<<<<< HEAD
 	setPath: function(data) {
 		// This function adds to the path drawn by a user
 		// This allows for a smoother continuous line
@@ -289,6 +284,8 @@ var Canvas = React.createClass({
 
 	},
 
+=======
+>>>>>>> ac0b673c28d1a29e6ed8c1c8fba6de0b8e7ad40f
 	/*
 	pickColor takes a hex color in via a js popup prompt and saves it to colorPicked
 
@@ -303,6 +300,7 @@ var Canvas = React.createClass({
 		}
 	},
 
+<<<<<<< HEAD
 	drawCloud: function(data) {
 		// This function adds a cloud to the path
 		paths[data.id].strokeColor = data.strokeColor;
@@ -406,6 +404,8 @@ var Canvas = React.createClass({
 		// This function clears the project
 		paper.project.clear();
 	},
+=======
+>>>>>>> ac0b673c28d1a29e6ed8c1c8fba6de0b8e7ad40f
 
 	// ***** SOCKET FUNCTIONALITY *****
 
@@ -419,37 +419,39 @@ var Canvas = React.createClass({
 
 	setupReceiver: function(data) {
 		// These are all of the receiver functions
-		this.props.socket.on('setPath', this.setPath);
-		this.props.socket.on('drawPencil', this.drawPencil);
-		this.props.socket.on('drawText', this.drawText);
-		this.props.socket.on('drawCloud', this.drawCloud);
-		this.props.socket.on('drawPrettyCircle', this.drawPrettyCircle);
-		this.props.socket.on('drawPrettyRectangle', this.drawPrettyRectangle);
-		this.props.socket.on('drawPrettyEllipse', this.drawPrettyEllipse);
-		this.props.socket.on('erase', this.erase);
-		this.props.socket.on('clear', this.receiveClear);
-		this.props.socket.on('importSVG', this.importSVG);
-		this.props.socket.on('drawCircle', this.drawCircle);
+		this.props.socket.on('setPath', pavement.setPath);
+		this.props.socket.on('drawPencil', pavement.drawPencil);
+		this.props.socket.on('drawText', pavement.drawText);
+		this.props.socket.on('drawCloud', pavement.drawCloud);
+		this.props.socket.on('drawCircle', pavement.drawCircle);
+		this.props.socket.on('drawPrettyCircle', pavement.drawPrettyCircle);
+		this.props.socket.on('drawPrettyRectangle', pavement.drawPrettyRectangle);
+		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipse);
+		this.props.socket.on('erase', pavement.erase);
+		this.props.socket.on('clear', pavement.clearProject);
+		this.props.socket.on('importSVG', pavement.importSVG);
 	},
 
 	render: function () {
 		return (
 			<div id="pavementDiv">
-				<nav id="toolBar">
-					<Button setTool={this.usePencil} tool={"Pencil"}/>
-					<Button setTool={this.useText} tool={"Text"}/>
-					<Button setTool={this.useCloud} tool={"Cloud"}/>
-					<Button setTool={this.useCircle} tool={"Circle"}/>
-					<Button setTool={this.usePrettyCircle} tool={"Pretty Circles"}/>
-					<Button setTool={this.usePrettyRectangle} tool={"Pretty Rectangles"}/>
-					<Button setTool={this.usePrettyEllipse} tool={"Pretty Ellipses"}/>
-					<Button setTool={this.pickColor} tool={"Pick Color"}/>
-					<Button setTool={this.useEraser} tool={"Erase"}/>
-					<Button setTool={this.download} tool={'Download'}/>
-					<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
-					<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
-					<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
-				</nav>
+				<div id="toolBarDiv">
+					<nav id="toolBar">
+						<Button setTool={this.usePencil} active={this.state.activeIndex===0} tool={"Pencil"}/>
+						<Button setTool={this.useText} active={this.state.activeIndex===0} tool={"Text"}/>
+						<Button setTool={this.useCloud} active={this.state.activeIndex===1} tool={"Cloud"}/>
+						<Button setTool={this.useCircle} active={this.state.activeIndex===2} tool={"Circle"}/>
+						<Button setTool={this.usePrettyCircle} active={this.state.activeIndex===3} tool={"Pretty Circles"}/>
+						<Button setTool={this.usePrettyRectangle} active={this.state.activeIndex===4} tool={"Pretty Rectangles"}/>
+						<Button setTool={this.usePrettyEllipse} active={this.state.activeIndex===5} tool={"Pretty Ellipses"}/>
+						<Button setTool={this.pickColor} tool={"Pick Color"}/>
+						<Button setTool={this.useEraser} active={this.state.activeIndex===6} tool={"Erase"}/>
+						<Button setTool={this.download} tool={'Download'}/>
+						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
+						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
+						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
+					</nav>
+				</div>
 				<div id="canvasDiv">
 					<canvas id="myCanvas" data-paper-resize></canvas>
 				</div>
