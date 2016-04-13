@@ -55,6 +55,20 @@ var Canvas = React.createClass({
 		
 	},
 
+	useText: function () {
+		this.tool = new Tool();
+		this.tool.activate();
+		this.tool.onMouseDown = function(event) {
+			// packing the data
+			var data = {};
+			data.startX = event.point.x;
+			data.startY = event.point.y;
+			data.strokeColor = colorPicked;
+			// emitting all the data
+			this.emitEvent('drawText', data);
+		}.bind(this);
+	},
+
 	useCloud: function () {
 		this.tool.activate();
 		this.tool.minDistance = 20;
@@ -123,7 +137,6 @@ var Canvas = React.createClass({
 		}.bind(this);
 
 	},
-
 
 	usePrettyRectangle: function() {
 		this.tool.activate();
@@ -260,6 +273,22 @@ var Canvas = React.createClass({
 		view.draw(); // this refreshes the view
 	},
 
+	/* drawText will add text starting at the point clicked */
+	drawText: function(data) {
+		this.tool.activate();
+
+		var text = new PointText(new Point (data.startX, data.startY));
+		var input = prompt("Text");
+		text.fillColor = data.strokeColor;
+		console.log('in drawText');
+		if (input != null) {
+			text.content = input;
+		}
+
+		view.draw();
+
+	},
+
 	/*
 	pickColor takes a hex color in via a js popup prompt and saves it to colorPicked
 
@@ -300,6 +329,7 @@ var Canvas = React.createClass({
 	    // Refresh the view, so we always get an update, even if the tab is not in focus
 	    view.draw();
 	},
+
 	drawCircle: function(data) {
 		// This function adds a circle, it does not need a user's path
 
@@ -391,6 +421,7 @@ var Canvas = React.createClass({
 		// These are all of the receiver functions
 		this.props.socket.on('setPath', this.setPath);
 		this.props.socket.on('drawPencil', this.drawPencil);
+		this.props.socket.on('drawText', this.drawText);
 		this.props.socket.on('drawCloud', this.drawCloud);
 		this.props.socket.on('drawPrettyCircle', this.drawPrettyCircle);
 		this.props.socket.on('drawPrettyRectangle', this.drawPrettyRectangle);
@@ -406,6 +437,7 @@ var Canvas = React.createClass({
 			<div id="pavementDiv">
 				<nav id="toolBar">
 					<Button setTool={this.usePencil} tool={"Pencil"}/>
+					<Button setTool={this.useText} tool={"Text"}/>
 					<Button setTool={this.useCloud} tool={"Cloud"}/>
 					<Button setTool={this.useCircle} tool={"Circle"}/>
 					<Button setTool={this.usePrettyCircle} tool={"Pretty Circles"}/>
