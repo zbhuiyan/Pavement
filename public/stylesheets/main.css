@@ -1,83 +1,163 @@
-/*@font-face { font-family: Gotham; src: url('Gotham-Book.ttf'); } 
-@font-face { font-family: Entypo; src: url('fontello.ttf'); } */
-canvas{
-        height: 400px;
-        width: 400px;
-        border: 1px solid black;
+body {
+    /*display: flex;*/
+    font-family: 'Open Sans', sans-serif;
 }
 
-/*body {
-    display: flex;
-    justify-content: center;
-    background-color: white;
-}*/
+/******************
+***Overall Stuff***
+******************/
 
-/*#content {
-	width: 100%;
-}*/
-
-/*.contextParent{
-    font-family: Gotham, sans-serif;
-    padding:10px;
-    text-align: center;
-}*/
-
-/*.contextChild {
-    margin:50px;
-}*/
-
-/*.contextPic{
-    margin-left: -25%;
-}*/
-
-/*.contextWelcome{
-    margin-top: -120px;
-    margin-left: 20%;
-}*/
-
-.proPic{
-  display: block;
-  width: 150px;
-  height: 150px;
-  margin: 1em auto;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  -webkit-border-radius: 99em;
-  -moz-border-radius: 99em;
-  border-radius: 99em;
-}
-
-
-a:link, a:visited, a:hover, a:active {
-    border-radius: 50px;
-    background-color: #23CF5F;
-    color: white;
-    font-family: Gotham, sans-serif;
-    font-size: 20px;
-    padding: 14px 25px;
-    text-align: center; 
-    text-decoration: none;
-    display: inline-block;
+#content {
+    /*display: block;*/
+    /*margin: auto;*/
+    /*display: felx;
+    justify-content: center;*/
 }
 
 .header {
-	font-size: 200%;
-	padding: 10px;
-	justify-content: center;
-	border-bottom: solid 1px gray;
+    font-size: 200%;
+    padding: 10px;
+    /*justify-content: center;*/
+    border-bottom: solid 1px gray;
 }
 
-
-
-canvas{
-  width: 100%;
-  height: 100%;
+input {
+    padding: 12px 20px;
 }
 
+input[type="text"],
+input[type="password"] {
+    width:20%;
+    min-width: 150px;
+    /*display:block;
+    margin:auto;*/
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 100%;
+}
+
+input[type="submit"] {
+        width: 10%;
+    min-width: 100px;
+    background-color: #FFE66F;
+    border: none;
+    color: gray;
+    padding: 12px 20px;
+    padding: px 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px 2px;
+    cursor: pointer;
+    font-size: 100%;
+    border-radius: 5px;
+}
+
+.submitButton {
+    width: 10%;
+    min-width: 100px;
+    background-color: #FFE66F;
+    border: none;
+    color: gray;
+    padding: 12px 20px;
+    padding: px 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px 2px;
+    cursor: pointer;
+    font-size: 100%;
+    border-radius: 5px;
+}
+
+/***************
+***Login page***
+***************/
+
+.FormViewControl {
+    margin: auto;
+    text-align: center;
+}
+
+/***************
+***Board Page***
+***************/
+
+.publicCheckbox {
+    padding: 8px;
+}
+
+button {
+    padding: 14px 14px;
+    
+}
+
+/**************
+***Pavement***
+**************/
 
 
+#pavementDiv {
+    /*height: 100%;*/
+    /*display: block;*/
+}
 
+#toolBar {
+	/*float: left;*/
+	list-style-type: none;
+	/*padding: 14px 16px;*/
+    /*flex: 1;*/
+}
 
+.toolBarButton {
+    background-color: #FFE66F;
+    border: none;
+    color: gray;
+    padding: 1px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px 2px;
+    cursor: pointer;
+    font-size: 100%;
+    border-radius: 5px;
+}
 
+.active {
+    background-color: #aeaeea;
+}
 
+.toolBarButton:hover:not(.active) {
+    background-color: #aeeaea;
+}
+
+#canvasDiv {
+   /*margin-bottom: 100px;*/
+}
+
+canvas {
+    border: 1px solid black;
+    width: 100%;
+    height: absolute;
+    /*height: 100%;*/
+    /*min-height: 300px;*/
+}
+
+.chatBox {
+    /*float: right;*/
+}
+
+.chatList {
+    border: 1px teal solid;
+    height: 225px;
+    width: 400px;
+    overflow: scroll;
+}
+
+.chatAuthor {
+    font-weight: bold;
+}
