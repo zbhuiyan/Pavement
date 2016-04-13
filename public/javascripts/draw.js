@@ -248,7 +248,6 @@ var Canvas = React.createClass({
 
 	// ***** RECEIVING FUNCTIONALITY *****
 
-<<<<<<< HEAD
 	setPath: function(data) {
 		// This function adds to the path drawn by a user
 		// This allows for a smoother continuous line
@@ -284,8 +283,6 @@ var Canvas = React.createClass({
 
 	},
 
-=======
->>>>>>> ac0b673c28d1a29e6ed8c1c8fba6de0b8e7ad40f
 	/*
 	pickColor takes a hex color in via a js popup prompt and saves it to colorPicked
 
@@ -300,7 +297,6 @@ var Canvas = React.createClass({
 		}
 	},
 
-<<<<<<< HEAD
 	drawCloud: function(data) {
 		// This function adds a cloud to the path
 		paths[data.id].strokeColor = data.strokeColor;
@@ -404,8 +400,7 @@ var Canvas = React.createClass({
 		// This function clears the project
 		paper.project.clear();
 	},
-=======
->>>>>>> ac0b673c28d1a29e6ed8c1c8fba6de0b8e7ad40f
+
 
 	// ***** SOCKET FUNCTIONALITY *****
 
@@ -426,10 +421,10 @@ var Canvas = React.createClass({
 		this.props.socket.on('drawCircle', pavement.drawCircle);
 		this.props.socket.on('drawPrettyCircle', pavement.drawPrettyCircle);
 		this.props.socket.on('drawPrettyRectangle', pavement.drawPrettyRectangle);
-		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipse);
+		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipses);
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
-		this.props.socket.on('importSVG', pavement.importSVG);
+		this.props.socket.on('importSVG', this.importSVG);
 	},
 
 	render: function () {
