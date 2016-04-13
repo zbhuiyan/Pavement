@@ -220,24 +220,22 @@ var Canvas = React.createClass({
 
 	},
 
-	importSVG: function(){
+	sendSVG: function(){
 		var _this = this;
 		var myCanvas = document.getElementById('myCanvas');
 
 		$("#upload").on('change',function(){
 			_this.tool.activate();
-			paper.project.clear();
+
 	        var fs = $("#upload")[0].files;	
-			console.log(fs[0].name);
-			paper.project.clear();
 			var reader = new FileReader(); 
+
 	        reader.onloadend = function (e) {  //called after a read completes
-	          myCanvas.innerHTML = e.target.result;
-	          var svg = myCanvas.querySelector('svg');
-	          console.log('svg', svg);
-	          project.importSVG(svg);
-	          myCanvas.innerHTML = "";
-	          _this.emitEvent('importSVG', svg);
+
+	          var data = {};
+	          data.svg = e.target.result;
+	          
+	          _this.emitEvent('importSVG', data);
 	        };  
 	        reader.readAsText(fs[0]); 
 
@@ -287,7 +285,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipses);
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
-		this.props.socket.on('importSVG', this.importSVG);
+		this.props.socket.on('importSVG', pavement.importSVG);
 	},
 
 	render: function () {
@@ -306,8 +304,9 @@ var Canvas = React.createClass({
 						<Button setTool={this.useText} active={this.state.activeIndex===7} tool={"Text"}/>
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
-						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
-						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
+						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} tool={'Import SVG'}/>
+						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.sendSVG}/><br />
+						<span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth} />
 					</nav>
 				</div>
 				<div id="canvasDiv">

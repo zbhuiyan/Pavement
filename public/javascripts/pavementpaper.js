@@ -192,6 +192,12 @@ var PavementWrapper = function(canvas) {
 
 	this.clearProject = function() {
 		paper.project.clear();
+
+		if(typeof Path !== 'undefined') {
+			view.draw();
+		} else {
+			paper.view.draw();
+		}
 	}
 
 	/**
@@ -214,8 +220,23 @@ var PavementWrapper = function(canvas) {
 			text.content = input;
 		}
 
-		view.draw();
+		if(typeof Path !== 'undefined') {
+			view.draw();
+		} else {
+			paper.view.draw();
+		}
+	}
 
+	this.importSVG = function(data) {
+		paper.project.clear();
+
+		if(typeof Path !== 'undefined') {
+			project.importSVG(data.svg);
+			view.draw();
+		} else {
+			paper.project.importSVG(data.svg);
+			paper.view.draw();
+		}
 	}
 }
 
