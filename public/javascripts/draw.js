@@ -7,7 +7,7 @@ var pavement = new PavementWrapper(myCanvas);
 var Canvas = React.createClass({
 
 	getInitialState: function() {
-		return {tool: this.usePencil(), activeIndex: 0};
+		return {tool: this.usePencil(), activeIndex:0, strokeWidth:1};
 	},
 
 	componentDidMount: function () {
@@ -24,6 +24,12 @@ var Canvas = React.createClass({
 
 	},
 
+	// ***** STATE EVENTS *****
+
+	setStrokeWidth: function(e) {
+		this.setState({strokeWidth:e.target.value});
+	},
+
 	// ***** EMITTING EVENTS *****
 
 	usePencil: function () {
@@ -37,6 +43,8 @@ var Canvas = React.createClass({
 			var data = {};
 			data.toPoint = event.point;
 			data.strokeColor = colorPicked;
+			data.strokeWidth = this.state.strokeWidth;
+
 			// emiting the data
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
@@ -70,6 +78,7 @@ var Canvas = React.createClass({
 			var data = {};
 			data.toPoint = event.point;
 			data.strokeColor = colorPicked;
+			data.strokeWidth = this.state.strokeWidth;
 
 			// emitting the data
 			this.emitEvent('drawCloud', data)
@@ -264,7 +273,6 @@ var Canvas = React.createClass({
 		}
 	},
 
-
 	// ***** SOCKET FUNCTIONALITY *****
 
 	emitEvent: function(eventName, data) {
@@ -307,7 +315,9 @@ var Canvas = React.createClass({
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
-						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
+						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/><br />
+						<span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth} />
+
 					</nav>
 				</div>
 				<div id="canvasDiv">

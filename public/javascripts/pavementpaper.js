@@ -30,6 +30,7 @@ var PavementWrapper = function(canvas) {
 
 	this.drawPencil = function(data) {
 		paths[data.id].strokeColor = data.strokeColor;
+		paths[data.id].strokeWidth = data.strokeWidth;
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 	};
 
@@ -41,7 +42,7 @@ var PavementWrapper = function(canvas) {
 
 	this.drawCloud = function(data) {
 		paths[data.id].strokeColor = data.strokeColor;
-		paths[data.id].strokeWidth = 5;
+		paths[data.id].strokeWidth = data.strokeWidth;
 		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
 	}
 
@@ -206,15 +207,26 @@ var PavementWrapper = function(canvas) {
 
 	/* drawText will add text starting at the point clicked */
 	this.drawText = function(data) {
-		var text = new PointText(new Point (data.startX, data.startY));
 		var input = data.text;
+		
+		if(typeof Path !== 'undefined') {
+			var text = new PointText(new Point (data.startX, data.startY));
+		} else {
+			var text = new paper.PointText(new paper.Point(data.startX, data.startY));
+		}
+
 		text.fillColor = data.strokeColor;
-		console.log('in drawText');
+		
 		if (input != null) {
 			text.content = input;
 		}
 
-		view.draw();
+		if(typeof Path !== 'undefined') {
+			view.draw();
+		} else {
+			paper.view.draw();
+		}
+		
 
 	}
 }
