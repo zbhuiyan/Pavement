@@ -44,6 +44,7 @@ var Canvas = React.createClass({
 	},
 
 	useText: function () {
+		this.setState({activeIndex: 7});
 		this.tool = new Tool();
 		this.tool.activate();
 		this.tool.onMouseDown = function(event) {
@@ -433,7 +434,6 @@ var Canvas = React.createClass({
 				<div id="toolBarDiv">
 					<nav id="toolBar">
 						<Button setTool={this.usePencil} active={this.state.activeIndex===0} tool={"Pencil"}/>
-						<Button setTool={this.useText} active={this.state.activeIndex===0} tool={"Text"}/>
 						<Button setTool={this.useCloud} active={this.state.activeIndex===1} tool={"Cloud"}/>
 						<Button setTool={this.useCircle} active={this.state.activeIndex===2} tool={"Circle"}/>
 						<Button setTool={this.usePrettyCircle} active={this.state.activeIndex===3} tool={"Pretty Circles"}/>
@@ -441,6 +441,7 @@ var Canvas = React.createClass({
 						<Button setTool={this.usePrettyEllipse} active={this.state.activeIndex===5} tool={"Pretty Ellipses"}/>
 						<Button setTool={this.pickColor} tool={"Pick Color"}/>
 						<Button setTool={this.useEraser} active={this.state.activeIndex===6} tool={"Erase"}/>
+						<Button setTool={this.useText} active={this.state.activeIndex===7} tool={"Text"}/>
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
