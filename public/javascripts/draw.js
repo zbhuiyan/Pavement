@@ -268,7 +268,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('drawCircle', pavement.drawCircle);
 		this.props.socket.on('drawPrettyCircle', pavement.drawPrettyCircle);
 		this.props.socket.on('drawPrettyRectangle', pavement.drawPrettyRectangle);
-		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipse);
+		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipses);
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', this.importSVG);
