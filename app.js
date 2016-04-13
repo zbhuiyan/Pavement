@@ -36,8 +36,6 @@ var chat = require('./routes/chat.js');
 var board = require('./routes/board.js');
 var accessor = require('./passport/accessor.js');
 
-
-
 app.get('/', accessor.isLoggedIn, index.home);
 app.get('/currentUser', user.currentUser);
 app.get('/draw/:boardId', accessor.canAccessBoard, index.draw);
@@ -108,6 +106,7 @@ io.on('connection', function(socket) {
 	socket.on('disconnect', function() {
 		console.log('disconnecting...');
 		delete openConnections[socket.id];
+		console.log(wrapper.exportSVG());
 	});
 });
 
