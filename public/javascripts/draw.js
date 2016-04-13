@@ -207,6 +207,26 @@ var Canvas = React.createClass({
 		}.bind(this);
 	},
 
+	useSingleCircle: function() {
+		this.setState({activeIndex: 8});
+		this.tool.activate();
+		this.tool.onMouseDown = this.onMouseDown;
+
+		this.tool.onMouseDrag = function(event){
+			var data = {};
+			var x1 = event.middlePoint.x;
+			var y1 = event.middlePoint.y;
+			// var x2 = event.point.x;
+			// var y2 = event.point.y;
+			data.x1 = x1;
+			data.y1 = y1;
+			data.radius = this.state.strokeWidth;
+			data.color = colorPicked;
+			
+			this.emitEvent('drawSingleCircle', data);
+		}.bind(this);
+	},
+
 	clearCanvas: function(){
 		this.tool.activate();
 		paper.project.clear();
@@ -291,6 +311,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('drawPrettyCircle', pavement.drawPrettyCircle);
 		this.props.socket.on('drawPrettyRectangle', pavement.drawPrettyRectangle);
 		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipses);
+		this.props.socket.on('drawSingleCircle', pavement.drawSingleCircle);
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
@@ -310,6 +331,7 @@ var Canvas = React.createClass({
 						<Button setTool={this.pickColor} tool={"Pick Color"}/>
 						<Button setTool={this.useEraser} active={this.state.activeIndex===6} tool={"Erase"}/>
 						<Button setTool={this.useText} active={this.state.activeIndex===7} tool={"Text"}/>
+						<Button setTool={this.useSingleCircle} active={this.state.activeIndex===8} tool={"Single Circle"}/>
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
