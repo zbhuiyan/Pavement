@@ -8,7 +8,7 @@ var paths = {};
 var Canvas = React.createClass({
 
 	getInitialState: function() {
-		return {tool: this.usePencil()};
+		return {tool: this.usePencil(), activeIndex: 0};
 	},
 
 	componentDidMount: function () {
@@ -40,6 +40,7 @@ var Canvas = React.createClass({
 	// ***** EMITTING EVENTS *****
 
 	usePencil: function () {
+		this.setState({activeIndex: 0});
 		this.tool = new Tool();
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
@@ -56,6 +57,7 @@ var Canvas = React.createClass({
 	},
 
 	useCloud: function () {
+		this.setState({activeIndex: 1});
 		this.tool.activate();
 		this.tool.minDistance = 20;
 		this.tool.onMouseDown = this.onMouseDown;
@@ -74,6 +76,7 @@ var Canvas = React.createClass({
 
 
 	usePrettyCircle: function() {
+		this.setState({activeIndex: 3});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -109,6 +112,7 @@ var Canvas = React.createClass({
 	},
 
 	useCircle: function() {
+		this.setState({activeIndex: 2});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
@@ -126,6 +130,7 @@ var Canvas = React.createClass({
 
 
 	usePrettyRectangle: function() {
+		this.setState({activeIndex: 4});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -151,6 +156,7 @@ var Canvas = React.createClass({
 
 
 	usePrettyEllipse: function() {
+		this.setState({activeIndex: 5});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -176,6 +182,7 @@ var Canvas = React.createClass({
 
 
 	useEraser: function() {
+		this.setState({activeIndex: 6});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
@@ -404,20 +411,22 @@ var Canvas = React.createClass({
 	render: function () {
 		return (
 			<div id="pavementDiv">
-				<nav id="toolBar">
-					<Button setTool={this.usePencil} tool={"Pencil"}/>
-					<Button setTool={this.useCloud} tool={"Cloud"}/>
-					<Button setTool={this.useCircle} tool={"Circle"}/>
-					<Button setTool={this.usePrettyCircle} tool={"Pretty Circles"}/>
-					<Button setTool={this.usePrettyRectangle} tool={"Pretty Rectangles"}/>
-					<Button setTool={this.usePrettyEllipse} tool={"Pretty Ellipses"}/>
-					<Button setTool={this.pickColor} tool={"Pick Color"}/>
-					<Button setTool={this.useEraser} tool={"Erase"}/>
-					<Button setTool={this.download} tool={'Download'}/>
-					<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
-					<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
-					<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
-				</nav>
+				<div id="toolBarDiv">
+					<nav id="toolBar">
+						<Button setTool={this.usePencil} active={this.state.activeIndex===0} tool={"Pencil"}/>
+						<Button setTool={this.useCloud} active={this.state.activeIndex===1} tool={"Cloud"}/>
+						<Button setTool={this.useCircle} active={this.state.activeIndex===2} tool={"Circle"}/>
+						<Button setTool={this.usePrettyCircle} active={this.state.activeIndex===3} tool={"Pretty Circles"}/>
+						<Button setTool={this.usePrettyRectangle} active={this.state.activeIndex===4} tool={"Pretty Rectangles"}/>
+						<Button setTool={this.usePrettyEllipse} active={this.state.activeIndex===5} tool={"Pretty Ellipses"}/>
+						<Button setTool={this.pickColor} tool={"Pick Color"}/>
+						<Button setTool={this.useEraser} active={this.state.activeIndex===6} tool={"Erase"}/>
+						<Button setTool={this.download} tool={'Download'}/>
+						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
+						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.importSVG} tool={'Import SVG'}/>
+						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.importSVG}/>
+					</nav>
+				</div>
 				<div id="canvasDiv">
 					<canvas id="myCanvas" data-paper-resize></canvas>
 				</div>

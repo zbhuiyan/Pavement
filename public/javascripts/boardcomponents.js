@@ -231,7 +231,7 @@ var CreateBoardForm = React.createClass({
 							name='name'
 							value={this.state.name}
 							onChange={this.handleNameChange} />
-					<span>Public :</span>
+					<span className="publicCheckbox">Public :</span>
 					<input type='checkbox'
 							name='isPublic'
 							value={this.state.isPublic}

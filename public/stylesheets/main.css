@@ -14,6 +14,17 @@ body {
     justify-content: center;*/
 }
 
+.header {
+    font-size: 200%;
+    padding: 10px;
+    /*justify-content: center;*/
+    border-bottom: solid 1px gray;
+}
+
+input {
+    padding: 12px 20px;
+}
+
 input[type="text"],
 input[type="password"] {
     width:20%;
@@ -29,35 +40,38 @@ input[type="password"] {
     font-size: 100%;
 }
 
-/*input[type="text"],
-input[type="password"]{
-    width:20%;
-    padding: 10px;
-    border: solid 5px #c9c9c9;
-    transition: border 0.3s;
-}
-
-input[type="text"]:focus,
-input[type="text"].focus {
-    border: solid 5px #969696;
-}*/
-
-.submitButton {
-    width: 10%;
+input[type="submit"] {
+        width: 10%;
     min-width: 100px;
     background-color: #FFE66F;
     border: none;
-    /*color: white;*/
     color: gray;
     padding: 12px 20px;
     padding: px 3px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    /*font-size: 16px;*/
     margin: 2px 2px;
     cursor: pointer;
     font-size: 100%;
+    border-radius: 5px;
+}
+
+.submitButton {
+    width: 10%;
+    min-width: 100px;
+    background-color: #FFE66F;
+    border: none;
+    color: gray;
+    padding: 12px 20px;
+    padding: px 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px 2px;
+    cursor: pointer;
+    font-size: 100%;
+    border-radius: 5px;
 }
 
 /***************
@@ -69,24 +83,48 @@ input[type="text"].focus {
     text-align: center;
 }
 
+/***************
+***Board Page***
+***************/
+
+.publicCheckbox {
+    padding: 8px;
+}
+
+button {
+    padding: 14px 14px;
+    
+}
+
+/**************
+***Pavement***
+**************/
 
 
 #pavementDiv {
+    /*height: 100%;*/
     /*display: block;*/
 }
 
 #toolBar {
-	float: left;
+	/*float: left;*/
 	list-style-type: none;
-	padding: 14px 16px;
+	/*padding: 14px 16px;*/
     /*flex: 1;*/
 }
 
 .toolBarButton {
-    padding: 8px 8px;
-    margin: 3px 3px;
-    background-color: gray;
+    background-color: #FFE66F;
+    border: none;
+    color: gray;
+    padding: 1px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px 2px;
     cursor: pointer;
+    font-size: 100%;
+    border-radius: 5px;
 }
 
 .active {
@@ -98,68 +136,28 @@ input[type="text"].focus {
 }
 
 #canvasDiv {
-    float: left;
+   /*margin-bottom: 100px;*/
 }
 
-canvas{
+canvas {
     border: 1px solid black;
     width: 100%;
-    height: 100%;
-    /*flex: 2;*/
-}
-
-button {
-	padding: 14px 14px;
-    
-}
-
-ul {
-    float: left;
+    height: absolute;
+    /*height: 100%;*/
+    /*min-height: 300px;*/
 }
 
 .chatBox {
-    float: right;
+    /*float: right;*/
 }
 
-li a {
-    display: block;
-    color: #000;
-    padding: 8px 8px;
-    text-decoration: none;
+.chatList {
+    border: 1px teal solid;
+    height: 225px;
+    width: 400px;
+    overflow: scroll;
 }
 
-li a.active {
-    background-color: #4CAF50;
-    color: white;
+.chatAuthor {
+    font-weight: bold;
 }
-
-li a:hover:not(.active) {
-    background-color: #555;
-    color: white;
-}
-
-
-/*button:link, button:visited, button:hover, button:active {
-    border-radius: 50px;
-    background-color: #23CF5F;
-    color: white;
-    font-family: Gotham, sans-serif;
-    font-size: 20px;
-    padding: 14px 25px;
-    text-align: center; 
-    text-decoration: none;
-    display: inline-block;
-}
-*/
-.header {
-	font-size: 200%;
-	padding: 10px;
-	/*justify-content: center;*/
-	border-bottom: solid 1px gray;
-}
-
-
-
-
-
-
