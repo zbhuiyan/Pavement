@@ -46,6 +46,29 @@ var PavementWrapper = function(canvas) {
 		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
 	}
 
+	this.drawSingleCircle = function (data) {
+
+		var x = data.x1;
+		var y = data.y1;
+		var radius = data.radius;
+		var color = data.color;
+
+		if(typeof Path !== 'undefined') {
+			var circle = new Path.Circle(new Point(x,y), radius);
+		    circle.strokeColor = new Color(color);
+		    circle.removeOnDrag();
+		    // Refresh the view, so we always get an update, even if the tab is not in focus
+		    view.draw();
+		} else {
+			var circle = new paper.Path.Circle(new paper.Point(x,y), radius);
+		    circle.strokeColor = new paper.Color(color);
+		    circle.removeOnDrag();
+		    // Refresh the view, so we always get an update, even if the tab is not in focus
+		    paper.view.draw();
+		}
+	}
+
+
 	/**
 	* Draws circle based on cursor location 
 	* @param {Object} data
