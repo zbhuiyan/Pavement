@@ -30,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect('mongodb://jwei:jwei@ds025459.mlab.com:25459/pavement');
 
+var socketHelper = require('./functions/sockethelper.js');
+
 var index = require('./routes/index.js');
 var user = require('./routes/user.js');
 var chat = require('./routes/chat.js');
@@ -95,7 +97,7 @@ io.on('connection', function(socket) {
 		chatObj.user = socketInfo.userId;
 		chatObj.msg = message;
 
-		chat.addMessage(chatObj);
+		socketHelper.addMessage(chatObj);
 	});
 
 	socket.on('draw', function(data) {

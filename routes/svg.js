@@ -18,18 +18,4 @@ svgMethods.getSvg = function(req, res) {
 	});
 };
 
-svgMethods.addSvg = function(boardId, data) {
-	newSvg = new SVG({
-		boardId:boardId,
-		data:data,
-		timestamp: new Date()
-	});
-
-	newSvg.save();
-};
-
-svgMethods.removeSvg = function(svgId) {
-	SVG.remove({_id:svgId});
-}
-
 module.exports = svgMethods;

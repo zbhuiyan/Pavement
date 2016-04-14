@@ -182,7 +182,12 @@ var PavementWrapper = function(canvas) {
 		return paper.project.exportSVG({asString:true});
 	}
 
-	/* drawText will add text starting at the point clicked */
+	/* 
+	* Adds text starting at the point clicked
+	* @param {Object} data
+	* @return {null}
+	*/
+
 	this.drawText = function(data) {
 		var input = data.text;
 		var text = new paper.PointText(new paper.Point(data.startX, data.startY));
@@ -196,6 +201,12 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
+	/*
+	* Adds an svg to the project
+	* @param {Object} data
+	* @return {null}
+	*/
+
 	this.importSVG = function(data) {
 		paper.project.clear();
 
@@ -204,7 +215,6 @@ var PavementWrapper = function(canvas) {
 	}
 }
 
-// This will throw an error but work anyway
 if(typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 	module.exports = PavementWrapper;
 } else {
