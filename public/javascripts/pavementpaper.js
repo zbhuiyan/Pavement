@@ -14,11 +14,8 @@ var PavementWrapper = function(canvas) {
 	*/
 
 	this.setPath = function(data) {
-		if(typeof Path !== 'undefined') {
-			paths[data.id] = new Path();
-		} else {
-			paths[data.id] = new paper.Path();
-		}
+		paths[data.id] = new paper.Path();
+		
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 	};
 
@@ -54,19 +51,11 @@ var PavementWrapper = function(canvas) {
 		var radius = parseInt(data.radius);
 		var color = data.color;
 
-		if(typeof Path !== 'undefined') {
-			var circle = new Path.Circle(new Point(x,y), radius);
-		    circle.strokeColor = new Color(color);
-		    circle.removeOnDrag();
-		    // Refresh the view, so we always get an update, even if the tab is not in focus
-		    view.draw();
-		} else {
-			var circle = new paper.Path.Circle(new paper.Point(x,y), radius);
-		    circle.strokeColor = new paper.Color(color);
-		    circle.removeOnDrag();
-		    // Refresh the view, so we always get an update, even if the tab is not in focus
-		    paper.view.draw();
-		}
+		var circle = new paper.Path.Circle(new paper.Point(x,y), radius);
+	    circle.strokeColor = new paper.Color(color);
+	    circle.removeOnDrag();
+	    // Refresh the view, so we always get an update, even if the tab is not in focus
+	    paper.view.draw();
 	}
 
 
@@ -85,19 +74,12 @@ var PavementWrapper = function(canvas) {
 
 		// create the object
 		// var size = new Size(radius);
-		if(typeof Path !== 'undefined') {
-			var circle = new Path.Circle(new Point(x,y), radius);
-		    circle.strokeColor = new Color(color);
+		var circle = new paper.Path.Circle(new paper.Point(x,y), radius);
+	    circle.strokeColor = new paper.Color(color);
 
-		    // Refresh the view, so we always get an update, even if the tab is not in focus
-		    view.draw();
-		} else {
-			var circle = new paper.Path.Circle(new paper.Point(x,y), radius);
-		    circle.strokeColor = new paper.Color(color);
-
-		    // Refresh the view, so we always get an update, even if the tab is not in focus
-		    paper.view.draw();
-		}
+	    // Refresh the view, so we always get an update, even if the tab is not in focus
+	    paper.view.draw();
+		
 	}
 
 	/**
@@ -114,17 +96,10 @@ var PavementWrapper = function(canvas) {
 		var color = data.color;
 
 		// create the object
-		if(typeof Path !== 'undefined') {
-			var circle = new Path.Circle(new Point(x, y), radius);
-		    circle.fillColor = new Color(color.red, color.green, color.blue, color.alpha);
+		var circle = new paper.Path.Circle(new paper.Point(x, y), radius);
+	    circle.fillColor = new paper.Color(color.red, color.green, color.blue, color.alpha);
 
-		    view.draw();
-		} else {
-			var circle = new paper.Path.Circle(new paper.Point(x, y), radius);
-		    circle.fillColor = new paper.Color(color.red, color.green, color.blue, color.alpha);
-
-		    paper.view.draw();
-		}
+	    paper.view.draw();
 	}
 
 	/**
@@ -140,19 +115,11 @@ var PavementWrapper = function(canvas) {
 		var color = data.color;
 
 		// create the object
-		if(typeof Path !== 'undefined') {
-			var rectangle = new Rectangle(new Point(x, y), new Point(x+60,y+80));
-			var path = new Path.Rectangle(rectangle);
-		    path.fillColor = new Color(color.green, color.red, color.blue, color.alpha);
+		var rectangle = new paper.Rectangle(new paper.Point(x, y), new paper.Point(x+60,y+80));
+		var path = new paper.Path.Rectangle(rectangle);
+	    path.fillColor = new paper.Color(color.green, color.red, color.blue, color.alpha);
 
-		    view.draw();
-		} else {
-			var rectangle = new paper.Rectangle(new paper.Point(x, y), new paper.Point(x+60,y+80));
-			var path = new paper.Path.Rectangle(rectangle);
-		    path.fillColor = new paper.Color(color.green, color.red, color.blue, color.alpha);
-
-		    paper.view.draw();
-		}
+	    paper.view.draw();
 	}
 
 	/**
@@ -168,23 +135,13 @@ var PavementWrapper = function(canvas) {
 		var color = data.color;
 
 		// create the object
-		if(typeof Path !== 'undefined') {
-			var ellipse = new Shape.Ellipse({
-				point: [x,y],
-				size: [180,60],
-				fillColor: new Color(color.green, color.red, color.blue, color.alpha)
-			});
+		var ellipse = new paper.Shape.Ellipse({
+			point: [x,y],
+			size: [180,60],
+			fillColor: new paper.Color(color.green, color.red, color.blue, color.alpha)
+		});
 
-			view.draw();
-		} else {
-			var ellipse = new paper.Shape.Ellipse({
-				point: [x,y],
-				size: [180,60],
-				fillColor: new paper.Color(color.green, color.red, color.blue, color.alpha)
-			});
-
-			paper.view.draw();
-		}
+		paper.view.draw();
 	}
 
 	/**
@@ -202,11 +159,7 @@ var PavementWrapper = function(canvas) {
 		// add the point
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 
-		if(typeof Path !== 'undefined') {
-			view.draw();
-		} else {
-			paper.view.draw();
-		}
+		paper.view.draw();
 	}
 
 	/**
@@ -217,12 +170,7 @@ var PavementWrapper = function(canvas) {
 
 	this.clearProject = function() {
 		paper.project.clear();
-
-		if(typeof Path !== 'undefined') {
-			view.draw();
-		} else {
-			paper.view.draw();
-		}
+		paper.view.draw();
 	}
 
 	/**
@@ -235,43 +183,39 @@ var PavementWrapper = function(canvas) {
 		return paper.project.exportSVG({asString:true});
 	}
 
-	/* drawText will add text starting at the point clicked */
+	/* 
+	* Adds text starting at the point clicked
+	* @param {Object} data
+	* @return {null}
+	*/
+
 	this.drawText = function(data) {
 		var input = data.text;
-		
-		if(typeof Path !== 'undefined') {
-			var text = new PointText(new Point (data.startX, data.startY));
-		} else {
-			var text = new paper.PointText(new paper.Point(data.startX, data.startY));
-		}
+		var text = new paper.PointText(new paper.Point(data.startX, data.startY));
 
 		text.fillColor = data.strokeColor;
 		
 		if (input != null) {
 			text.content = input;
 		}
-
-		if(typeof Path !== 'undefined') {
-			view.draw();
-		} else {
-			paper.view.draw();
-		}
+			
+		paper.view.draw();
 	}
+
+	/*
+	* Adds an svg to the project
+	* @param {Object} data
+	* @return {null}
+	*/
 
 	this.importSVG = function(data) {
 		paper.project.clear();
 
-		if(typeof Path !== 'undefined') {
-			project.importSVG(data.svg);
-			view.draw();
-		} else {
-			paper.project.importSVG(data.svg);
-			paper.view.draw();
-		}
+		paper.project.importSVG(data.svg);
+		paper.view.draw();
 	}
 }
 
-// This will throw an error but work anyway
 if(typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 	module.exports = PavementWrapper;
 } else {
