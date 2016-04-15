@@ -32,6 +32,7 @@ var PavementWrapper = function(canvas) {
 		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].strokeWidth = data.strokeWidth;
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
+		paper.view.draw();
 	};
 
 	/**
