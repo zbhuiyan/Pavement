@@ -74,6 +74,28 @@ input[type="submit"] {
     border-radius: 5px;
 }
 
+/************
+***Top Bar***
+************/
+.mainNav {
+    vertical-align: middle;
+    float: right;
+    /*width: 10%;*/
+    min-width: 50px;
+    background-color: #FFE66F;
+    border: none;
+    color: gray;
+    padding: 1px 3px;
+    text-align: center;
+    text-decoration: none;
+    /*display: inline-block;*/
+    margin: 1px 1px;
+    cursor: pointer;
+    font-size: 50%;
+    border-radius: 5px;
+}
+
+
 /***************
 ***Login page***
 ***************/
