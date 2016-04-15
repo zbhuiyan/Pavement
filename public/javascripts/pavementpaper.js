@@ -46,6 +46,12 @@ var PavementWrapper = function(canvas) {
 		paths[data.id].arcTo({x:data.toPoint[1], y:data.toPoint[2]});
 	}
 
+	/**
+	* Draws a circle at the cursor location on click
+	* @param {Object} data
+	* @return {null}
+	*/
+
 	this.drawSingleCircle = function (data) {
 
 		var x = data.x1;
@@ -68,6 +74,67 @@ var PavementWrapper = function(canvas) {
 		}
 	}
 
+	/**
+	* Draws a rectangle at the cursor location on click
+	* @param {Object} data
+	* @return {null}
+	*/
+
+	this.drawSingleRectangle = function (data) {
+
+		var x = data.x;
+		var y = data.y;
+		var color = data.color;
+		var size = parseInt(data.size);
+
+		if(typeof Path !== 'undefined') {
+			var rectangle = new Rectangle(new Point(x, y), new Point(x + size,y + size*2));
+			var path = new Path.Rectangle(rectangle);
+		    path.strokeColor = new Color(color);
+		    path.removeOnDrag();
+		    // Refresh the view, so we always get an update, even if the tab is not in focus
+		    view.draw();
+		} else {
+			var rectangle = new paper.Rectangle(new paper.Point(x, y), new paper.Point(x + size,y + size*2));
+			var path = new paper.Path.Rectangle(rectangle);
+		    path.strokeColor = new paper.Color(color);
+		    path.removeOnDrag();
+		    // Refresh the view, so we always get an update, even if the tab is not in focus
+		    paper.view.draw();
+		}
+	}
+
+	/**
+	* Draws an ellipse at the cursor location on click
+	* @param {Object} data
+	* @return {null}
+	*/
+
+	this.drawSingleEllipse = function (data) {
+		var x = data.x;
+		var y = data.y;
+		var color = data.color;
+		var size = parseInt(data.size);
+
+		// create the object
+		if(typeof Path !== 'undefined') {
+			var ellipse = new Shape.Ellipse({
+				point: [x,y],
+				size: [size*2,size],
+				fillColor: color
+			});
+			ellipse.removeOnDrag();
+			view.draw();
+		} else {
+			var ellipse = new paper.Shape.Ellipse({
+				ppoint: [x,y],
+				size: [size*2,size],
+				fillColor: color
+			});
+			ellipse.removeOnDrag();
+			paper.view.draw();
+		}
+	}
 
 	/**
 	* Draws circle based on cursor location 
