@@ -227,6 +227,42 @@ var Canvas = React.createClass({
 		}.bind(this);
 	},
 
+	useSingleRectangle: function() {
+		this.setState({activeIndex: 9});
+		this.tool.activate();
+		this.tool.onMouseDown = this.onMouseDown;
+
+		this.tool.onMouseDrag = function(event){
+			var data = {};
+			data.x = event.point.x;
+			data.y = event.point.y;
+			// var x2 = event.point.x;
+			// var y2 = event.point.y;
+			data.color = colorPicked;
+			data.size = this.state.strokeWidth;
+			
+			this.emitEvent('drawSingleRectangle', data);
+		}.bind(this);
+	},
+
+	useSingleEllipse: function () {
+		this.setState({activeIndex: 10});
+		this.tool.activate();
+		this.tool.onMouseDown = this.onMouseDown;
+
+		this.tool.onMouseDrag = function(event){
+			var data = {};
+			data.x = event.point.x;
+			data.y = event.point.y;
+			// var x2 = event.point.x;
+			// var y2 = event.point.y;
+			data.color = colorPicked;
+			data.size = this.state.strokeWidth;
+			
+			this.emitEvent('drawSingleEllipse', data);
+		}.bind(this);
+	},
+
 	clearCanvas: function(){
 		this.tool.activate();
 		paper.project.clear();
@@ -312,6 +348,8 @@ var Canvas = React.createClass({
 		this.props.socket.on('drawPrettyRectangle', pavement.drawPrettyRectangle);
 		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipses);
 		this.props.socket.on('drawSingleCircle', pavement.drawSingleCircle);
+		this.props.socket.on('drawSingleRectangle', pavement.drawSingleRectangle);
+		this.props.socket.on('drawSingleEllipse', pavement.drawSingleEllipse);
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
@@ -332,6 +370,8 @@ var Canvas = React.createClass({
 						<Button setTool={this.useEraser} active={this.state.activeIndex===6} tool={"Erase"}/>
 						<Button setTool={this.useText} active={this.state.activeIndex===7} tool={"Text"}/>
 						<Button setTool={this.useSingleCircle} active={this.state.activeIndex===8} tool={"Single Circle"}/>
+						<Button setTool={this.useSingleRectangle} active={this.state.activeIndex===9} tool={"Single Rectangle"}/>
+						<Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"}/>
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} tool={'Import SVG'}/>
