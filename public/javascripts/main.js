@@ -21,20 +21,20 @@ var App = React.createClass({
     },
 
     render: function () {
-    	console.log(this.state.user);
+        var loggedIn = false;
         if (this.state.user) {
         	var content = (
         		<BoardListContainer url='/board/add'/>
         	);
+            loggedIn = true;
         } else {
         	var content = (
         		<FormViewControl />
         	);
         }
-
         return (
             <div className='app'>
-            	<Logo />
+            	<Logo isLoggedIn={loggedIn}/>
                 {content}
             </div>
         )

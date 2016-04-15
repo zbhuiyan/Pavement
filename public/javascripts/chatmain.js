@@ -20,9 +20,11 @@ $.ajax({
 
 var App = React.createClass({
     render: function () {
+    	var loggedIn = true;
+    	var homeButton = true;
         return (
             <div className='app'>
-                <Logo />
+                <Logo isLoggedIn={loggedIn} homeButton={homeButton} />
                 <div>
                 	<Canvas socket={socket} />
 	                <ChatBox socket={socket} boardId={this.props.boardId} />
