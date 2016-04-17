@@ -314,17 +314,39 @@ var Canvas = React.createClass({
 	// ***** RECEIVING FUNCTIONALITY *****
 
 	/*
-	pickColor takes a hex color in via a js popup prompt and saves it to colorPicked
+	pickHexColor takes a hex color in via a js popup prompt and saves it to colorPicked
 
 	When a tool is selected, it pack the color into the data which is then used in the 
 	`draw` functions 	
 	*/
-	pickColor: function(){
+	pickHexColor: function(){
 		this.tool.activate();
 		var input = prompt("Please enter a hex color", "#12A8B3");
 		if (input != null) {
 			colorPicked = input;
 		}
+	}, 
+
+	// ***** STATIC COLOR FUNCTIONALITY *****
+
+	colorRed: function(){
+		this.tool.activate();
+		colorPicked = "#FF0000";
+	},
+
+	colorBlack: function(){
+		this.tool.activate();
+		colorPicked = "#000000";
+	},
+
+	colorBlue: function(){
+		this.tool.activate();
+		colorPicked = "#0000FF";
+	},
+
+	colorWhite: function(){
+		this.tool.activate();
+		colorPicked = "#FFFFFF"; 
 	},
 
 	// ***** SOCKET FUNCTIONALITY *****
@@ -366,7 +388,7 @@ var Canvas = React.createClass({
 						<Button setTool={this.usePrettyCircle} active={this.state.activeIndex===3} tool={"Pretty Circles"}/>
 						<Button setTool={this.usePrettyRectangle} active={this.state.activeIndex===4} tool={"Pretty Rectangles"}/>
 						<Button setTool={this.usePrettyEllipse} active={this.state.activeIndex===5} tool={"Pretty Ellipses"}/>
-						<Button setTool={this.pickColor} tool={"Pick Color"}/>
+						<Button setTool={this.pickHexColor} tool={"Pick Hex Color"}/>
 						<Button setTool={this.useEraser} active={this.state.activeIndex===6} tool={"Erase"}/>
 						<Button setTool={this.useText} active={this.state.activeIndex===7} tool={"Text"}/>
 						<Button setTool={this.useSingleCircle} active={this.state.activeIndex===8} tool={"Single Circle"}/>
@@ -374,6 +396,10 @@ var Canvas = React.createClass({
 						<Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"}/>
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
+						<Button setTool={this.colorBlack} tool={"Black"}/>
+						<Button setTool={this.colorBlue} tool={"Blue"}/>
+						<Button setTool={this.colorRed} tool={"Red"}/>
+						<Button setTool={this.colorWhite} tool={"White"}/>
 						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} tool={'Import SVG'}/>
 						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.sendSVG}/><br />
 						<span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth} />
