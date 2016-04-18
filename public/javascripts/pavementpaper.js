@@ -15,7 +15,6 @@ var PavementWrapper = function(canvas) {
 
 	this.setPath = function(data) {
 		paths[data.id] = new paper.Path();
-		
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 	};
 
@@ -29,6 +28,15 @@ var PavementWrapper = function(canvas) {
 		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].strokeWidth = data.strokeWidth;
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
+
+		if (Key.isDown('m')){
+			paths[data.id].fullySelected = true;
+			paths[data.id].lastSegment.handleIn = event.point;	
+		}
+		// if (event.modifiers.shift){
+		// 	paths[data.id].lastSegment.point = event.point;
+		// }
+		
 		paper.view.draw();
 	};
 
@@ -118,7 +126,7 @@ var PavementWrapper = function(canvas) {
 			view.draw();
 		} else {
 			var ellipse = new paper.Shape.Ellipse({
-				ppoint: [x,y],
+				point: [x,y],
 				size: [size*2,size],
 				fillColor: color
 			});
@@ -212,12 +220,19 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
+	
+	this.move = function(data){
+		
+		paper.view.draw();
+	}
+
+
+
 	/**
 	* Erases a point in the path
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.erase = function(data) {
 		// set up path object
 		paths[data.id].strokeWidth = 30;
