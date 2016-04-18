@@ -88,7 +88,7 @@ socketFunctions.addSvg = function(boardId, data) {
 socketFunctions.removeSvg = function(svgId) {
 	SVG.remove({_id:svgId}, function(err, nRemoved) {
 		if(!err) {
-			console.log('SVG replaced: ', nRemoved);
+			console.log('SVG replaced');
 		} else {
 			console.log('SVG not replaced');
 		}

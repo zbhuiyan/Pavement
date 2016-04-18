@@ -7,6 +7,11 @@ var PavementWrapper = function(canvas) {
 
 	var paths = {};
 
+	this.startProjectFromSVG = function(data) {
+		paper.project.importSVG(data.svg);
+		paper.view.draw();
+	}
+
 	/**
 	* Sets new path object given a data package
 	* @param {Object} data

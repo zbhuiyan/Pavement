@@ -44,14 +44,12 @@ var resqueConnectionDetails = {redis: redisClient};
 var jobs = {
 	"saveState": {
 		perform: function(room, callback) {
-			// TODO make static screen sizes?
-			var canvas = new paper.Canvas(1000, 1000);
-			var wrapper = new pavementWrapper(canvas);
-
 			socketHelper.getSvg(room, function(svgdata) {
+				var canvas = new paper.Canvas(1000, 1000);
+				var wrapper = new pavementWrapper(canvas);
 
-				if(svgdata !== undefined) {
-					wrapper.importSVG(svgdata.data);
+				if(svgdata.data !== undefined) {
+					wrapper.startProjectFromSVG(svgdata.data);
 				}
 
 				socketHelper.getEdits(room, function(data) {
@@ -70,6 +68,8 @@ var jobs = {
 
 					socketHelper.addSvg(room, wrapper.exportSVG());
 					socketHelper.removeSvg(svgdata._id);
+
+					callback(null);
 				});
 			});
 		}
