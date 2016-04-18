@@ -44,17 +44,17 @@ var resqueConnectionDetails = {redis: redisClient};
 var jobs = {
 	"saveState": {
 		perform: function(room, callback) {
-			// TODO make static screen sizes?
-			var canvas = new paper.Canvas(1000, 1000);
-			var wrapper = new pavementWrapper(canvas);
-
 			socketHelper.getSvg(room, function(svgdata) {
 
-				if(svgdata !== undefined) {
-					wrapper.importSVG(svgdata.data);
-				}
-
 				socketHelper.getEdits(room, function(data) {
+					var canvas = new paper.Canvas(1000, 1000);
+					var wrapper = new pavementWrapper(canvas);
+
+					if(svgdata !== undefined && svgdata.data !== undefined) {
+						wrapper.startProjectFromSVG(svgdata.data);
+						console.log(svgdata.data);
+					}
+
 					for(var index = 0; index < data.length; index++) {
 						var editData = data[index].data;
 
@@ -64,12 +64,16 @@ var jobs = {
 						else if(editData.method === 'drawPencil') {
 							wrapper.drawPencil(editData);
 						}
-
-						socketHelper.removeEdit(data[index]._id);
 					}
 
-					socketHelper.addSvg(room, wrapper.exportSVG());
-					socketHelper.removeSvg(svgdata._id);
+					socketHelper.addSvg(room, wrapper.exportSVG(), function() {
+						socketHelper.removeSvg(svgdata._id);
+						for(var index = 0; index < data.length; index++) {
+							socketHelper.removeEdit(data[index]._id);
+						}
+					});
+
+					callback();
 				});
 			});
 		}

@@ -75,20 +75,24 @@ socketFunctions.getSvg = function(boardId, callback) {
 	});
 };
 
-socketFunctions.addSvg = function(boardId, data) {
+socketFunctions.addSvg = function(boardId, data, callback) {
 	newSvg = new SVG({
 		boardId:boardId,
 		data:data,
 		timestamp: new Date()
 	});
 
-	newSvg.save();
+	newSvg.save(function(err) {
+		if(!err) {
+			callback();
+		}
+	});
 };
 
 socketFunctions.removeSvg = function(svgId) {
 	SVG.remove({_id:svgId}, function(err, nRemoved) {
 		if(!err) {
-			console.log('SVG replaced: ', nRemoved);
+			console.log('SVG replaced');
 		} else {
 			console.log('SVG not replaced');
 		}
