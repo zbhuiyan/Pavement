@@ -66,7 +66,7 @@ var jobs = {
 						}
 
 						socketHelper.removeEdit(data[index]._id);
-					}	
+					}
 
 					socketHelper.addSvg(room, wrapper.exportSVG());
 					socketHelper.removeSvg(svgdata._id);
