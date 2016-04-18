@@ -7,8 +7,8 @@ var PavementWrapper = function(canvas) {
 
 	var paths = {};
 
-	this.startProjectFromSVG = function(data) {
-		paper.project.importSVG(data.svg);
+	this.startProjectFromSVG = function(svg) {
+		paper.project.importSVG(svg);
 		paper.view.draw();
 	}
 
@@ -31,6 +31,10 @@ var PavementWrapper = function(canvas) {
 	*/
 
 	this.drawPencil = function(data) {
+		if(paths[data.id] === undefined) {
+			paths[data.id] = new paper.Path();
+		}
+
 		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].strokeWidth = data.strokeWidth;
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});

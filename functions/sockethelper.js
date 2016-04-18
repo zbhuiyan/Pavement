@@ -75,14 +75,18 @@ socketFunctions.getSvg = function(boardId, callback) {
 	});
 };
 
-socketFunctions.addSvg = function(boardId, data) {
+socketFunctions.addSvg = function(boardId, data, callback) {
 	newSvg = new SVG({
 		boardId:boardId,
 		data:data,
 		timestamp: new Date()
 	});
 
-	newSvg.save();
+	newSvg.save(function(err) {
+		if(!err) {
+			callback();
+		}
+	});
 };
 
 socketFunctions.removeSvg = function(svgId) {
