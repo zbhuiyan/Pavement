@@ -30,7 +30,7 @@ socketFunctions.addMessage = function(chatObj) {
 // Edit Methods
 
 socketFunctions.getEdits = function(boardId, callback) {
-	Edit.find({boardId:boardId}, function(err, edits) {
+	Edit.find({boardId:boardId}).sort({timestamp:1}).exec(function(err, edits) {
 		if(!err) {
 			callback(edits);
 		} else {
