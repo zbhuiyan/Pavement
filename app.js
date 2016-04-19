@@ -44,70 +44,74 @@ var resqueConnectionDetails = {redis: redisClient};
 var jobs = {
 	"saveState": {
 		perform: function(room, callback) {
-			socketHelper.getSvg(room, function(svgdata) {
+			socketHelper.getEdits(room, function(data) {
+				if (data.length > 0) {
+					socketHelper.getSvg(room, function(svgdata) {
+						var canvas = new paper.Canvas(1000, 1000);
+						var wrapper = new pavementWrapper(canvas);
 
-				socketHelper.getEdits(room, function(data) {
-					var canvas = new paper.Canvas(1000, 1000);
-					var wrapper = new pavementWrapper(canvas);
+						if(svgdata !== undefined && svgdata.data !== undefined) {
+							wrapper.startProjectFromSVG(svgdata.data);
+							console.log(svgdata.data);
+						}
 
-					if(svgdata !== undefined && svgdata.data !== undefined) {
-						wrapper.startProjectFromSVG(svgdata.data);
-						console.log(svgdata.data);
-					}
-
-					for(var index = 0; index < data.length; index++) {
-						var editData = data[index].data;
-
-						if(editData.method === 'setPath') {
-							wrapper.setPath(editData);
-						}
-						else if(editData.method === 'drawPencil') {
-							wrapper.drawPencil(editData);
-						}
-						else if(editData.method === 'drawCloud') {
-							wrapper.drawCloud(editData);
-						}
-						else if(editData.method === 'drawSingleCircle') {
-							wrapper.drawSingleCircle(editData);
-						}
-						else if(editData.method === 'drawSingleRectangle') {
-							wrapper.drawSingleRectangle(editData);
-						}
-						else if(editData.method === 'drawSingleEllipse') {
-							wrapper.drawSingleEllipse(editData);
-						}
-						else if(editData.method === 'drawCircle') {
-							wrapper.drawCircle(editData);
-						}
-						else if(editData.method === 'drawPrettyCircle') {
-							wrapper.drawPrettyCircle(editData);
-						}
-						else if(editData.method === 'drawPrettyRectangle') {
-							wrapper.drawPrettyRectangle(editData);
-						}
-						else if(editData.method === 'erase') {
-							wrapper.erase(editData);
-						}
-						else if(editData.method === 'clearProject') {
-							wrapper.clearProject(editData);
-						}
-						else if(editData.method === 'drawText') {
-							wrapper.drawText(editData);
-						}
-						else if(editData.method === 'importSVG') {
-							wrapper.importSVG(editData);
-						}
-					}
-
-					socketHelper.addSvg(room, wrapper.exportSVG(), function() {
-						socketHelper.removeSvg(svgdata._id);
 						for(var index = 0; index < data.length; index++) {
-							socketHelper.removeEdit(data[index]._id);
-						}
-					});
+							var editData = data[index].data;
 
+							if(editData.method === 'setPath') {
+								wrapper.setPath(editData);
+							}
+							else if(editData.method === 'drawPencil') {
+								wrapper.drawPencil(editData);
+							}
+							else if(editData.method === 'drawCloud') {
+								wrapper.drawCloud(editData);
+							}
+							else if(editData.method === 'drawSingleCircle') {
+								wrapper.drawSingleCircle(editData);
+							}
+							else if(editData.method === 'drawSingleRectangle') {
+								wrapper.drawSingleRectangle(editData);
+							}
+							else if(editData.method === 'drawSingleEllipse') {
+								wrapper.drawSingleEllipse(editData);
+							}
+							else if(editData.method === 'drawCircle') {
+								wrapper.drawCircle(editData);
+							}
+							else if(editData.method === 'drawPrettyCircle') {
+								wrapper.drawPrettyCircle(editData);
+							}
+							else if(editData.method === 'drawPrettyRectangle') {
+								wrapper.drawPrettyRectangle(editData);
+							}
+							else if(editData.method === 'erase') {
+								wrapper.erase(editData);
+							}
+							else if(editData.method === 'clearProject') {
+								wrapper.clearProject(editData);
+							}
+							else if(editData.method === 'drawText') {
+								wrapper.drawText(editData);
+							}
+							else if(editData.method === 'importSVG') {
+								wrapper.importSVG(editData);
+							}
+						}
+
+						socketHelper.addSvg(room, wrapper.exportSVG(), function() {
+							if (svgdata !== undefined &&svgdata._id !== undefined) {
+								socketHelper.removeSvg(svgdata._id);
+							}
+							for(var index = 0; index < data.length; index++) {
+								socketHelper.removeEdit(data[index]._id);
+							}
+						});
+						callback();
+					});
+				} else {
 					callback();
-				});
+				}
 			});
 		}
 	}
@@ -195,17 +199,12 @@ io.on('connection', function(socket) {
 	socket.on('setup', function(userInfo) {
 		var roomId = userInfo.boardId;
 		openConnections[socket.id] = userInfo;
-
-		if(io.sockets.adapter.rooms[roomId] === undefined) {
-			console.log('no one in room');
-			queue.connect(function() {
-				queue.enqueue('board' + roomId, 'saveState', roomId, function(message) {
-					console.log(message);
-				});
-			});
-		}
-
 		socket.join(roomId);
+		queue.connect(function() {
+			queue.enqueue('board' + roomId, 'saveState', roomId, function(message) {
+				console.log(message);
+			});
+		});
 	});
 
 	socket.on('chat', function(message) {
@@ -230,16 +229,23 @@ io.on('connection', function(socket) {
 	});
 
 	socket.on('draw', function(data) {
+		var roomId = openConnections[socket.id].boardId;
 		data.id = openConnections[socket.id].userId;
-		io.to(openConnections[socket.id].boardId).emit(data.method, data);
+		io.to(roomId).emit(data.method, data);
 
-		socketHelper.addEdit(openConnections[socket.id].boardId, data);
+		socketHelper.addEdit(roomId, data);
 	});
 
 	socket.on('disconnect', function() {
 		console.log('disconnecting...');
+		var roomId = openConnections[socket.id].boardId;
+		queue.connect(function() {
+			queue.enqueue('board' + roomId, 'saveState', roomId, function(message) {
+				console.log(message);
+			});
+			delete openConnections[socket.id];
+		});
 		//console.log(io.sockets.adapter.rooms['56f97f246be8a54a27d8ce0f']);
-		delete openConnections[socket.id];
 	});
 });
 
