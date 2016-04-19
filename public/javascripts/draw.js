@@ -39,6 +39,7 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event) {
+
 			// packing the data
 			var data = {};
 			data.toPoint = event.point;
@@ -48,6 +49,7 @@ var Canvas = React.createClass({
 			// emiting the data
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
+
 		
 	},
 
@@ -112,17 +114,7 @@ var Canvas = React.createClass({
 
 		}.bind(this);
 	},
-	calculateDistance: function(){
-		var x1 = firstPoint.x;
-		var y1 = firstPoint.y;
-		var x2 = endPoint.x;
-		var y2 = endPoint.y;
-
-		var distance = Math.sqrt((Math.pow((x2-x1),2)) + (Math.pow((y2-y1), 2)));
-		return distance;
-
-	},
-
+	
 	useCircle: function() {
 		this.setState({activeIndex: 2});
 		this.tool.activate();
@@ -269,6 +261,57 @@ var Canvas = React.createClass({
 		this.emitEvent('clear', {});
 	},
 
+	editItem: function(){
+		this.tool.activate();
+		var data = {};
+
+		this.tool.onMouseDown = function(event) {
+			data._path = event.item;
+			data._path.fullySelected = true;
+			data.handle = null;
+			var hitResult = data._path.hitTest(event.point, {handles:true, selected: true, segments:true, selectedSegments:true, tolerance: 20});
+			if (hitResult) {
+				if (hitResult.type == 'handle-in'){
+					console.log('handlein');
+					data.handle = hitResult.segment.handleIn;
+				} else {
+					console.log('handleout');
+					data.handle = hitResult.segment.handleOut;
+				};
+			}
+		}
+		this.tool.onMouseDrag = function(event){
+			if (data.handle){
+				data.handle.x += event.delta.x;
+				data.handle.y += event.delta.y;
+			};
+		}
+
+		this.tool.onMouseUp = function(event){
+			data._path.fullySelected = false;
+		}
+
+		this.emitEvent('editItem', {});
+	},
+
+	deleteItem: function(){
+		this.tool.activate();
+		var data = {};
+
+		this.tool.onMouseDown = function(event){
+			data._path = event.item;
+			data._path.fullySelected = true;
+			data._path.remove();
+		}
+
+		this.emitEvent('deleteItem', data);
+
+
+
+
+	},
+
+
 	// ***** ADDITIONAL NON-COLLABORATIVE FUNCTIONALITY *****
 
 	download: function(fileName) {
@@ -375,6 +418,8 @@ var Canvas = React.createClass({
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
+		this.props.socket.on('editItem', pavement.editItem);
+		this.props.socket.on('deleteItem', pavement.deleteItem);
 	},
 
 	render: function () {
@@ -396,13 +441,15 @@ var Canvas = React.createClass({
 						<Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"}/>
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
+						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
+						<Button setTool={this.editItem} tool={'Edit Item'}/>
 						<Button setTool={this.colorBlack} tool={"Black"}/>
 						<Button setTool={this.colorBlue} tool={"Blue"}/>
 						<Button setTool={this.colorRed} tool={"Red"}/>
 						<Button setTool={this.colorWhite} tool={"White"}/>
 						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} tool={'Import SVG'}/>
 						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.sendSVG}/><br />
-						<span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth} />
+						<span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="400" onChange={this.setStrokeWidth} />
 					</nav>
 				</div>
 				<div id="canvasDiv">
