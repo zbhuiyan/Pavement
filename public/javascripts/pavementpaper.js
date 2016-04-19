@@ -228,8 +228,23 @@ var PavementWrapper = function(canvas) {
 
 
 	this.deleteItem = function(data){
+		paper.view.draw();
+	}
+
+
+	this.move = function(data){
+		// var item = data.item;
+		// var oldPoint = data.oldPoint;
+		// var x = data.x;
+		// var y = data.y;
+		// // item.x = x;
+		// // item.y = y;
+		// item.center = new Point (x,y);
+
 
 		paper.view.draw();
+
+
 	}
 
 

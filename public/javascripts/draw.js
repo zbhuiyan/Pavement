@@ -125,7 +125,7 @@ var Canvas = React.createClass({
 			data.x = event.middlePoint.x;
 			data.y = event.middlePoint.y;
 			data.radius = (data.x-data.y)/2;
-			console.log(data.radius);
+			// console.log(data.radius);
 			data.color = colorPicked;
 			this.emitEvent('drawCircle', data);
 		}.bind(this);
@@ -294,6 +294,33 @@ var Canvas = React.createClass({
 		this.emitEvent('editItem', {});
 	},
 
+	move:function(){
+		this.tool.activate();
+		var data = {};
+
+		this.tool.onMouseDown = function(event){
+			data.item = event.item;
+			data.item.fullySelected = true;
+			data.oldPoint = event.point;
+
+		}
+
+		this.tool.onMouseDrag = function(event){
+			data.x = event.delta.x;
+			data.y = event.delta.y;
+			data.item.x += event.delta.x;
+			data.item.y += event.delta.y; 
+
+
+			
+		}
+
+
+		this.emitEvent('move', data);
+
+	},
+
+
 	deleteItem: function(){
 		this.tool.activate();
 		var data = {};
@@ -420,6 +447,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('importSVG', pavement.importSVG);
 		this.props.socket.on('editItem', pavement.editItem);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
+		this.props.socket.on('move', pavement.move);
 	},
 
 	render: function () {
@@ -442,6 +470,7 @@ var Canvas = React.createClass({
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
+						<Button setTool={this.move} tool={'Move'}/>
 						<Button setTool={this.editItem} tool={'Edit Item'}/>
 						<Button setTool={this.colorBlack} tool={"Black"}/>
 						<Button setTool={this.colorBlue} tool={"Blue"}/>
