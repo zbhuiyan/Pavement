@@ -291,7 +291,24 @@ var Canvas = React.createClass({
 			data._path.fullySelected = false;
 		}
 
-		this.emitEvent('move', data);
+		this.emitEvent('move', {});
+	},
+
+	deleteItem: function(){
+		this.tool.activate();
+		var data = {};
+
+		this.tool.onMouseDown = function(event){
+			data._path = event.item;
+			data._path.fullySelected = true;
+			data._path.remove();
+		}
+
+		this.emitEvent('deleteItem', data);
+
+
+
+
 	},
 
 
@@ -402,6 +419,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
 		this.props.socket.on('move', pavement.move);
+		this.props.socket.on('deleteItem', pavement.deleteItem);
 	},
 
 	render: function () {
@@ -423,6 +441,7 @@ var Canvas = React.createClass({
 						<Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"}/>
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
+						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
 						<Button setTool={this.move} tool={'Move'}/>
 						<Button setTool={this.colorBlack} tool={"Black"}/>
 						<Button setTool={this.colorBlue} tool={"Blue"}/>
@@ -430,7 +449,7 @@ var Canvas = React.createClass({
 						<Button setTool={this.colorWhite} tool={"White"}/>
 						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} tool={'Import SVG'}/>
 						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.sendSVG}/><br />
-						<span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth} />
+						<span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="400" onChange={this.setStrokeWidth} />
 					</nav>
 				</div>
 				<div id="canvasDiv">

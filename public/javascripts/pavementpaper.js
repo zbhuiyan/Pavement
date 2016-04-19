@@ -222,10 +222,15 @@ var PavementWrapper = function(canvas) {
 
 	
 	this.move = function(data){
-		
 		paper.view.draw();
 	}
 
+
+
+	this.deleteItem = function(data){
+
+		paper.view.draw();
+	}
 
 
 	/**
