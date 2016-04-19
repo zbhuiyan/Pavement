@@ -261,7 +261,7 @@ var Canvas = React.createClass({
 		this.emitEvent('clear', {});
 	},
 
-	move: function(){
+	editItem: function(){
 		this.tool.activate();
 		var data = {};
 
@@ -291,7 +291,7 @@ var Canvas = React.createClass({
 			data._path.fullySelected = false;
 		}
 
-		this.emitEvent('move', {});
+		this.emitEvent('editItem', {});
 	},
 
 	deleteItem: function(){
@@ -418,7 +418,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
-		this.props.socket.on('move', pavement.move);
+		this.props.socket.on('editItem', pavement.editItem);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
 	},
 
@@ -442,7 +442,7 @@ var Canvas = React.createClass({
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
-						<Button setTool={this.move} tool={'Move'}/>
+						<Button setTool={this.editItem} tool={'Edit Item'}/>
 						<Button setTool={this.colorBlack} tool={"Black"}/>
 						<Button setTool={this.colorBlue} tool={"Blue"}/>
 						<Button setTool={this.colorRed} tool={"Red"}/>

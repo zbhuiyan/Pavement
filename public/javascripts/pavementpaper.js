@@ -221,7 +221,7 @@ var PavementWrapper = function(canvas) {
 	}
 
 	
-	this.move = function(data){
+	this.editItem = function(data){
 		paper.view.draw();
 	}
 
