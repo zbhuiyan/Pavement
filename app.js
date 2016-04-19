@@ -64,6 +64,39 @@ var jobs = {
 						else if(editData.method === 'drawPencil') {
 							wrapper.drawPencil(editData);
 						}
+						else if(editData.method === 'drawCloud') {
+							wrapper.drawCloud(editData);
+						}
+						else if(editData.method === 'drawSingleCircle') {
+							wrapper.drawSingleCircle(editData);
+						}
+						else if(editData.method === 'drawSingleRectangle') {
+							wrapper.drawSingleRectangle(editData);
+						}
+						else if(editData.method === 'drawSingleEllipse') {
+							wrapper.drawSingleEllipse(editData);
+						}
+						else if(editData.method === 'drawCircle') {
+							wrapper.drawCircle(editData);
+						}
+						else if(editData.method === 'drawPrettyCircle') {
+							wrapper.drawPrettyCircle(editData);
+						}
+						else if(editData.method === 'drawPrettyRectangle') {
+							wrapper.drawPrettyRectangle(editData);
+						}
+						else if(editData.method === 'erase') {
+							wrapper.erase(editData);
+						}
+						else if(editData.method === 'clearProject') {
+							wrapper.clearProject(editData);
+						}
+						else if(editData.method === 'drawText') {
+							wrapper.drawText(editData);
+						}
+						else if(editData.method === 'importSVG') {
+							wrapper.importSVG(editData);
+						}
 					}
 
 					socketHelper.addSvg(room, wrapper.exportSVG(), function() {
