@@ -8,9 +8,9 @@ var PavementWrapper = function(canvas) {
 	var paths = {};
 
 	/**
-	*
-	*
-	*
+	* Takes an edit object and applies the appropriate function to the current workspace
+	* @param {Object} edit
+	* @return {null}
 	*/
 	this.applyEdit = function(edit) {
 		if(edit.method === 'setPath') {
