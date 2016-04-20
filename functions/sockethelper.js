@@ -51,9 +51,7 @@ socketFunctions.addEdit = function(boardId, data) {
 
 socketFunctions.removeEdit = function(editId) {
 	Edit.remove({_id:editId}, function(err, nRemoved) {
-		if(!err) {
-			console.log('success');
-		} else {
+		if(err) {
 			console.log('error');
 		}
 	});
