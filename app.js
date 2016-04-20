@@ -68,10 +68,10 @@ var jobs = {
 								socketHelper.removeEdit(data[index]._id);
 							}
 						});
-						callback('replaced SVG');
+						callback(null, 'replaced SVG');
 					});
 				} else {
-					callback('no edits to apply');
+					callback(null, 'no edits to apply');
 				}
 			});
 		}
@@ -203,7 +203,7 @@ io.on('connection', function(socket) {
 		console.log('disconnecting...');
 		var roomId = openConnections[socket.id].boardId;
 		queue.connect(function() {
-			queue.enqueue('board' + roomId, 'saveState', roomId, function(message) {
+			queue.enqueue('board' + roomId, 'saveState', roomId, function(err, message) {
 				console.log(message);
 			});
 			delete openConnections[socket.id];
