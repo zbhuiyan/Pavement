@@ -43,7 +43,7 @@ var PavementWrapper = function(canvas) {
 		else if(edit.method === 'erase') {
 			this.erase(edit);
 		}
-		else if(edit.method === 'clearProject') {
+		else if(edit.method === 'clear') {
 			this.clearProject(edit);
 		}
 		else if(edit.method === 'drawText') {

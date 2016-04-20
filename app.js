@@ -68,10 +68,10 @@ var jobs = {
 								socketHelper.removeEdit(data[index]._id);
 							}
 						});
-						callback('replaced SVG');
+						callback(null, 'replaced SVG');
 					});
 				} else {
-					callback('no edits to apply');
+					callback(null, 'no edits to apply');
 				}
 			});
 		}
@@ -121,11 +121,13 @@ var index = require('./routes/index.js');
 var user = require('./routes/user.js');
 var chat = require('./routes/chat.js');
 var board = require('./routes/board.js');
+var svgRoutes = require('./routes/svg.js');
 var accessor = require('./passport/accessor.js');
 
 app.get('/', accessor.isLoggedIn, index.home);
 app.get('/currentUser', user.currentUser);
 app.get('/draw/:boardId', accessor.canAccessBoard, index.draw);
+app.get('/svg/:boardId', svgRoutes.getSvg);
 app.get('/me', user.currentUser);
 app.get('/users/:username', user.getUser);
 app.get('/messages/:boardId', chat.getChat);
@@ -201,7 +203,7 @@ io.on('connection', function(socket) {
 		console.log('disconnecting...');
 		var roomId = openConnections[socket.id].boardId;
 		queue.connect(function() {
-			queue.enqueue('board' + roomId, 'saveState', roomId, function(message) {
+			queue.enqueue('board' + roomId, 'saveState', roomId, function(err, message) {
 				console.log(message);
 			});
 			delete openConnections[socket.id];
