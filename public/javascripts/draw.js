@@ -19,7 +19,7 @@ var Canvas = React.createClass({
 
 	loadLatestSVG: function () {
 		$.ajax({
-			url: this.props.url,
+			url: '/svg/' + this.props.boardId,
 			success: function(result) {
 				pavement.startProjectFromSVG (result.data);
 			}
