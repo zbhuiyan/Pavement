@@ -311,22 +311,17 @@ var Canvas = React.createClass({
 			data.item = event.item;
 			data.item.fullySelected = true;
 			data.oldPoint = event.point;
-
 		}
 
 		this.tool.onMouseDrag = function(event){
 			data.x = event.delta.x;
 			data.y = event.delta.y;
-			data.item.x += event.delta.x;
-			data.item.y += event.delta.y; 
-
-
-			
+			data.item.position.x += event.delta.x;
+			data.item.position.y += event.delta.y; 
 		}
 
 
 		this.emitEvent('move', data);
-
 	},
 
 
