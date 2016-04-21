@@ -319,7 +319,9 @@ var Canvas = React.createClass({
 			data.item.position.x += event.delta.x;
 			data.item.position.y += event.delta.y; 
 		}
-
+		this.tool.onMouseUp = function(data){
+			data.item.fullySelected = false;
+		}
 
 		this.emitEvent('move', data);
 	},
