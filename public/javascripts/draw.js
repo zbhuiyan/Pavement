@@ -348,10 +348,18 @@ var Canvas = React.createClass({
 			var reader = new FileReader(); 
 
 	        reader.onloadend = function (e) {  //called after a read completes
+<<<<<<< Updated upstream
 
 	          var data = {};
 	          data.svg = e.target.result;
 	          
+=======
+	          //myCanvas.innerHTML = e.target.result;
+	          //var svg = myCanvas.querySelector('svg');
+	          var data = {};
+	          data.svg = e.target.result;
+	          //myCanvas.innerHTML = "";
+>>>>>>> Stashed changes
 	          _this.emitEvent('importSVG', data);
 	        };  
 	        reader.readAsText(fs[0]); 
@@ -427,8 +435,11 @@ var Canvas = React.createClass({
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
+<<<<<<< Updated upstream
 		this.props.socket.on('editItem', pavement.editItem);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
+=======
+>>>>>>> Stashed changes
 	},
 
 	render: function () {

@@ -211,6 +211,10 @@ io.on('connection', function(socket) {
 		});
 		//console.log(io.sockets.adapter.rooms['56f97f246be8a54a27d8ce0f']);
 	});
+
+	socket.on('error', function() {
+		console.log('error occurred in socket');
+	});
 });
 
 var PORT = process.env.PORT || 3000;
