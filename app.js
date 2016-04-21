@@ -202,14 +202,17 @@ io.on('connection', function(socket) {
 
 	socket.on('disconnect', function() {
 		console.log('disconnecting...');
-		var roomId = openConnections[socket.id].boardId;
-		queue.connect(function() {
-			queue.enqueue('board' + roomId, 'saveState', roomId, function(err, message) {
-				console.log(message);
-			});
+
+		if(openConnections[socket.id] !== undefined) {
+			var roomId = openConnections[socket.id].boardId;
 			delete openConnections[socket.id];
-		});
-		//console.log(io.sockets.adapter.rooms['56f97f246be8a54a27d8ce0f']);
+
+			queue.connect(function() {
+				queue.enqueue('board' + roomId, 'saveState', roomId, function(err, message) {
+					console.log(message);
+				});
+			});
+		}
 	});
 
 	socket.on('error', function() {
