@@ -34,6 +34,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//TODO: replace with new URI and link via auth file instead?
 mongoose.connect('mongodb://jwei:jwei@ds025459.mlab.com:25459/pavement');
 
 var socketHelper = require('./functions/sockethelper.js');
