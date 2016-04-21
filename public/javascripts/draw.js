@@ -11,11 +11,20 @@ var Canvas = React.createClass({
 	},
 
 	componentDidMount: function () {
-		//instatiate the paperScope with the canvas element
+		this.loadLatestSVG();
+		//instantiate the paperScope with the canvas element
 		paper.setup('myCanvas');
 		this.setupReceiver();
 	},
 
+	loadLatestSVG: function () {
+		$.ajax({
+			url: '/svg/' + this.props.boardId,
+			success: function(result) {
+				pavement.startProjectFromSVG (result.data);
+			}
+		});
+	}, 
 
 	onMouseDown: function (event) {
 		var data = {};

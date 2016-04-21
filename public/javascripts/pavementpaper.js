@@ -8,6 +8,64 @@ var PavementWrapper = function(canvas) {
 	var paths = {};
 
 	/**
+	* Takes an edit object and applies the appropriate function to the current workspace
+	* @param {Object} edit
+	* @return {null}
+	*/
+	this.applyEdit = function(edit) {
+		if(edit.method === 'setPath') {
+			this.setPath(edit);
+		}
+		else if(edit.method === 'drawPencil') {
+			this.drawPencil(edit);
+		}
+		else if(edit.method === 'drawCloud') {
+			this.drawCloud(edit);
+		}
+		else if(edit.method === 'drawSingleCircle') {
+			this.drawSingleCircle(edit);
+		}
+		else if(edit.method === 'drawSingleRectangle') {
+			this.drawSingleRectangle(edit);
+		}
+		else if(edit.method === 'drawSingleEllipse') {
+			this.drawSingleEllipse(edit);
+		}
+		else if(edit.method === 'drawCircle') {
+			this.drawCircle(edit);
+		}
+		else if(edit.method === 'drawPrettyCircle') {
+			this.drawPrettyCircle(edit);
+		}
+		else if(edit.method === 'drawPrettyRectangle') {
+			this.drawPrettyRectangle(edit);
+		}
+		else if(edit.method === 'erase') {
+			this.erase(edit);
+		}
+		else if(edit.method === 'clear') {
+			this.clearProject(edit);
+		}
+		else if(edit.method === 'drawText') {
+			this.drawText(edit);
+		}
+		else if(edit.method === 'importSVG') {
+			this.importSVG(edit);
+		}
+	}.bind(this);
+
+	/**
+	* Takes in svg and applies it to the current project
+	* @param {String} svg
+	* @return {null}
+	*/
+
+	this.startProjectFromSVG = function(svg) {
+		paper.project.importSVG(svg);
+		paper.view.draw();
+	}
+
+	/**
 	* Sets new path object given a data package
 	* @param {Object} data
 	* @return {null}
@@ -25,14 +83,18 @@ var PavementWrapper = function(canvas) {
 	*/
 
 	this.drawPencil = function(data) {
+		if(paths[data.id] === undefined) {
+			paths[data.id] = new paper.Path();
+		}
+
 		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].strokeWidth = data.strokeWidth;
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 
-		if (Key.isDown('m')){
-			paths[data.id].fullySelected = true;
-			paths[data.id].lastSegment.handleIn = event.point;	
-		}
+		// if (Key.isDown('m')){
+		// 	paths[data.id].fullySelected = true;
+		// 	paths[data.id].lastSegment.handleIn = event.point;	
+		// }
 		// if (event.modifiers.shift){
 		// 	paths[data.id].lastSegment.point = event.point;
 		// }
