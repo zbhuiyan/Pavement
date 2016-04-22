@@ -264,45 +264,45 @@ var Canvas = React.createClass({
 		this.emitEvent('clear', {});
 	},
 
-	editItem: function(){
-		this.tool.activate();
-		var data = {};
+	// editItem: function(){
+	// 	this.tool.activate();
+	// 	var data = {};
 
-		this.tool.onMouseDown = function(event) {
-			data._path = event.item;
-			data._path.fullySelected = true;
-			data.handle = null;
-			var hitOptions = {
-				handles:true,
-				selected: true,
-				// fill:true,
-				stroke: true,
-				segments: true,
-				selectedSegments:true,
-				tolerance:200
-			};
-			var hitResult = data._path.hitTest(event.point, hitOptions);
-			if (hitResult) {
-				if (hitResult.type == 'handle-in'){
-					data.handle = hitResult.segment.handleIn;
-				} else {
-					data.handle = hitResult.segment.handleOut;
-				};
-			}
-		}
-		this.tool.onMouseDrag = function(event){
-			if (data.handle){
-				data.handle.x += event.delta.x;
-				data.handle.y += event.delta.y;
-			};
-		}
+	// 	this.tool.onMouseDown = function(event) {
+	// 		data._path = event.item;
+	// 		data._path.fullySelected = true;
+	// 		data.handle = null;
+	// 		var hitOptions = {
+	// 			handles:true,
+	// 			selected: true,
+	// 			// fill:true,
+	// 			stroke: true,
+	// 			segments: true,
+	// 			selectedSegments:true,
+	// 			tolerance:200
+	// 		};
+	// 		var hitResult = data._path.hitTest(event.point, hitOptions);
+	// 		if (hitResult) {
+	// 			if (hitResult.type == 'handle-in'){
+	// 				data.handle = hitResult.segment.handleIn;
+	// 			} else {
+	// 				data.handle = hitResult.segment.handleOut;
+	// 			};
+	// 		}
+	// 	}
+	// 	this.tool.onMouseDrag = function(event){
+	// 		if (data.handle){
+	// 			data.handle.x += event.delta.x;
+	// 			data.handle.y += event.delta.y;
+	// 		};
+	// 	}
 
-		this.tool.onMouseUp = function(event){
-			data._path.fullySelected = false;
-		}
+	// 	this.tool.onMouseUp = function(event){
+	// 		data._path.fullySelected = false;
+	// 	}
 
-		this.emitEvent('editItem', {});
-	},
+	// 	this.emitEvent('editItem', {});
+	// },
 
 	move:function(){
 		this.tool.activate();
@@ -450,7 +450,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
-		this.props.socket.on('editItem', pavement.editItem);
+		// this.props.socket.on('editItem', pavement.editItem);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
 		this.props.socket.on('move', pavement.move);
 	},
@@ -476,7 +476,7 @@ var Canvas = React.createClass({
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
 						<Button setTool={this.move} tool={'Move'}/>
-						<Button setTool={this.editItem} tool={'Edit Item'}/>
+						// <Button setTool={this.editItem} tool={'Edit Item'}/>
 						<Button setTool={this.colorBlack} tool={"Black"}/>
 						<Button setTool={this.colorBlue} tool={"Blue"}/>
 						<Button setTool={this.colorRed} tool={"Red"}/>
