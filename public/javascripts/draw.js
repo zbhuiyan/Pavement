@@ -348,10 +348,8 @@ var Canvas = React.createClass({
 			var reader = new FileReader(); 
 
 	        reader.onloadend = function (e) {  //called after a read completes
-
 	          var data = {};
 	          data.svg = e.target.result;
-	          
 	          _this.emitEvent('importSVG', data);
 	        };  
 	        reader.readAsText(fs[0]); 
