@@ -1,6 +1,8 @@
 body {
     /*display: flex;*/
     font-family: 'Open Sans', sans-serif;
+    background-color: #999999;
+    color: #003333;
 }
 
 /******************
@@ -43,7 +45,7 @@ input[type="password"] {
 input[type="submit"] {
         width: 10%;
     min-width: 100px;
-    background-color: #FFE66F;
+    background-color: #aeeaea;
     border: none;
     color: gray;
     padding: 12px 20px;
@@ -60,7 +62,7 @@ input[type="submit"] {
 .submitButton {
     width: 10%;
     min-width: 100px;
-    background-color: #FFE66F;
+    background-color: #aeeaea;
     border: none;
     color: gray;
     padding: 12px 20px;
@@ -82,7 +84,7 @@ input[type="submit"] {
     float: right;
     /*width: 10%;*/
     min-width: 50px;
-    background-color: #FFE66F;
+    background-color: #aeeaea;
     border: none;
     color: gray;
     padding: 1px 3px;
@@ -126,17 +128,20 @@ button {
 #pavementDiv {
     /*height: 100%;*/
     /*display: block;*/
+    overflow: hidden;
 }
 
 #toolBar {
-	/*float: left;*/
 	list-style-type: none;
-	/*padding: 14px 16px;*/
-    /*flex: 1;*/
+}
+
+#toolBarDiv {
+    display: inline-block;
+    float: left;
 }
 
 .toolBarButton {
-    background-color: #FFE66F;
+    background-color: #aeeaea;
     border: none;
     color: gray;
     padding: 1px 5px;
@@ -154,17 +159,19 @@ button {
 }
 
 .toolBarButton:hover:not(.active) {
-    background-color: #aeeaea;
+    background-color: #FF7260;
 }
 
 #canvasDiv {
    /*margin-bottom: 100px;*/
+   min-width: 800px;
 }
 
 canvas {
     border: 1px solid black;
-    width: 100%;
+    width: 60%;
     height: absolute;
+    background-color: white;
     /*height: 100%;*/
     /*min-height: 300px;*/
 }
