@@ -11,11 +11,20 @@ var Canvas = React.createClass({
 	},
 
 	componentDidMount: function () {
-		//instatiate the paperScope with the canvas element
+		this.loadLatestSVG();
+		//instantiate the paperScope with the canvas element
 		paper.setup('myCanvas');
 		this.setupReceiver();
 	},
 
+	loadLatestSVG: function () {
+		$.ajax({
+			url: '/svg/' + this.props.boardId,
+			success: function(result) {
+				pavement.startProjectFromSVG (result.data);
+			}
+		});
+	}, 
 
 	onMouseDown: function (event) {
 		var data = {};
@@ -39,6 +48,7 @@ var Canvas = React.createClass({
 		this.tool.onMouseDown = this.onMouseDown;
 
 		this.tool.onMouseDrag = function(event) {
+
 			// packing the data
 			var data = {};
 			data.toPoint = event.point;
@@ -48,6 +58,7 @@ var Canvas = React.createClass({
 			// emiting the data
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
+
 		
 	},
 
@@ -112,17 +123,7 @@ var Canvas = React.createClass({
 
 		}.bind(this);
 	},
-	calculateDistance: function(){
-		var x1 = firstPoint.x;
-		var y1 = firstPoint.y;
-		var x2 = endPoint.x;
-		var y2 = endPoint.y;
-
-		var distance = Math.sqrt((Math.pow((x2-x1),2)) + (Math.pow((y2-y1), 2)));
-		return distance;
-
-	},
-
+	
 	useCircle: function() {
 		this.setState({activeIndex: 2});
 		this.tool.activate();
@@ -269,6 +270,57 @@ var Canvas = React.createClass({
 		this.emitEvent('clear', {});
 	},
 
+	editItem: function(){
+		this.tool.activate();
+		var data = {};
+
+		this.tool.onMouseDown = function(event) {
+			data._path = event.item;
+			data._path.fullySelected = true;
+			data.handle = null;
+			var hitResult = data._path.hitTest(event.point, {handles:true, selected: true, segments:true, selectedSegments:true, tolerance: 20});
+			if (hitResult) {
+				if (hitResult.type == 'handle-in'){
+					console.log('handlein');
+					data.handle = hitResult.segment.handleIn;
+				} else {
+					console.log('handleout');
+					data.handle = hitResult.segment.handleOut;
+				};
+			}
+		}
+		this.tool.onMouseDrag = function(event){
+			if (data.handle){
+				data.handle.x += event.delta.x;
+				data.handle.y += event.delta.y;
+			};
+		}
+
+		this.tool.onMouseUp = function(event){
+			data._path.fullySelected = false;
+		}
+
+		this.emitEvent('editItem', {});
+	},
+
+	deleteItem: function(){
+		this.tool.activate();
+		var data = {};
+
+		this.tool.onMouseDown = function(event){
+			data._path = event.item;
+			data._path.fullySelected = true;
+			data._path.remove();
+		}
+
+		this.emitEvent('deleteItem', data);
+
+
+
+
+	},
+
+
 	// ***** ADDITIONAL NON-COLLABORATIVE FUNCTIONALITY *****
 
 	download: function(fileName) {
@@ -296,10 +348,8 @@ var Canvas = React.createClass({
 			var reader = new FileReader(); 
 
 	        reader.onloadend = function (e) {  //called after a read completes
-
 	          var data = {};
 	          data.svg = e.target.result;
-	          
 	          _this.emitEvent('importSVG', data);
 	        };  
 	        reader.readAsText(fs[0]); 
@@ -314,17 +364,39 @@ var Canvas = React.createClass({
 	// ***** RECEIVING FUNCTIONALITY *****
 
 	/*
-	pickColor takes a hex color in via a js popup prompt and saves it to colorPicked
+	pickHexColor takes a hex color in via a js popup prompt and saves it to colorPicked
 
 	When a tool is selected, it pack the color into the data which is then used in the 
 	`draw` functions 	
 	*/
-	pickColor: function(){
+	pickHexColor: function(){
 		this.tool.activate();
 		var input = prompt("Please enter a hex color", "#12A8B3");
 		if (input != null) {
 			colorPicked = input;
 		}
+	}, 
+
+	// ***** STATIC COLOR FUNCTIONALITY *****
+
+	colorRed: function(){
+		this.tool.activate();
+		colorPicked = "#FF0000";
+	},
+
+	colorBlack: function(){
+		this.tool.activate();
+		colorPicked = "#000000";
+	},
+
+	colorBlue: function(){
+		this.tool.activate();
+		colorPicked = "#0000FF";
+	},
+
+	colorWhite: function(){
+		this.tool.activate();
+		colorPicked = "#FFFFFF"; 
 	},
 
 	// ***** SOCKET FUNCTIONALITY *****
@@ -353,6 +425,8 @@ var Canvas = React.createClass({
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
+		this.props.socket.on('editItem', pavement.editItem);
+		this.props.socket.on('deleteItem', pavement.deleteItem);
 	},
 
 	render: function () {

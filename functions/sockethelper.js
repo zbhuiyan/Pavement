@@ -29,6 +29,16 @@ socketFunctions.addMessage = function(chatObj) {
 
 // Edit Methods
 
+socketFunctions.getEdits = function(boardId, callback) {
+	Edit.find({boardId:boardId}).sort({timestamp:1}).exec(function(err, edits) {
+		if(!err) {
+			callback(edits);
+		} else {
+			callback([])
+		}
+	});
+};
+
 socketFunctions.addEdit = function(boardId, data) {
 	newEdit = new Edit({
 		boardId:boardId,
@@ -40,23 +50,51 @@ socketFunctions.addEdit = function(boardId, data) {
 };
 
 socketFunctions.removeEdit = function(editId) {
-	Edit.remove({_id:editId});
+	Edit.remove({_id:editId}, function(err, nRemoved) {
+		if(err) {
+			console.log('error');
+		}
+	});
 };
 
 // SVG Methods
 
-socketFunctions.addSvg = function(boardId, data) {
+socketFunctions.getSvg = function(boardId, callback) {
+	SVG.find({boardId:boardId}).sort({timestamp: -1}).exec(function(err, svg) {
+		if(!err) {
+			if(svg) {
+				callback(svg[0]);
+			} else {
+				callback({});
+			}
+		} else {
+			callback({});
+		}
+	});
+};
+
+socketFunctions.addSvg = function(boardId, data, callback) {
 	newSvg = new SVG({
 		boardId:boardId,
 		data:data,
 		timestamp: new Date()
 	});
 
-	newSvg.save();
+	newSvg.save(function(err) {
+		if(!err) {
+			callback();
+		}
+	});
 };
 
 socketFunctions.removeSvg = function(svgId) {
-	SVG.remove({_id:svgId});
+	SVG.remove({_id:svgId}, function(err, nRemoved) {
+		if(!err) {
+			console.log('SVG replaced');
+		} else {
+			console.log('SVG not replaced');
+		}
+	});
 }
 
 module.exports = socketFunctions;

@@ -41,6 +41,10 @@ var ChatBox = React.createClass({displayName:'ChatBox',
 });
 
 var ChatList = React.createClass({displayName:'ChatList',
+	componentDidUpdate: function() {
+		var domNode = ReactDOM.findDOMNode(this);
+		domNode.scrollTop = domNode.scrollHeight;
+	},
 	render:function() {
 		var nodes = this.props.data.map(function(chat) {
 			return (
