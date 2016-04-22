@@ -450,7 +450,6 @@ var Canvas = React.createClass({
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
-		// this.props.socket.on('editItem', pavement.editItem);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
 		this.props.socket.on('move', pavement.move);
 	},
@@ -476,7 +475,6 @@ var Canvas = React.createClass({
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
 						<Button setTool={this.move} tool={'Move'}/>
-						// <Button setTool={this.editItem} tool={'Edit Item'}/>
 						<Button setTool={this.colorBlack} tool={"Black"}/>
 						<Button setTool={this.colorBlue} tool={"Blue"}/>
 						<Button setTool={this.colorRed} tool={"Red"}/>
