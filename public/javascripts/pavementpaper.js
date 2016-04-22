@@ -202,7 +202,6 @@ var PavementWrapper = function(canvas) {
 		var color = data.color;
 
 		// create the object
-		// var size = new Size(radius);
 		var circle = new paper.Path.Circle(new paper.Point(x,y), radius);
 	    circle.strokeColor = new paper.Color(color);
 
@@ -273,18 +272,31 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
-	
-	this.editItem = function(data){
-		paper.view.draw();
-	}
+	/**
+	* Edits segments of an item
+	* @param {Object} data
+	* @return {null}
+	*/
+	// this.editItem = function(data){
+	// 	paper.view.draw();
+	// }
 
 
-
+	/**
+	* Deleted item
+	* @param {Object} data
+	* @return {null}
+	*/
 	this.deleteItem = function(data){
 		paper.view.draw();
 	}
 
 
+	/**
+	* Moves item selected to another cursor location
+	* @param {Object} data
+	* @return {null}
+	*/
 	this.move = function(data){
 		paper.view.draw();
 

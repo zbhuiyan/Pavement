@@ -217,8 +217,6 @@ var Canvas = React.createClass({
 			var data = {};
 			var x1 = event.middlePoint.x;
 			var y1 = event.middlePoint.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.x1 = x1;
 			data.y1 = y1;
 			data.radius = this.state.strokeWidth;
@@ -237,8 +235,6 @@ var Canvas = React.createClass({
 			var data = {};
 			data.x = event.point.x;
 			data.y = event.point.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.color = colorPicked;
 			data.size = this.state.strokeWidth;
 			
@@ -255,8 +251,6 @@ var Canvas = React.createClass({
 			var data = {};
 			data.x = event.point.x;
 			data.y = event.point.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.color = colorPicked;
 			data.size = this.state.strokeWidth;
 			
@@ -278,13 +272,20 @@ var Canvas = React.createClass({
 			data._path = event.item;
 			data._path.fullySelected = true;
 			data.handle = null;
-			var hitResult = data._path.hitTest(event.point, {handles:true, selected: true, segments:true, selectedSegments:true, tolerance: 20});
+			var hitOptions = {
+				handles:true,
+				selected: true,
+				// fill:true,
+				stroke: true,
+				segments: true,
+				selectedSegments:true,
+				tolerance:200
+			};
+			var hitResult = data._path.hitTest(event.point, hitOptions);
 			if (hitResult) {
 				if (hitResult.type == 'handle-in'){
-					console.log('handlein');
 					data.handle = hitResult.segment.handleIn;
 				} else {
-					console.log('handleout');
 					data.handle = hitResult.segment.handleOut;
 				};
 			}
@@ -372,14 +373,12 @@ var Canvas = React.createClass({
 			var reader = new FileReader(); 
 
 	        reader.onloadend = function (e) {  //called after a read completes
-
 	          var data = {};
 	          data.svg = e.target.result;
-	          
 	          _this.emitEvent('importSVG', data);
 	        };  
-	        reader.readAsText(fs[0]); 
 
+	        reader.readAsText(fs[0]); 
 
     	});
 		$('#upload').trigger('click');
