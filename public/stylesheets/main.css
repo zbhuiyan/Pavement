@@ -1,6 +1,7 @@
 body {
     /*display: flex;*/
     font-family: 'Open Sans', sans-serif;
+    background-color: #999999;
 }
 
 /******************
@@ -126,6 +127,7 @@ button {
 #pavementDiv {
     /*height: 100%;*/
     /*display: block;*/
+    overflow: hidden;
 }
 
 #toolBar {
@@ -133,6 +135,11 @@ button {
 	list-style-type: none;
 	/*padding: 14px 16px;*/
     /*flex: 1;*/
+}
+
+#toolBarDiv {
+    display: inline-block;
+    float: left;
 }
 
 .toolBarButton {
@@ -159,11 +166,12 @@ button {
 
 #canvasDiv {
    /*margin-bottom: 100px;*/
+   min-width: 800px;
 }
 
 canvas {
     border: 1px solid black;
-    width: 100%;
+    width: 60%;
     height: absolute;
     /*height: 100%;*/
     /*min-height: 300px;*/
