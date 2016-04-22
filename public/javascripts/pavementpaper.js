@@ -317,6 +317,11 @@ var PavementWrapper = function(canvas) {
 		paper.project.importSVG(data.svg);
 		paper.view.draw();
 	}
+
+	this.matches = function(point) {
+		var matchRectangle = new paper.Path.Rectangle(new paper.Point(point.x, point.y), new paper.Point(point.x+5, point.y+5));
+		console.log(paper.project.getItems({overlapping: matchRectangle}));
+	}
 }
 
 if(typeof module !== 'undefined' && typeof module.exports !== 'undefined') {

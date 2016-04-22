@@ -299,10 +299,10 @@ var Canvas = React.createClass({
 		var data = {};
 
 		this.tool.onMouseDown = function(event){
-			data.item = event.item;
-			data.item.fullySelected = true;
+			// data.item = event.item;
+			// data.item.fullySelected = true;
 			data.oldPoint = event.point;
-
+			pavement.matches(data.oldPoint);
 		}
 
 		this.tool.onMouseDrag = function(event){
