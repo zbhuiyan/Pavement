@@ -306,6 +306,11 @@ var Canvas = React.createClass({
 			this.emitEvent('select', data);
 		}.bind(this);
 
+		this.tool.onMouseDrag = function(event) {
+			// I guess I need to do this to stop it from drawing rectangles?
+			
+		}
+
 		this.tool.onMouseUp = function(event) {
 			var data = {};
 
