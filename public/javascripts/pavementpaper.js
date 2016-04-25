@@ -52,6 +52,12 @@ var PavementWrapper = function(canvas) {
 		}
 		else if(edit.method === 'importSVG') {
 			this.importSVG(edit);
+		} 
+		else if(edit.method === 'select') {
+			this.select(edit);
+		} 
+		else if(edit.method === 'move') {
+			this.move(edit);
 		}
 	}.bind(this);
 
@@ -294,14 +300,6 @@ var PavementWrapper = function(canvas) {
 
 
 	this.select = function(data){
-		// var item = data.item;
-		// var oldPoint = data.oldPoint;
-		// var x = data.x;
-		// var y = data.y;
-		// // item.x = x;
-		// // item.y = y;
-		// item.center = new Point (x,y);
-
 		var matches = this.matches({x:data.oldPoint[1], y:data.oldPoint[2]});
 
 		// deselect previous move object and select new one
