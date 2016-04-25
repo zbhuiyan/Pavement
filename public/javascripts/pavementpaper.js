@@ -6,6 +6,7 @@ var PavementWrapper = function(canvas) {
 	paper.setup(canvas);
 
 	var paths = {};
+	var moveObjects = {}
 
 	/**
 	* Sets new path object given a data package
@@ -241,11 +242,25 @@ var PavementWrapper = function(canvas) {
 		// // item.y = y;
 		// item.center = new Point (x,y);
 
+		var matches = this.matches({x:data.oldPoint[1], y:data.oldPoint[2]});
 
+		// deselect previous move object and select new one
+		if(moveObjects[data.id] !== undefined) {
+			moveObjects[data.id].selected = false;
+			moveObjects[data.id] = undefined;
+		}
+
+		// select first path object found
+		if(matches.length > 1) {
+			moveObjects[data.id] = matches[1];
+			moveObjects[data.id].selected = true;
+		}
+
+		//this.matches(data);
 		paper.view.draw();
 
 
-	}
+	}.bind(this)
 
 
 	/**
@@ -320,7 +335,7 @@ var PavementWrapper = function(canvas) {
 
 	this.matches = function(point) {
 		var matchRectangle = new paper.Path.Rectangle(new paper.Point(point.x, point.y), new paper.Point(point.x+5, point.y+5));
-		console.log(paper.project.getItems({overlapping: matchRectangle}));
+		return paper.project.getItems({overlapping: matchRectangle.bounds});
 	}
 }
 

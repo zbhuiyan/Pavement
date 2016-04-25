@@ -303,7 +303,9 @@ var Canvas = React.createClass({
 			// data.item.fullySelected = true;
 			data.oldPoint = event.point;
 			pavement.matches(data.oldPoint);
-		}
+
+			this.emitEvent('startMove', data);
+		}.bind(this);
 
 		this.tool.onMouseDrag = function(event){
 			data.x = event.delta.x;
@@ -314,10 +316,6 @@ var Canvas = React.createClass({
 
 			
 		}
-
-
-		this.emitEvent('move', data);
-
 	},
 
 
@@ -447,7 +445,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('importSVG', pavement.importSVG);
 		this.props.socket.on('editItem', pavement.editItem);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
-		this.props.socket.on('move', pavement.move);
+		this.props.socket.on('startMove', pavement.move);
 	},
 
 	render: function () {
