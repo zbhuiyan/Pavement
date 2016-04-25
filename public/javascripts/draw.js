@@ -11,11 +11,20 @@ var Canvas = React.createClass({
 	},
 
 	componentDidMount: function () {
-		//instatiate the paperScope with the canvas element
+		this.loadLatestSVG();
+		//instantiate the paperScope with the canvas element
 		paper.setup('myCanvas');
 		this.setupReceiver();
 	},
 
+	loadLatestSVG: function () {
+		$.ajax({
+			url: '/svg/' + this.props.boardId,
+			success: function(result) {
+				pavement.startProjectFromSVG (result.data);
+			}
+		});
+	}, 
 
 	onMouseDown: function (event) {
 		var data = {};
@@ -208,8 +217,6 @@ var Canvas = React.createClass({
 			var data = {};
 			var x1 = event.middlePoint.x;
 			var y1 = event.middlePoint.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.x1 = x1;
 			data.y1 = y1;
 			data.radius = this.state.strokeWidth;
@@ -228,8 +235,6 @@ var Canvas = React.createClass({
 			var data = {};
 			data.x = event.point.x;
 			data.y = event.point.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.color = colorPicked;
 			data.size = this.state.strokeWidth;
 			
@@ -246,8 +251,6 @@ var Canvas = React.createClass({
 			var data = {};
 			data.x = event.point.x;
 			data.y = event.point.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.color = colorPicked;
 			data.size = this.state.strokeWidth;
 			
@@ -261,43 +264,51 @@ var Canvas = React.createClass({
 		this.emitEvent('clear', {});
 	},
 
-	editItem: function(){
-		this.tool.activate();
-		var data = {};
+	// editItem: function(){
+	// 	this.tool.activate();
+	// 	var data = {};
 
-		this.tool.onMouseDown = function(event) {
-			data._path = event.item;
-			data._path.fullySelected = true;
-			data.handle = null;
-			var hitResult = data._path.hitTest(event.point, {handles:true, selected: true, segments:true, selectedSegments:true, tolerance: 20});
-			if (hitResult) {
-				if (hitResult.type == 'handle-in'){
-					console.log('handlein');
-					data.handle = hitResult.segment.handleIn;
-				} else {
-					console.log('handleout');
-					data.handle = hitResult.segment.handleOut;
-				};
-			}
-		}
-		this.tool.onMouseDrag = function(event){
-			if (data.handle){
-				data.handle.x += event.delta.x;
-				data.handle.y += event.delta.y;
-			};
-		}
+	// 	this.tool.onMouseDown = function(event) {
+	// 		data._path = event.item;
+	// 		data._path.fullySelected = true;
+	// 		data.handle = null;
+	// 		var hitOptions = {
+	// 			handles:true,
+	// 			selected: true,
+	// 			// fill:true,
+	// 			stroke: true,
+	// 			segments: true,
+	// 			selectedSegments:true,
+	// 			tolerance:200
+	// 		};
+	// 		var hitResult = data._path.hitTest(event.point, hitOptions);
+	// 		if (hitResult) {
+	// 			if (hitResult.type == 'handle-in'){
+	// 				data.handle = hitResult.segment.handleIn;
+	// 			} else {
+	// 				data.handle = hitResult.segment.handleOut;
+	// 			};
+	// 		}
+	// 	}
+	// 	this.tool.onMouseDrag = function(event){
+	// 		if (data.handle){
+	// 			data.handle.x += event.delta.x;
+	// 			data.handle.y += event.delta.y;
+	// 		};
+	// 	}
 
-		this.tool.onMouseUp = function(event){
-			data._path.fullySelected = false;
-		}
+	// 	this.tool.onMouseUp = function(event){
+	// 		data._path.fullySelected = false;
+	// 	}
 
-		this.emitEvent('editItem', {});
-	},
+	// 	this.emitEvent('editItem', {});
+	// },
 
 	move:function(){
 		this.tool.activate();
 
 		this.tool.onMouseDown = function(event){
+<<<<<<< HEAD
 			var data = {};
 
 			data.oldPoint = event.point;
@@ -319,6 +330,24 @@ var Canvas = React.createClass({
 
 			this.emitEvent('move', data);
 		}.bind(this);
+=======
+			data.item = event.item;
+			data.item.fullySelected = true;
+			data.oldPoint = event.point;
+		}
+
+		this.tool.onMouseDrag = function(event){
+			data.x = event.delta.x;
+			data.y = event.delta.y;
+			data.item.position.x += event.delta.x;
+			data.item.position.y += event.delta.y; 
+		}
+		this.tool.onMouseUp = function(data){
+			data.item.fullySelected = false;
+		}
+
+		this.emitEvent('move', data);
+>>>>>>> zarin5
 	},
 
 
@@ -367,14 +396,12 @@ var Canvas = React.createClass({
 			var reader = new FileReader(); 
 
 	        reader.onloadend = function (e) {  //called after a read completes
-
 	          var data = {};
 	          data.svg = e.target.result;
-	          
 	          _this.emitEvent('importSVG', data);
 	        };  
-	        reader.readAsText(fs[0]); 
 
+	        reader.readAsText(fs[0]); 
 
     	});
 		$('#upload').trigger('click');
@@ -446,7 +473,6 @@ var Canvas = React.createClass({
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
-		this.props.socket.on('editItem', pavement.editItem);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
 		this.props.socket.on('select', pavement.select);
 		this.props.socket.on('move', pavement.move);
@@ -473,7 +499,6 @@ var Canvas = React.createClass({
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
 						<Button setTool={this.move} tool={'Move'}/>
-						<Button setTool={this.editItem} tool={'Edit Item'}/>
 						<Button setTool={this.colorBlack} tool={"Black"}/>
 						<Button setTool={this.colorBlue} tool={"Blue"}/>
 						<Button setTool={this.colorRed} tool={"Red"}/>
