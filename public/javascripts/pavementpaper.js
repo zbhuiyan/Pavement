@@ -233,7 +233,7 @@ var PavementWrapper = function(canvas) {
 	}
 
 
-	this.move = function(data){
+	this.select = function(data){
 		// var item = data.item;
 		// var oldPoint = data.oldPoint;
 		// var x = data.x;
@@ -261,6 +261,12 @@ var PavementWrapper = function(canvas) {
 
 
 	}.bind(this)
+
+	this.move = function(data) {
+		moveObjects[data.id].position = new paper.Point(data.x, data.y);
+
+		paper.view.draw();
+	}
 
 
 	/**
