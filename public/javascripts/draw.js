@@ -308,7 +308,6 @@ var Canvas = React.createClass({
 		this.tool.activate();
 
 		this.tool.onMouseDown = function(event){
-<<<<<<< HEAD
 			var data = {};
 
 			data.oldPoint = event.point;
@@ -330,24 +329,6 @@ var Canvas = React.createClass({
 
 			this.emitEvent('move', data);
 		}.bind(this);
-=======
-			data.item = event.item;
-			data.item.fullySelected = true;
-			data.oldPoint = event.point;
-		}
-
-		this.tool.onMouseDrag = function(event){
-			data.x = event.delta.x;
-			data.y = event.delta.y;
-			data.item.position.x += event.delta.x;
-			data.item.position.y += event.delta.y; 
-		}
-		this.tool.onMouseUp = function(data){
-			data.item.fullySelected = false;
-		}
-
-		this.emitEvent('move', data);
->>>>>>> zarin5
 	},
 
 
