@@ -308,11 +308,8 @@ var PavementWrapper = function(canvas) {
 			moveObjects[data.id] = undefined;
 		}
 
-		// select first path object found
-		if(matches.length > 1) {
-			moveObjects[data.id] = matches[1];
-			moveObjects[data.id].selected = true;
-		}
+		moveObjects[data.id] = this.findPathMatches(matches);
+		moveObjects[data.id].selected = true;
 
 		paper.view.draw();
 
@@ -399,6 +396,20 @@ var PavementWrapper = function(canvas) {
 	this.matches = function(point) {
 		var matchRectangle = new paper.Path.Rectangle(new paper.Point(point.x, point.y), new paper.Point(point.x+5, point.y+5));
 		return paper.project.getItems({overlapping: matchRectangle.bounds});
+	}
+
+	this.findPathMatches = function(matches) {
+		for(var index = 0; index < matches.length; index++) {
+			if(matches[index].children === undefined) {
+				return matches[index];
+			}
+		}
+
+		if(matches.length > 1) {
+			return matches[1]
+		}
+
+		return matches[0];
 	}
 }
 

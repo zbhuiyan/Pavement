@@ -304,22 +304,28 @@ var Canvas = React.createClass({
 	// 	this.emitEvent('editItem', {});
 	// },
 
-	move:function(){
+	select: function() {
+		this.setState({activeIndex:11});
 		this.tool.activate();
 
 		this.tool.onMouseDown = function(event){
 			var data = {};
 
 			data.oldPoint = event.point;
-			pavement.matches(data.oldPoint);
 
 			this.emitEvent('select', data);
 		}.bind(this);
 
-		this.tool.onMouseDrag = function(event) {
-			// I guess I need to do this to stop it from drawing rectangles?
-			
-		}
+		this.tool.onMouseDrag = function(event) {};
+		this.tool.onMouseUp = function(event) {};
+	},
+
+	move:function(){
+		this.setState({activeIndex:12});
+		this.tool.activate();
+
+		this.tool.onMouseDown = function(event) {};
+		this.tool.onMouseDrag = function(event) {};
 
 		this.tool.onMouseUp = function(event) {
 			var data = {};
@@ -476,10 +482,11 @@ var Canvas = React.createClass({
 						<Button setTool={this.useSingleCircle} active={this.state.activeIndex===8} tool={"Single Circle"}/>
 						<Button setTool={this.useSingleRectangle} active={this.state.activeIndex===9} tool={"Single Rectangle"}/>
 						<Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"}/>
+						<Button setTool={this.select} tool={'Select'} active={this.state.activeIndex===11} />
+						<Button setTool={this.move} tool={'Move'} active={this.state.activeIndex===12} />
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
-						<Button setTool={this.move} tool={'Move'}/>
 						<Button setTool={this.colorBlack} tool={"Black"}/>
 						<Button setTool={this.colorBlue} tool={"Blue"}/>
 						<Button setTool={this.colorRed} tool={"Red"}/>
