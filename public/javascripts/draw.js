@@ -333,17 +333,13 @@ var Canvas = React.createClass({
 			this.emitEvent('select', data);
 		}.bind(this);
 
+		this.tool.onKeyDown = function(event) {
+			if(this.state.activeIndex === 11 && event.key === 'delete') {
+				this.emitEvent('deleteItem', {});
+			}
+		}.bind(this);
+
 		this.tool.onMouseDrag = function(event) {};
-		this.tool.onMouseUp = function(event) {};
-	},
-
-	move:function(){
-		this.setState({activeIndex:12});
-		this.tool.activate();
-
-		this.tool.onMouseDown = function(event) {};
-		this.tool.onMouseDrag = function(event) {};
-
 		this.tool.onMouseUp = function(event) {
 			var data = {};
 
@@ -352,12 +348,6 @@ var Canvas = React.createClass({
 
 			this.emitEvent('move', data);
 		}.bind(this);
-	},
-
-
-	deleteItem: function(){
-		this.tool.activate();
-		this.emitEvent('deleteItem', {});
 	},
 
 
