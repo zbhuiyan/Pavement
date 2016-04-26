@@ -59,7 +59,7 @@ var Canvas = React.createClass({
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
 
-		
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useText: function () {
@@ -76,6 +76,8 @@ var Canvas = React.createClass({
 			// emitting all the data
 			this.emitEvent('drawText', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useCloud: function () {
@@ -95,6 +97,8 @@ var Canvas = React.createClass({
 			this.emitEvent('drawCloud', data)
 
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 
@@ -122,6 +126,8 @@ var Canvas = React.createClass({
 			this.emitEvent('drawPrettyCircle', data);
 
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 	
 	useCircle: function() {
@@ -139,6 +145,7 @@ var Canvas = React.createClass({
 			this.emitEvent('drawCircle', data);
 		}.bind(this);
 
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	usePrettyRectangle: function() {
@@ -164,6 +171,7 @@ var Canvas = React.createClass({
 
 		}.bind(this);
 		
+		this.tool.onMouseUp = function(event) {};
 	},
 
 
@@ -189,7 +197,8 @@ var Canvas = React.createClass({
 			this.emitEvent('drawPrettyEllipse', data);
 
 		}.bind(this);
-		
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 
@@ -206,6 +215,8 @@ var Canvas = React.createClass({
 			// emitting the data
 			this.emitEvent('erase', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useSingleCircle: function() {
@@ -224,6 +235,8 @@ var Canvas = React.createClass({
 			
 			this.emitEvent('drawSingleCircle', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useSingleRectangle: function() {
@@ -240,6 +253,8 @@ var Canvas = React.createClass({
 			
 			this.emitEvent('drawSingleRectangle', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useSingleEllipse: function () {
@@ -256,6 +271,8 @@ var Canvas = React.createClass({
 			
 			this.emitEvent('drawSingleEllipse', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	clearCanvas: function(){
