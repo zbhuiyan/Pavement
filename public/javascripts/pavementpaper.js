@@ -6,6 +6,7 @@ var PavementWrapper = function(canvas) {
 	paper.setup(canvas);
 
 	var paths = {};
+	var moveObjects = {}
 
 	/**
 	* Takes an edit object and applies the appropriate function to the current workspace
@@ -51,6 +52,12 @@ var PavementWrapper = function(canvas) {
 		}
 		else if(edit.method === 'importSVG') {
 			this.importSVG(edit);
+		} 
+		else if(edit.method === 'select') {
+			this.select(edit);
+		} 
+		else if(edit.method === 'move') {
+			this.move(edit);
 		}
 	}.bind(this);
 
@@ -292,15 +299,30 @@ var PavementWrapper = function(canvas) {
 	}
 
 
-	/**
-	* Moves item selected to another cursor location
-	* @param {Object} data
-	* @return {null}
-	*/
-	this.move = function(data){
+	this.select = function(data){
+		var matches = this.matches({x:data.oldPoint[1], y:data.oldPoint[2]});
+
+		// deselect previous move object and select new one
+		if(moveObjects[data.id] !== undefined) {
+			moveObjects[data.id].selected = false;
+			moveObjects[data.id] = undefined;
+		}
+
+		// select first path object found
+		if(matches.length > 1) {
+			moveObjects[data.id] = matches[1];
+			moveObjects[data.id].selected = true;
+		}
+
 		paper.view.draw();
 
 
+	}.bind(this)
+
+	this.move = function(data) {
+		moveObjects[data.id].position = new paper.Point(data.x, data.y);
+
+		paper.view.draw();
 	}
 
 
@@ -372,6 +394,11 @@ var PavementWrapper = function(canvas) {
 
 		paper.project.importSVG(data.svg);
 		paper.view.draw();
+	}
+
+	this.matches = function(point) {
+		var matchRectangle = new paper.Path.Rectangle(new paper.Point(point.x, point.y), new paper.Point(point.x+5, point.y+5));
+		return paper.project.getItems({overlapping: matchRectangle.bounds});
 	}
 }
 

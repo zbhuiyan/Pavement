@@ -306,25 +306,29 @@ var Canvas = React.createClass({
 
 	move:function(){
 		this.tool.activate();
-		var data = {};
 
 		this.tool.onMouseDown = function(event){
-			data.item = event.item;
-			data.item.fullySelected = true;
+			var data = {};
+
 			data.oldPoint = event.point;
+			pavement.matches(data.oldPoint);
+
+			this.emitEvent('select', data);
+		}.bind(this);
+
+		this.tool.onMouseDrag = function(event) {
+			// I guess I need to do this to stop it from drawing rectangles?
+			
 		}
 
-		this.tool.onMouseDrag = function(event){
-			data.x = event.delta.x;
-			data.y = event.delta.y;
-			data.item.position.x += event.delta.x;
-			data.item.position.y += event.delta.y; 
-		}
-		this.tool.onMouseUp = function(data){
-			data.item.fullySelected = false;
-		}
+		this.tool.onMouseUp = function(event) {
+			var data = {};
 
-		this.emitEvent('move', data);
+			data.x = event.point.x;
+			data.y = event.point.y;
+
+			this.emitEvent('move', data);
+		}.bind(this);
 	},
 
 
@@ -451,6 +455,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
+		this.props.socket.on('select', pavement.select);
 		this.props.socket.on('move', pavement.move);
 	},
 
