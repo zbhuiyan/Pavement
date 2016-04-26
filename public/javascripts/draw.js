@@ -10,8 +10,7 @@ var ACTIVE_INDEX = {
 		PRETTY_RECTANGLE: 8,
 		PRETTY_ELLIPSE: 9,
 		COOL_CIRCLE: 10,
-		DELETE_ITEM: 11,
-		EDIT_ITEM: 12
+		SELECT: 11
 };
 
 paper.install(window);
@@ -75,7 +74,7 @@ var Canvas = React.createClass({
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
 
-		
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useText: function () {
@@ -92,6 +91,8 @@ var Canvas = React.createClass({
 			// emitting all the data
 			this.emitEvent('drawText', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useCloud: function () {
@@ -111,6 +112,8 @@ var Canvas = React.createClass({
 			this.emitEvent('drawCloud', data)
 
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 
@@ -138,6 +141,8 @@ var Canvas = React.createClass({
 			this.emitEvent('drawPrettyCircle', data);
 
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 	
 	useCircle: function() {
@@ -150,11 +155,12 @@ var Canvas = React.createClass({
 			data.x = event.middlePoint.x;
 			data.y = event.middlePoint.y;
 			data.radius = (data.x-data.y)/2;
-			console.log(data.radius);
+			// console.log(data.radius);
 			data.color = colorPicked;
 			this.emitEvent('drawCircle', data);
 		}.bind(this);
 
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	usePrettyRectangle: function() {
@@ -180,6 +186,7 @@ var Canvas = React.createClass({
 
 		}.bind(this);
 		
+		this.tool.onMouseUp = function(event) {};
 	},
 
 
@@ -205,7 +212,8 @@ var Canvas = React.createClass({
 			this.emitEvent('drawPrettyEllipse', data);
 
 		}.bind(this);
-		
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 
@@ -222,6 +230,8 @@ var Canvas = React.createClass({
 			// emitting the data
 			this.emitEvent('erase', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useSingleCircle: function() {
@@ -233,8 +243,6 @@ var Canvas = React.createClass({
 			var data = {};
 			var x1 = event.middlePoint.x;
 			var y1 = event.middlePoint.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.x1 = x1;
 			data.y1 = y1;
 			data.radius = this.state.strokeWidth;
@@ -242,6 +250,8 @@ var Canvas = React.createClass({
 			
 			this.emitEvent('drawSingleCircle', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useSingleRectangle: function() {
@@ -253,13 +263,13 @@ var Canvas = React.createClass({
 			var data = {};
 			data.x = event.point.x;
 			data.y = event.point.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.color = colorPicked;
 			data.size = this.state.strokeWidth;
 			
 			this.emitEvent('drawSingleRectangle', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useSingleEllipse: function () {
@@ -271,13 +281,13 @@ var Canvas = React.createClass({
 			var data = {};
 			data.x = event.point.x;
 			data.y = event.point.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.color = colorPicked;
 			data.size = this.state.strokeWidth;
 			
 			this.emitEvent('drawSingleEllipse', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	clearCanvas: function(){
@@ -286,56 +296,67 @@ var Canvas = React.createClass({
 		this.emitEvent('clear', {});
 	},
 
-	editItem: function(){
-		this.setState({activeIndex: ACTIVE_INDEX.EDIT_ITEM});
+	// editItem: function(){
+	// 	this.setState({activeIndex: ACTIVE_INDEX.EDIT_ITEM});
+	// 	this.tool.activate();
+	// 	var data = {};
+
+	// 	this.tool.onMouseDown = function(event) {
+	// 		data._path = event.item;
+	// 		data._path.fullySelected = true;
+	// 		data.handle = null;
+	// 		var hitResult = data._path.hitTest(event.point, {handles:true, selected: true, segments:true, selectedSegments:true, tolerance: 20});
+	// 		if (hitResult) {
+	// 			if (hitResult.type == 'handle-in'){
+	// 				console.log('handlein');
+	// 				data.handle = hitResult.segment.handleIn;
+	// 			} else {
+	// 				console.log('handleout');
+	// 				data.handle = hitResult.segment.handleOut;
+	// 			};
+	// 		}
+	// 	}
+	// 	this.tool.onMouseDrag = function(event){
+	// 		if (data.handle){
+	// 			data.handle.x += event.delta.x;
+	// 			data.handle.y += event.delta.y;
+	// 		};
+	// 	}
+
+	// 	this.tool.onMouseUp = function(event){
+	// 		data._path.fullySelected = false;
+	// 	}
+
+	// 	this.emitEvent('editItem', {});
+	// },
+
+	select: function() {
+		this.setState({activeIndex:ACTIVE_INDEX.SELECT});
 		this.tool.activate();
-		var data = {};
-
-		this.tool.onMouseDown = function(event) {
-			data._path = event.item;
-			data._path.fullySelected = true;
-			data.handle = null;
-			var hitResult = data._path.hitTest(event.point, {handles:true, selected: true, segments:true, selectedSegments:true, tolerance: 20});
-			if (hitResult) {
-				if (hitResult.type == 'handle-in'){
-					console.log('handlein');
-					data.handle = hitResult.segment.handleIn;
-				} else {
-					console.log('handleout');
-					data.handle = hitResult.segment.handleOut;
-				};
-			}
-		}
-		this.tool.onMouseDrag = function(event){
-			if (data.handle){
-				data.handle.x += event.delta.x;
-				data.handle.y += event.delta.y;
-			};
-		}
-
-		this.tool.onMouseUp = function(event){
-			data._path.fullySelected = false;
-		}
-
-		this.emitEvent('editItem', {});
-	},
-
-	deleteItem: function(){
-		this.setState({activeIndex: ACTIVE_INDEX.DELETE_ITEM});
-		this.tool.activate();
-		var data = {};
 
 		this.tool.onMouseDown = function(event){
-			data._path = event.item;
-			data._path.fullySelected = true;
-			data._path.remove();
-		}
+			var data = {};
 
-		this.emitEvent('deleteItem', data);
+			data.oldPoint = event.point;
 
+			this.emitEvent('select', data);
+		}.bind(this);
 
+		this.tool.onKeyDown = function(event) {
+			if(this.state.activeIndex === 11 && event.key === 'delete') {
+				this.emitEvent('deleteItem', {});
+			}
+		}.bind(this);
 
+		this.tool.onMouseDrag = function(event) {};
+		this.tool.onMouseUp = function(event) {
+			var data = {};
 
+			data.x = event.point.x;
+			data.y = event.point.y;
+
+			this.emitEvent('move', data);
+		}.bind(this);
 	},
 
 
@@ -370,8 +391,8 @@ var Canvas = React.createClass({
 	          data.svg = e.target.result;
 	          _this.emitEvent('importSVG', data);
 	        };  
-	        reader.readAsText(fs[0]); 
 
+	        reader.readAsText(fs[0]); 
 
     	});
 		$('#upload').trigger('click');
@@ -443,8 +464,9 @@ var Canvas = React.createClass({
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
-		this.props.socket.on('editItem', pavement.editItem);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
+		this.props.socket.on('select', pavement.select);
+		this.props.socket.on('move', pavement.move);
 	},
 
 	render: function () {
@@ -465,7 +487,7 @@ var Canvas = React.createClass({
 						<li><Button setTool={this.useCircle} active={this.state.activeIndex===ACTIVE_INDEX.COOL_CIRCLE} tool={"Circle"} /></li>
 						
 						<li><Button setTool={this.pickHexColor} icon={"icon-palette"}  tool={"Color"} /></li>
-						<li><Button setTool={this.deleteItem} active={this.state.activeIndex===ACTIVE_INDEX.DELETE_ITEM} tool={'Delete Item'} /></li>
+						<li><Button setTool={this.select} active={this.state.activeIndex===ACTIVE_INDEX.SELECT} tool={'Select'} /></li>
 						<li><Button setTool={this.editItem} active={this.state.activeIndex===ACTIVE_INDEX.EDIT_ITEM} tool={'Edit Item'} /></li>
 
 						<li><Button setTool={this.colorBlack} tool={"Black"} /></li>
@@ -477,7 +499,9 @@ var Canvas = React.createClass({
 						<li><Button setTool={this.clearCanvas} tool={"Clear Canvas"} /></li>
 						<li><Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} icon={"icon-publish"} tool={'Import SVG'}/></li>
 						<li><input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.sendSVG}/><br /></li>
-						<li><span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="400" onChange={this.setStrokeWidth} /></li>
+
+						<li><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth}/></li>
+						<li><span>Stroke Width: {this.state.strokeWidth}</span></li>
 					</ul>
 				</div>
 				<div id="canvasDiv">
