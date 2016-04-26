@@ -382,7 +382,7 @@ var PavementWrapper = function(canvas) {
 			
 		paper.view.draw();
 	}
-
+	
 	/*
 	* Adds an svg to the project
 	* @param {Object} data

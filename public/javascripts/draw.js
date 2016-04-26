@@ -463,31 +463,26 @@ var Canvas = React.createClass({
 		return (
 			<div id="pavementDiv">
 				<div id="toolBarDiv">
-					<nav id="toolBar">
-						<Button setTool={this.usePencil} active={this.state.activeIndex===0} tool={"Pencil"}/>
-						<Button setTool={this.useCloud} active={this.state.activeIndex===1} tool={"Cloud"}/>
-						<Button setTool={this.useCircle} active={this.state.activeIndex===2} tool={"Circle"}/>
-						<Button setTool={this.usePrettyCircle} active={this.state.activeIndex===3} tool={"Pretty Circles"}/>
-						<Button setTool={this.usePrettyRectangle} active={this.state.activeIndex===4} tool={"Pretty Rectangles"}/>
-						<Button setTool={this.usePrettyEllipse} active={this.state.activeIndex===5} tool={"Pretty Ellipses"}/>
-						<Button setTool={this.pickHexColor} tool={"Pick Hex Color"}/>
-						<Button setTool={this.useEraser} active={this.state.activeIndex===6} tool={"Erase"}/>
-						<Button setTool={this.useText} active={this.state.activeIndex===7} tool={"Text"}/>
-						<Button setTool={this.useSingleCircle} active={this.state.activeIndex===8} tool={"Single Circle"}/>
-						<Button setTool={this.useSingleRectangle} active={this.state.activeIndex===9} tool={"Single Rectangle"}/>
-						<Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"}/>
-						<Button setTool={this.download} tool={'Download'}/>
-						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
-						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
-						<Button setTool={this.move} tool={'Move'}/>
-						<Button setTool={this.colorBlack} tool={"Black"}/>
-						<Button setTool={this.colorBlue} tool={"Blue"}/>
-						<Button setTool={this.colorRed} tool={"Red"}/>
-						<Button setTool={this.colorWhite} tool={"White"}/>
-						<Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} tool={'Import SVG'}/>
-						<input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.sendSVG}/><br />
-						<span>Stroke Width: {this.state.strokeWidth} </span><input type="range" value={this.state.strokeWidth} min="1" max="400" onChange={this.setStrokeWidth} />
-					</nav>
+					<ul id="toolBar">
+						<li><Button setTool={this.usePencil} active={this.state.activeIndex===0} icon={"icon-pencil"} tool={"Pencil"} /></li>
+						<li><Button setTool={this.useCloud} active={this.state.activeIndex===1} icon={"icon-cloud"} tool={"Cloud"} /></li>
+						<li><Button setTool={this.useCircle} active={this.state.activeIndex===2} tool={"Circle"} /></li>
+						<li><Button setTool={this.usePrettyCircle} active={this.state.activeIndex===3} tool={"Pretty Circles"} /></li>
+						<li><Button setTool={this.usePrettyRectangle} active={this.state.activeIndex===4} tool={"Pretty Rectangles"} /></li>
+						<li><Button setTool={this.usePrettyEllipse} active={this.state.activeIndex===5} tool={"Pretty Ellipses"} /></li>
+						<li><Button setTool={this.pickColor} icon={"icon-palette"}  tool={"Color"} /></li>
+						<li><Button setTool={this.useEraser} active={this.state.activeIndex===6} icon={"icon-eraser"} tool={"Eraser"} /></li>
+						<li><Button setTool={this.useText} active={this.state.activeIndex===7} icon={"icon-language"} tool={"Text"} /></li>
+						<li><Button setTool={this.useSingleCircle} active={this.state.activeIndex===8} icon={"icon-record"}/></li>
+						<li><Button setTool={this.useSingleRectangle} active={this.state.activeIndex===9} icon={"icon-progress-0"} tool={"Single Rectangle"} /></li>
+						<li><Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"} /></li>
+						<li><Button setTool={this.download} icon={'icon-download'} tool={"Download SVG"} /></li>
+						<li><Button setTool={this.clearCanvas} tool={"Clear Canvas"} /></li>
+						<li><Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} icon={"icon-publish"} tool={'Import SVG'}/></li>
+						<li><input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.sendSVG}/><br /></li>
+						<li><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth}/></li>
+						<li><span>Stroke Width: {this.state.strokeWidth}</span></li>
+					</ul>
 				</div>
 				<div id="canvasDiv">
 					<canvas id="myCanvas" data-paper-resize></canvas>
