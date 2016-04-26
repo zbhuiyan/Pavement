@@ -59,6 +59,9 @@ var PavementWrapper = function(canvas) {
 		else if(edit.method === 'move') {
 			this.move(edit);
 		}
+		else if(edit.method === 'deleteItem') {
+			this.deleteItem(edit);
+		}
 	}.bind(this);
 
 	/**
@@ -295,6 +298,9 @@ var PavementWrapper = function(canvas) {
 	* @return {null}
 	*/
 	this.deleteItem = function(data){
+		if(moveObjects[data.id] !== undefined) {
+			moveObjects[data.id].remove();
+		}
 		paper.view.draw();
 	}
 
@@ -317,7 +323,9 @@ var PavementWrapper = function(canvas) {
 	}.bind(this)
 
 	this.move = function(data) {
-		moveObjects[data.id].position = new paper.Point(data.x, data.y);
+		if(moveObjects[data.id] !== undefined) {
+			moveObjects[data.id].position = new paper.Point(data.x, data.y);
+		}
 
 		paper.view.draw();
 	}

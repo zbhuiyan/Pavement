@@ -340,19 +340,7 @@ var Canvas = React.createClass({
 
 	deleteItem: function(){
 		this.tool.activate();
-		var data = {};
-
-		this.tool.onMouseDown = function(event){
-			data._path = event.item;
-			data._path.fullySelected = true;
-			data._path.remove();
-		}
-
-		this.emitEvent('deleteItem', data);
-
-
-
-
+		this.emitEvent('deleteItem', {});
 	},
 
 
@@ -484,6 +472,7 @@ var Canvas = React.createClass({
 						<Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"}/>
 						<Button setTool={this.select} tool={'Select'} active={this.state.activeIndex===11} />
 						<Button setTool={this.move} tool={'Move'} active={this.state.activeIndex===12} />
+						<Button setTool={this.deleteItem} tool={'Delete'} />
 						<Button setTool={this.download} tool={'Download'}/>
 						<Button setTool={this.clearCanvas} tool={'Clear Canvas'}/>
 						<Button setTool={this.deleteItem} tool={'Delete Item'}/>
