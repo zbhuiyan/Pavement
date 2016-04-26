@@ -134,7 +134,7 @@ var BoardListContainer = React.createClass({
 				<h1>Create a board</h1>
 				<CreateBoardForm onBoardSubmit={this.handleBoardSubmit} />
 
-				<h1>Boards You Are A Part Of</h1>
+				<h1>Private Boards</h1>
 				<BoardList data={this.state.privateBoards} user={this.state.user} handleBoardDelete={this.handleBoardDelete} />
 
 				<h1>Public Boards</h1>
@@ -173,10 +173,6 @@ var BoardElement = React.createClass({
 
 	render:function() {
 		var content = (<p></p>);
-		console.log('owner');
-		console.log(this.props.owner);
-		console.log('user');
-		console.log(this.props.user._id);
 		if (this.props.owner === this.props.user._id) {
 			content = (
 				<button onClick={this.handleDelete}>Delete</button>
@@ -185,7 +181,7 @@ var BoardElement = React.createClass({
 		// <button onClick={this.handleDelete}>Delete</button>
 		return (
 			<div className='BoardElement'>
-				<h3>Board: {this.props.name}</h3>
+				<span className='boardElement'>{this.props.name}</span>
 				<button onClick={this.handleClick}>Join</button>
 				{content}
 			</div>
@@ -197,7 +193,8 @@ var CreateBoardForm = React.createClass({
 	getInitialState: function () {
 		return {
 			name: '',
-			isPublic: false
+			isPublic: false,
+			users: []
 		};
 	},
 
@@ -209,17 +206,22 @@ var CreateBoardForm = React.createClass({
 		this.setState({isPublic:e.target.value});
 	},
 
+	handleUsersChange: function (e) {
+		this.setState({users: e.target.value.split(', ')});
+	},
+
 	handleSubmit: function (e) {
 		e.preventDefault();
 		var name = this.state.name.trim();
 		var isPublic = this.state.isPublic;
+		var users = this.state.users;
 
 		if (!name) {
 			return;
 		}
 
-		this.props.onBoardSubmit({name: name, isPublic: isPublic});
-		this.setState({name: '', isPublic: false});
+		this.props.onBoardSubmit({name: name, isPublic: isPublic, users: users});
+		this.setState({name: '', isPublic: false, users: []});
 	},
 
 	render: function () {
@@ -239,6 +241,12 @@ var CreateBoardForm = React.createClass({
 					<input type='submit'
 							value='Create'
 							className='submitButton' />
+					<br />
+					<input type='text'
+							placeholder='private members'
+							name='users'
+							value={this.state.users}
+							onChange={this.handleUsersChange} />
 				</form>
 			</div>
 		);

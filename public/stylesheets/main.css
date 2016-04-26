@@ -2,7 +2,6 @@ body {
     /*display: flex;*/
     font-family: 'Open Sans', sans-serif;
     background-color: #EFEFEF;
-    color: #003333;
 }
 
 /******************
@@ -43,7 +42,7 @@ input[type="password"] {
 }
 
 input[type="submit"] {
-        width: 10%;
+    width: 10%;
     min-width: 100px;
     background-color: #aeeaea;
     border: none;
@@ -111,13 +110,32 @@ input[type="submit"] {
 ***Board Page***
 ***************/
 
+.BoardListContainer {
+    margin: auto;
+    text-align: center;
+}
+
+.boardElement {
+    font-size: 150%;
+    margin-right: 10px;
+}
+
 .publicCheckbox {
     padding: 8px;
 }
 
 button {
-    padding: 14px 14px;
-    
+    background-color: #aeeaea;
+    border: none;
+    color: gray;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px 2px;
+    cursor: pointer;
+    font-size: 100%;
+    border-radius: 5px;
 }
 
 /**************
@@ -126,8 +144,6 @@ button {
 
 
 #pavementDiv {
-    /*height: 100%;*/
-    /*display: block;*/
     overflow: hidden;
 }
 
@@ -164,13 +180,15 @@ button {
 
 #canvasDiv {
    /*margin-bottom: 100px;*/
-   min-width: 800px;
+   min-width: 200px;
+   overflow: auto;
 }
 
 canvas {
     border: 1px solid black;
-    width: 60%;
-    height: absolute;
+    width: 80%;
+    height: 90%;
+    min-height: 500px;
     background-color: white;
     /*height: 100%;*/
     /*min-height: 300px;*/
@@ -188,5 +206,6 @@ canvas {
 }
 
 .chatAuthor {
-    font-weight: bold;
+    font-weight: bolder;
+    background-color: #e6e6e6;
 }
