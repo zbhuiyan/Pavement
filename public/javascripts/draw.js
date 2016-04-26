@@ -59,7 +59,7 @@ var Canvas = React.createClass({
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
 
-		
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useText: function () {
@@ -76,6 +76,8 @@ var Canvas = React.createClass({
 			// emitting all the data
 			this.emitEvent('drawText', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useCloud: function () {
@@ -95,6 +97,8 @@ var Canvas = React.createClass({
 			this.emitEvent('drawCloud', data)
 
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 
@@ -122,6 +126,8 @@ var Canvas = React.createClass({
 			this.emitEvent('drawPrettyCircle', data);
 
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 	
 	useCircle: function() {
@@ -139,6 +145,7 @@ var Canvas = React.createClass({
 			this.emitEvent('drawCircle', data);
 		}.bind(this);
 
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	usePrettyRectangle: function() {
@@ -164,6 +171,7 @@ var Canvas = React.createClass({
 
 		}.bind(this);
 		
+		this.tool.onMouseUp = function(event) {};
 	},
 
 
@@ -189,7 +197,8 @@ var Canvas = React.createClass({
 			this.emitEvent('drawPrettyEllipse', data);
 
 		}.bind(this);
-		
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 
@@ -206,6 +215,8 @@ var Canvas = React.createClass({
 			// emitting the data
 			this.emitEvent('erase', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useSingleCircle: function() {
@@ -224,6 +235,8 @@ var Canvas = React.createClass({
 			
 			this.emitEvent('drawSingleCircle', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useSingleRectangle: function() {
@@ -240,6 +253,8 @@ var Canvas = React.createClass({
 			
 			this.emitEvent('drawSingleRectangle', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	useSingleEllipse: function () {
@@ -256,6 +271,8 @@ var Canvas = React.createClass({
 			
 			this.emitEvent('drawSingleEllipse', data);
 		}.bind(this);
+
+		this.tool.onMouseUp = function(event) {};
 	},
 
 	clearCanvas: function(){
@@ -316,17 +333,13 @@ var Canvas = React.createClass({
 			this.emitEvent('select', data);
 		}.bind(this);
 
+		this.tool.onKeyDown = function(event) {
+			if(this.state.activeIndex === 11 && event.key === 'delete') {
+				this.emitEvent('deleteItem', {});
+			}
+		}.bind(this);
+
 		this.tool.onMouseDrag = function(event) {};
-		this.tool.onMouseUp = function(event) {};
-	},
-
-	move:function(){
-		this.setState({activeIndex:12});
-		this.tool.activate();
-
-		this.tool.onMouseDown = function(event) {};
-		this.tool.onMouseDrag = function(event) {};
-
 		this.tool.onMouseUp = function(event) {
 			var data = {};
 
@@ -335,12 +348,6 @@ var Canvas = React.createClass({
 
 			this.emitEvent('move', data);
 		}.bind(this);
-	},
-
-
-	deleteItem: function(){
-		this.tool.activate();
-		this.emitEvent('deleteItem', {});
 	},
 
 
@@ -471,8 +478,6 @@ var Canvas = React.createClass({
 						<li><Button setTool={this.useSingleRectangle} active={this.state.activeIndex===9} icon={"icon-progress-0"} tool={"Single Rectangle"} /></li>
 						<li><Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"} /></li>
 						<li><Button setTool={this.select} tool={'Select'} active={this.state.activeIndex===11} /></li>
-						<li><Button setTool={this.move} tool={'Move'} active={this.state.activeIndex===12} /></li>
-						<li><Button setTool={this.deleteItem} tool={'Delete'} /></li>
 						<li><Button setTool={this.download} icon={'icon-download'} tool={"Download SVG"} /></li>
 						<li><Button setTool={this.clearCanvas} tool={"Clear Canvas"} /></li>
 						<li><Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} icon={"icon-publish"} tool={'Import SVG'}/></li>
