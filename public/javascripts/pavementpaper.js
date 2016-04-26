@@ -6,6 +6,7 @@ var PavementWrapper = function(canvas) {
 	paper.setup(canvas);
 
 	var paths = {};
+	var moveObjects = {}
 
 	/**
 	* Takes an edit object and applies the appropriate function to the current workspace
@@ -51,6 +52,15 @@ var PavementWrapper = function(canvas) {
 		}
 		else if(edit.method === 'importSVG') {
 			this.importSVG(edit);
+		} 
+		else if(edit.method === 'select') {
+			this.select(edit);
+		} 
+		else if(edit.method === 'move') {
+			this.move(edit);
+		}
+		else if(edit.method === 'deleteItem') {
+			this.deleteItem(edit);
 		}
 	}.bind(this);
 
@@ -90,15 +100,6 @@ var PavementWrapper = function(canvas) {
 		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].strokeWidth = data.strokeWidth;
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
-
-		// if (Key.isDown('m')){
-		// 	paths[data.id].fullySelected = true;
-		// 	paths[data.id].lastSegment.handleIn = event.point;	
-		// }
-		// if (event.modifiers.shift){
-		// 	paths[data.id].lastSegment.point = event.point;
-		// }
-		
 		paper.view.draw();
 	};
 
@@ -211,7 +212,6 @@ var PavementWrapper = function(canvas) {
 		var color = data.color;
 
 		// create the object
-		// var size = new Size(radius);
 		var circle = new paper.Path.Circle(new paper.Point(x,y), radius);
 	    circle.strokeColor = new paper.Color(color);
 
@@ -282,14 +282,50 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
-	
-	this.editItem = function(data){
+	/**
+	* Edits segments of an item
+	* @param {Object} data
+	* @return {null}
+	*/
+	// this.editItem = function(data){
+	// 	paper.view.draw();
+	// }
+
+
+	/**
+	* Deleted item
+	* @param {Object} data
+	* @return {null}
+	*/
+	this.deleteItem = function(data){
+		if(moveObjects[data.id] !== undefined) {
+			moveObjects[data.id].remove();
+		}
 		paper.view.draw();
 	}
 
 
+	this.select = function(data){
+		var matches = this.matches({x:data.oldPoint[1], y:data.oldPoint[2]});
 
-	this.deleteItem = function(data){
+		// deselect previous move object and select new one
+		if(moveObjects[data.id] !== undefined) {
+			moveObjects[data.id].selected = false;
+			moveObjects[data.id] = undefined;
+		}
+
+		moveObjects[data.id] = this.findPathMatches(matches);
+		moveObjects[data.id].selected = true;
+
+		paper.view.draw();
+
+
+	}.bind(this)
+
+	this.move = function(data) {
+		if(moveObjects[data.id] !== undefined) {
+			moveObjects[data.id].position = new paper.Point(data.x, data.y);
+		}
 
 		paper.view.draw();
 	}
@@ -363,6 +399,25 @@ var PavementWrapper = function(canvas) {
 
 		paper.project.importSVG(data.svg);
 		paper.view.draw();
+	}
+
+	this.matches = function(point) {
+		var matchRectangle = new paper.Path.Rectangle(new paper.Point(point.x, point.y), new paper.Point(point.x+5, point.y+5));
+		return paper.project.getItems({overlapping: matchRectangle.bounds});
+	}
+
+	this.findPathMatches = function(matches) {
+		for(var index = 0; index < matches.length; index++) {
+			if(matches[index].children === undefined) {
+				return matches[index];
+			}
+		}
+
+		if(matches.length > 1) {
+			return matches[1]
+		}
+
+		return matches[0];
 	}
 }
 

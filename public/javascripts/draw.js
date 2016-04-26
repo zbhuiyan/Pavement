@@ -134,7 +134,7 @@ var Canvas = React.createClass({
 			data.x = event.middlePoint.x;
 			data.y = event.middlePoint.y;
 			data.radius = (data.x-data.y)/2;
-			console.log(data.radius);
+			// console.log(data.radius);
 			data.color = colorPicked;
 			this.emitEvent('drawCircle', data);
 		}.bind(this);
@@ -217,8 +217,6 @@ var Canvas = React.createClass({
 			var data = {};
 			var x1 = event.middlePoint.x;
 			var y1 = event.middlePoint.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.x1 = x1;
 			data.y1 = y1;
 			data.radius = this.state.strokeWidth;
@@ -237,8 +235,6 @@ var Canvas = React.createClass({
 			var data = {};
 			data.x = event.point.x;
 			data.y = event.point.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.color = colorPicked;
 			data.size = this.state.strokeWidth;
 			
@@ -255,8 +251,6 @@ var Canvas = React.createClass({
 			var data = {};
 			data.x = event.point.x;
 			data.y = event.point.y;
-			// var x2 = event.point.x;
-			// var y2 = event.point.y;
 			data.color = colorPicked;
 			data.size = this.state.strokeWidth;
 			
@@ -270,54 +264,83 @@ var Canvas = React.createClass({
 		this.emitEvent('clear', {});
 	},
 
-	editItem: function(){
+	// editItem: function(){
+	// 	this.tool.activate();
+	// 	var data = {};
+
+	// 	this.tool.onMouseDown = function(event) {
+	// 		data._path = event.item;
+	// 		data._path.fullySelected = true;
+	// 		data.handle = null;
+	// 		var hitOptions = {
+	// 			handles:true,
+	// 			selected: true,
+	// 			// fill:true,
+	// 			stroke: true,
+	// 			segments: true,
+	// 			selectedSegments:true,
+	// 			tolerance:200
+	// 		};
+	// 		var hitResult = data._path.hitTest(event.point, hitOptions);
+	// 		if (hitResult) {
+	// 			if (hitResult.type == 'handle-in'){
+	// 				data.handle = hitResult.segment.handleIn;
+	// 			} else {
+	// 				data.handle = hitResult.segment.handleOut;
+	// 			};
+	// 		}
+	// 	}
+	// 	this.tool.onMouseDrag = function(event){
+	// 		if (data.handle){
+	// 			data.handle.x += event.delta.x;
+	// 			data.handle.y += event.delta.y;
+	// 		};
+	// 	}
+
+	// 	this.tool.onMouseUp = function(event){
+	// 		data._path.fullySelected = false;
+	// 	}
+
+	// 	this.emitEvent('editItem', {});
+	// },
+
+	select: function() {
+		this.setState({activeIndex:11});
 		this.tool.activate();
-		var data = {};
 
-		this.tool.onMouseDown = function(event) {
-			data._path = event.item;
-			data._path.fullySelected = true;
-			data.handle = null;
-			var hitResult = data._path.hitTest(event.point, {handles:true, selected: true, segments:true, selectedSegments:true, tolerance: 20});
-			if (hitResult) {
-				if (hitResult.type == 'handle-in'){
-					console.log('handlein');
-					data.handle = hitResult.segment.handleIn;
-				} else {
-					console.log('handleout');
-					data.handle = hitResult.segment.handleOut;
-				};
-			}
-		}
-		this.tool.onMouseDrag = function(event){
-			if (data.handle){
-				data.handle.x += event.delta.x;
-				data.handle.y += event.delta.y;
-			};
-		}
+		this.tool.onMouseDown = function(event){
+			var data = {};
 
-		this.tool.onMouseUp = function(event){
-			data._path.fullySelected = false;
-		}
+			data.oldPoint = event.point;
 
-		this.emitEvent('editItem', {});
+			this.emitEvent('select', data);
+		}.bind(this);
+
+		this.tool.onMouseDrag = function(event) {};
+		this.tool.onMouseUp = function(event) {};
 	},
+
+	move:function(){
+		this.setState({activeIndex:12});
+		this.tool.activate();
+
+		this.tool.onMouseDown = function(event) {};
+		this.tool.onMouseDrag = function(event) {};
+
+		this.tool.onMouseUp = function(event) {
+			var data = {};
+
+			data.x = event.point.x;
+			data.y = event.point.y;
+
+			this.emitEvent('move', data);
+		}.bind(this);
+	},
+
 
 	deleteItem: function(){
 		this.tool.activate();
-		var data = {};
-
-		this.tool.onMouseDown = function(event){
-			data._path = event.item;
-			data._path.fullySelected = true;
-			data._path.remove();
-		}
-
-		this.emitEvent('deleteItem', data);
-
-
-
-
+		this.emitEvent('deleteItem', {});
 	},
 
 
@@ -352,8 +375,8 @@ var Canvas = React.createClass({
 	          data.svg = e.target.result;
 	          _this.emitEvent('importSVG', data);
 	        };  
-	        reader.readAsText(fs[0]); 
 
+	        reader.readAsText(fs[0]); 
 
     	});
 		$('#upload').trigger('click');
@@ -425,8 +448,9 @@ var Canvas = React.createClass({
 		this.props.socket.on('erase', pavement.erase);
 		this.props.socket.on('clear', pavement.clearProject);
 		this.props.socket.on('importSVG', pavement.importSVG);
-		this.props.socket.on('editItem', pavement.editItem);
 		this.props.socket.on('deleteItem', pavement.deleteItem);
+		this.props.socket.on('select', pavement.select);
+		this.props.socket.on('move', pavement.move);
 	},
 
 	render: function () {
@@ -446,6 +470,9 @@ var Canvas = React.createClass({
 						<li><Button setTool={this.useSingleCircle} active={this.state.activeIndex===8} icon={"icon-record"}/></li>
 						<li><Button setTool={this.useSingleRectangle} active={this.state.activeIndex===9} icon={"icon-progress-0"} tool={"Single Rectangle"} /></li>
 						<li><Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"} /></li>
+						<li><Button setTool={this.select} tool={'Select'} active={this.state.activeIndex===11} /></li>
+						<li><Button setTool={this.move} tool={'Move'} active={this.state.activeIndex===12} /></li>
+						<li><Button setTool={this.deleteItem} tool={'Delete'} /></li>
 						<li><Button setTool={this.download} icon={'icon-download'} tool={"Download SVG"} /></li>
 						<li><Button setTool={this.clearCanvas} tool={"Clear Canvas"} /></li>
 						<li><Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} icon={"icon-publish"} tool={'Import SVG'}/></li>
