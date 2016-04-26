@@ -478,8 +478,6 @@ var Canvas = React.createClass({
 						<li><Button setTool={this.useSingleRectangle} active={this.state.activeIndex===9} icon={"icon-progress-0"} tool={"Single Rectangle"} /></li>
 						<li><Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"} /></li>
 						<li><Button setTool={this.select} tool={'Select'} active={this.state.activeIndex===11} /></li>
-						<li><Button setTool={this.move} tool={'Move'} active={this.state.activeIndex===12} /></li>
-						<li><Button setTool={this.deleteItem} tool={'Delete'} /></li>
 						<li><Button setTool={this.download} icon={'icon-download'} tool={"Download SVG"} /></li>
 						<li><Button setTool={this.clearCanvas} tool={"Clear Canvas"} /></li>
 						<li><Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} icon={"icon-publish"} tool={'Import SVG'}/></li>
