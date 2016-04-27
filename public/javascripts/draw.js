@@ -1,3 +1,18 @@
+var ACTIVE_INDEX = {
+		PENCIL: 0,
+		CLOUD: 1,
+		CIRCLE: 2,
+		RECTANGLE: 3,
+		ELLIPSE: 4,
+		ERASER: 5,
+		TEXT: 6,
+		PRETTY_CIRCLE: 7,
+		PRETTY_RECTANGLE: 8,
+		PRETTY_ELLIPSE: 9,
+		COOL_CIRCLE: 10,
+		SELECT: 11
+};
+
 paper.install(window);
 var myCanvas = document.getElementById('myCanvas');
 var colorPicked = 'black'; // default color used
@@ -7,7 +22,7 @@ var pavement = new PavementWrapper(myCanvas);
 var Canvas = React.createClass({
 
 	getInitialState: function() {
-		return {tool: this.usePencil(), activeIndex:0, strokeWidth:1};
+		return {tool: this.usePencil(), activeIndex:ACTIVE_INDEX.PENCIL, strokeWidth:1};
 	},
 
 	componentDidMount: function () {
@@ -42,7 +57,7 @@ var Canvas = React.createClass({
 	// ***** EMITTING EVENTS *****
 
 	usePencil: function () {
-		this.setState({activeIndex: 0});
+		this.setState({activeIndex: ACTIVE_INDEX.PENCIL});
 		this.tool = new Tool();
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
@@ -63,7 +78,7 @@ var Canvas = React.createClass({
 	},
 
 	useText: function () {
-		this.setState({activeIndex: 7});
+		this.setState({activeIndex: ACTIVE_INDEX.TEXT});
 		this.tool = new Tool();
 		this.tool.activate();
 		this.tool.onMouseDown = function(event) {
@@ -81,7 +96,7 @@ var Canvas = React.createClass({
 	},
 
 	useCloud: function () {
-		this.setState({activeIndex: 1});
+		this.setState({activeIndex: ACTIVE_INDEX.CLOUD});
 		this.tool.activate();
 		this.tool.minDistance = 20;
 		this.tool.onMouseDown = this.onMouseDown;
@@ -103,7 +118,7 @@ var Canvas = React.createClass({
 
 
 	usePrettyCircle: function() {
-		this.setState({activeIndex: 3});
+		this.setState({activeIndex: ACTIVE_INDEX.PRETTY_CIRCLE});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -131,7 +146,7 @@ var Canvas = React.createClass({
 	},
 	
 	useCircle: function() {
-		this.setState({activeIndex: 2});
+		this.setState({activeIndex: ACTIVE_INDEX.COOL_CIRCLE});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
@@ -149,7 +164,7 @@ var Canvas = React.createClass({
 	},
 
 	usePrettyRectangle: function() {
-		this.setState({activeIndex: 4});
+		this.setState({activeIndex: ACTIVE_INDEX.PRETTY_RECTANGLE});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -176,7 +191,7 @@ var Canvas = React.createClass({
 
 
 	usePrettyEllipse: function() {
-		this.setState({activeIndex: 5});
+		this.setState({activeIndex: ACTIVE_INDEX.PRETTY_ELLIPSE});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 		
@@ -203,7 +218,7 @@ var Canvas = React.createClass({
 
 
 	useEraser: function() {
-		this.setState({activeIndex: 6});
+		this.setState({activeIndex: ACTIVE_INDEX.ERASER});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
@@ -220,7 +235,7 @@ var Canvas = React.createClass({
 	},
 
 	useSingleCircle: function() {
-		this.setState({activeIndex: 8});
+		this.setState({activeIndex: ACTIVE_INDEX.CIRCLE});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
@@ -240,7 +255,7 @@ var Canvas = React.createClass({
 	},
 
 	useSingleRectangle: function() {
-		this.setState({activeIndex: 9});
+		this.setState({activeIndex: ACTIVE_INDEX.RECTANGLE});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
@@ -258,7 +273,7 @@ var Canvas = React.createClass({
 	},
 
 	useSingleEllipse: function () {
-		this.setState({activeIndex: 10});
+		this.setState({activeIndex: ACTIVE_INDEX.ELLIPSE});
 		this.tool.activate();
 		this.tool.onMouseDown = this.onMouseDown;
 
@@ -282,6 +297,7 @@ var Canvas = React.createClass({
 	},
 
 	// editItem: function(){
+	// 	this.setState({activeIndex: ACTIVE_INDEX.EDIT_ITEM});
 	// 	this.tool.activate();
 	// 	var data = {};
 
@@ -289,20 +305,13 @@ var Canvas = React.createClass({
 	// 		data._path = event.item;
 	// 		data._path.fullySelected = true;
 	// 		data.handle = null;
-	// 		var hitOptions = {
-	// 			handles:true,
-	// 			selected: true,
-	// 			// fill:true,
-	// 			stroke: true,
-	// 			segments: true,
-	// 			selectedSegments:true,
-	// 			tolerance:200
-	// 		};
-	// 		var hitResult = data._path.hitTest(event.point, hitOptions);
+	// 		var hitResult = data._path.hitTest(event.point, {handles:true, selected: true, segments:true, selectedSegments:true, tolerance: 20});
 	// 		if (hitResult) {
 	// 			if (hitResult.type == 'handle-in'){
+	// 				console.log('handlein');
 	// 				data.handle = hitResult.segment.handleIn;
 	// 			} else {
+	// 				console.log('handleout');
 	// 				data.handle = hitResult.segment.handleOut;
 	// 			};
 	// 		}
@@ -322,7 +331,7 @@ var Canvas = React.createClass({
 	// },
 
 	select: function() {
-		this.setState({activeIndex:11});
+		this.setState({activeIndex:ACTIVE_INDEX.SELECT});
 		this.tool.activate();
 
 		this.tool.onMouseDown = function(event){
@@ -465,23 +474,32 @@ var Canvas = React.createClass({
 			<div id="pavementDiv">
 				<div id="toolBarDiv">
 					<ul id="toolBar">
-						<li><Button setTool={this.usePencil} active={this.state.activeIndex===0} icon={"icon-pencil"} tool={"Pencil"} /></li>
-						<li><Button setTool={this.useCloud} active={this.state.activeIndex===1} icon={"icon-cloud"} tool={"Cloud"} /></li>
-						<li><Button setTool={this.useCircle} active={this.state.activeIndex===2} tool={"Circle"} /></li>
-						<li><Button setTool={this.usePrettyCircle} active={this.state.activeIndex===3} tool={"Pretty Circles"} /></li>
-						<li><Button setTool={this.usePrettyRectangle} active={this.state.activeIndex===4} tool={"Pretty Rectangles"} /></li>
-						<li><Button setTool={this.usePrettyEllipse} active={this.state.activeIndex===5} tool={"Pretty Ellipses"} /></li>
-						<li><Button setTool={this.pickColor} icon={"icon-palette"}  tool={"Color"} /></li>
-						<li><Button setTool={this.useEraser} active={this.state.activeIndex===6} icon={"icon-eraser"} tool={"Eraser"} /></li>
-						<li><Button setTool={this.useText} active={this.state.activeIndex===7} icon={"icon-language"} tool={"Text"} /></li>
-						<li><Button setTool={this.useSingleCircle} active={this.state.activeIndex===8} icon={"icon-record"}/></li>
-						<li><Button setTool={this.useSingleRectangle} active={this.state.activeIndex===9} icon={"icon-progress-0"} tool={"Single Rectangle"} /></li>
-						<li><Button setTool={this.useSingleEllipse} active={this.state.activeIndex===10} tool={"Single Ellipse"} /></li>
-						<li><Button setTool={this.select} tool={'Select'} active={this.state.activeIndex===11} /></li>
+						<li><Button setTool={this.usePencil} active={this.state.activeIndex===ACTIVE_INDEX.PENCIL} icon={"icon-pencil"} tool={"Pencil"} /></li>
+						<li><Button setTool={this.useCloud} active={this.state.activeIndex===ACTIVE_INDEX.CLOUD} icon={"icon-cloud"} tool={"Cloud"} /></li>
+						<li><Button setTool={this.useSingleCircle} active={this.state.activeIndex===ACTIVE_INDEX.CIRCLE} icon={"icon-record"}/></li>
+						<li><Button setTool={this.useSingleRectangle} active={this.state.activeIndex===ACTIVE_INDEX.RECTANGLE} icon={"icon-progress-0"} tool={"Single Rectangle"} /></li>
+						<li><Button setTool={this.useSingleEllipse} active={this.state.activeIndex===ACTIVE_INDEX.ELLIPSE} tool={"Single Ellipse"} /></li>
+						<li><Button setTool={this.useEraser} active={this.state.activeIndex===ACTIVE_INDEX.ERASER} icon={"icon-eraser"} tool={"Eraser"} /></li>
+						<li><Button setTool={this.useText} active={this.state.activeIndex===ACTIVE_INDEX.TEXT} icon={"icon-language"} tool={"Text"} /></li>
+						<li><Button setTool={this.usePrettyCircle} active={this.state.activeIndex===ACTIVE_INDEX.PRETTY_CIRCLE} tool={"Pretty Circles"} /></li>
+						<li><Button setTool={this.usePrettyRectangle} active={this.state.activeIndex===ACTIVE_INDEX.PRETTY_RECTANGLE} tool={"Pretty Rectangles"} /></li>
+						<li><Button setTool={this.usePrettyEllipse} active={this.state.activeIndex===ACTIVE_INDEX.PRETTY_ELLIPSE} tool={"Pretty Ellipses"} /></li>
+						<li><Button setTool={this.useCircle} active={this.state.activeIndex===ACTIVE_INDEX.COOL_CIRCLE} tool={"Circle"} /></li>
+						
+						<li><Button setTool={this.pickHexColor} icon={"icon-palette"}  tool={"Color"} /></li>
+						<li><Button setTool={this.select} active={this.state.activeIndex===ACTIVE_INDEX.SELECT} tool={'Select'} /></li>
+						<li><Button setTool={this.editItem} active={this.state.activeIndex===ACTIVE_INDEX.EDIT_ITEM} tool={'Edit Item'} /></li>
+
+						<li><Button setTool={this.colorBlack} tool={"Black"} /></li>
+						<li><Button setTool={this.colorBlue} tool={"Blue"} /></li>
+						<li><Button setTool={this.colorRed} tool={"Red"} /></li>
+						<li><Button setTool={this.colorWhite} tool={"White"} /></li>
+						
 						<li><Button setTool={this.download} icon={'icon-download'} tool={"Download SVG"} /></li>
 						<li><Button setTool={this.clearCanvas} tool={"Clear Canvas"} /></li>
 						<li><Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} icon={"icon-publish"} tool={'Import SVG'}/></li>
 						<li><input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.sendSVG}/><br /></li>
+
 						<li><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth}/></li>
 						<li><span>Stroke Width: {this.state.strokeWidth}</span></li>
 					</ul>
