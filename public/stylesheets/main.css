@@ -59,6 +59,10 @@ input[type="submit"] {
     border-radius: 5px;
 }
 
+input[type="submit"]:hover {
+    background-color: #85e0e0;
+}
+
 .submitButton {
     width: 10%;
     min-width: 100px;
@@ -75,6 +79,10 @@ input[type="submit"] {
     font-size: 100%;
     border-radius: 5px;
     box-shadow: 5px 5px 5px #888;
+}
+
+.submitButton:hover {
+    background-color: #85e0e0;
 }
 
 /************
@@ -98,6 +106,9 @@ input[type="submit"] {
     border-radius: 5px;
 }
 
+.mainNav:hover {
+    background-color: #85e0e0;
+}
 
 /***************
 ***Login page***
