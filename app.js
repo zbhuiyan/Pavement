@@ -156,6 +156,7 @@ app.post('/dashboard', index.dashboard);
 
 app.delete('/board/:name/:owner', board.deleteBoard);
 
+app.put('/addUser/:boardId/:userId', board.addUser);
 // DO SOCKET STUFF HERE
 var openConnections = {};
 

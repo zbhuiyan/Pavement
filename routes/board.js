@@ -4,17 +4,16 @@ var Board = require('../models/boardModel.js');
 var boardRoutes = {};
 
 boardRoutes.addUser = function(req,res) {
-	var board = req.params.board;
+	var boardId = req.params.boardId;
 	var user = req.params.userId;
-	Board.findOneAndUpdate({_id:BoardId}, {$push: {users: user}}, {new:true}, function (err, board) {
-		if (err) {
-			res.status(500).send('could not add the user to the board');
-		}
-		else {
+	Board.findOneAndUpdate({_id:boardId}, {$push: {users: user}}, {new:true}, function (err, board) {
+		if (!err) {
 			res.json(board);
 		}
+		else {
+			res.status(500).send('could not add the user to the board');
+		}
 	})
-	res.json(board.users.append(user));
 };
 
 boardRoutes.add = function(req,res) {
