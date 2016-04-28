@@ -123,12 +123,14 @@ var user = require('./routes/user.js');
 var chat = require('./routes/chat.js');
 var board = require('./routes/board.js');
 var svgRoutes = require('./routes/svg.js');
+//var editRoutes = require('./routes/edit.js');
 var accessor = require('./passport/accessor.js');
 
 app.get('/', accessor.isLoggedIn, index.home);
 app.get('/currentUser', user.currentUser);
 app.get('/draw/:boardId', accessor.canAccessBoard, index.draw);
 app.get('/svg/:boardId', svgRoutes.getSvg);
+//app.get('/edits/:boardId', editRoutes.getEdits);
 app.get('/me', user.currentUser);
 app.get('/users/:username', user.getUser);
 app.get('/messages/:boardId', chat.getChat);
