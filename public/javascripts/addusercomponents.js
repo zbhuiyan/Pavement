@@ -43,24 +43,26 @@ var UserList = React.createClass({
 			}.bind(this)
 		});
 	},
+	handleAdd: function(username) {
+		console.log(username);
+	},
 	render: function() {
-		var boardId = this.props.boardId;
 		var users = this.state.currentUsers;
 
 		var addNodes = this.props.data.map(function(element) { 
-			if(users.indexOf(element._id) === -1) {
+			if(users.indexOf(element.username) === -1) {
 				return (
-					<UserAddElement boardId={boardId} username={element.username} key={element._id} />
+					<UserAddElement boardId={this.props.boardId} username={element.username} key={element._id} handle={this.handleAdd} />
 				)
 			}
-		});
+		}.bind(this));
 
 		// TODO Change addUsers to take username instead of id
 		var currentNodes = this.state.currentUsers.map(function(element) {
 			return (
-				<UserCurrentElement boardId={boardId} username={element} key={element} />
+				<UserCurrentElement boardId={this.props.boardId} username={element} key={element} />
 			)
-		});
+		}.bind(this));
 
 		return (
 			<div id='userlist'>
@@ -87,7 +89,7 @@ var UserAddElement = React.createClass({
 	render: function() {
 		return (
 			<div className='userElement'>
-				<div onClick={this.handleClick} id={this.props.username}>
+				<div onClick={this.props.handle} id={this.props.username}>
 					{this.props.username}
 				</div>
 			</div>

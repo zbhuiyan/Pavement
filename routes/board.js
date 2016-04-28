@@ -8,7 +8,7 @@ boardRoutes.addUser = function(req,res) {
 	var user = req.params.userId;
 	Board.findOneAndUpdate({_id:boardId}, {$push: {users: user}}, {new:true}, function (err, board) {
 		if (!err) {
-			res.json(board);
+			res.json(board.users);
 		}
 		else {
 			res.status(500).send('could not add the user to the board');
@@ -21,7 +21,7 @@ boardRoutes.removeUser = function(req, res) {
 	var user = req.params.userId;
 	Board.findOneAndUpdate({_id:boardId}, {$pull: {users: user}}, {new:true}, function(err, board)  {
 		if(!err) {
-			res.json(board);
+			res.json(board.users);
 		} else {
 			res.status(500).send('could not remove user from the board');
 		}
