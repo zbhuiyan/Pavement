@@ -4,22 +4,45 @@ var Board = require('../models/boardModel.js');
 var boardRoutes = {};
 
 boardRoutes.addUser = function(req,res) {
-	var board = req.params.board;
+	var boardId = req.params.boardId;
 	var user = req.params.userId;
-	Board.findOneAndUpdate({_id:BoardId}, {$push: {users: user}}, {new:true}, function (err, board) {
-		if (err) {
-			res.status(500).send('could not add the user to the board');
+	Board.findOneAndUpdate({_id:boardId}, {$push: {users: user}}, {new:true}, function (err, board) {
+		if (!err) {
+			res.json(board.users);
 		}
 		else {
-			res.json(board);
+			res.status(500).send('could not add the user to the board');
 		}
 	})
-	res.json(board.users.append(user));
+};
+
+boardRoutes.removeUser = function(req, res) {
+	var boardId = req.params.boardId;
+	var user = req.params.userId;
+	Board.findOneAndUpdate({_id:boardId}, {$pull: {users: user}}, {new:true}, function(err, board)  {
+		if(!err) {
+			res.json(board.users);
+		} else {
+			res.status(500).send('could not remove user from the board');
+		}
+	});
+};
+
+boardRoutes.getBoardUsers = function(req, res) {
+	var boardId = req.params.boardId;
+
+	Board.findOne({_id:boardId}).select('users').exec(function(err, board) {
+		if(!err) {
+			res.json(board);
+		} else {
+			res.status(500).send('could not get board');
+		}
+	});
 };
 
 boardRoutes.add = function(req,res) {
 	dbBoardReq = req.body;
-	var user = req.user._id;
+	var user = req.user.username;
 	dbBoard = new Board({
 		users: [user], 
 		owner: user, 
@@ -58,7 +81,7 @@ boardRoutes.getUserBoards = function(req,res) {
 
 boardRoutes.getAvailablePrivateBoards = function(req, res) {
 	if(req.user != null) {
-		Board.find({users:{'$in':[req.user._id]}}, function(err, boards) {
+		Board.find({users:{'$in':[req.user.username]}}, function(err, boards) {
 			if(!err) {
 				if(boards) {
 					res.json(boards);

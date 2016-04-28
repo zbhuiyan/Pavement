@@ -128,6 +128,7 @@ var accessor = require('./passport/accessor.js');
 app.get('/', accessor.isLoggedIn, index.home);
 app.get('/currentUser', user.currentUser);
 app.get('/draw/:boardId', accessor.canAccessBoard, index.draw);
+app.get('/boardUsers/:boardId', board.getBoardUsers);
 app.get('/svg/:boardId', svgRoutes.getSvg);
 app.get('/me', user.currentUser);
 app.get('/users/:username', user.getUser);
@@ -155,7 +156,9 @@ app.post('/board/add', board.add);
 app.post('/dashboard', index.dashboard);
 
 app.delete('/board/:name/:owner', board.deleteBoard);
+app.delete('/removeUser/:boardId/:userId', board.removeUser);
 
+app.put('/addUser/:boardId/:userId', board.addUser);
 // DO SOCKET STUFF HERE
 var openConnections = {};
 

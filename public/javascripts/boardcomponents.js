@@ -107,19 +107,19 @@ var BoardListContainer = React.createClass({
 		var boards;
 		console.log(this.state.user);
         $.ajax({
-        	url: '/board/' + board.name + '/' + this.state.user._id,
+        	url: '/board/' + board.name + '/' + this.state.user.username,
         	type: 'DELETE',
         	success: function () {
         		if (board.isPublic) {
         			boards = this.state.publicBoards;
         			var newPublicBoards = boards.filter(function (element) {
-        				return !(element.name === board.name && element.owner === this.state.user._id);
+        				return !(element.name === board.name && element.owner === this.state.user.username);
         			}.bind(this));
         			this.setState({publicBoards: newPublicBoards});
         		} else {
         			boards = this.state.privateBoards;
         			var newPrivateBoards = boards.filter(function (element) {
-        				return !(element.name === board.name && element.owner === this.state.user._id);
+        				return !(element.name === board.name && element.owner === this.state.user.username);
         			}.bind(this));
         			this.setState({privateBoards: newPrivateBoards}) 
         		}
@@ -173,7 +173,7 @@ var BoardElement = React.createClass({
 
 	render:function() {
 		var content = (<p></p>);
-		if (this.props.owner === this.props.user._id) {
+		if (this.props.owner === this.props.user.username) {
 			content = (
 				<button onClick={this.handleDelete}>Delete</button>
 			);
