@@ -15,7 +15,7 @@ module.exports.canAccessBoard = function(req, res, next) {
 						// IF BOARD IS NOT PUBLIC;
 
 						// check to see if req.user._id is in board ids
-						if(board.users.indexOf(req.user._id) > -1) {
+						if(board.users.indexOf(req.user.username) > -1) {
 							return next();
 						} else {
 							res.redirect('/');

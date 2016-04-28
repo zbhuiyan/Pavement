@@ -16,9 +16,21 @@ boardRoutes.addUser = function(req,res) {
 	})
 };
 
+boardRoutes.getBoardUsers = function(req, res) {
+	var boardId = req.params.boardId;
+
+	Board.findOne({_id:boardId}).select('users').exec(function(err, board) {
+		if(!err) {
+			res.json(board);
+		} else {
+			res.status(500).send('could not get board');
+		}
+	});
+};
+
 boardRoutes.add = function(req,res) {
 	dbBoardReq = req.body;
-	var user = req.user._id;
+	var user = req.user.username;
 	dbBoard = new Board({
 		users: [user], 
 		owner: user, 
@@ -57,7 +69,7 @@ boardRoutes.getUserBoards = function(req,res) {
 
 boardRoutes.getAvailablePrivateBoards = function(req, res) {
 	if(req.user != null) {
-		Board.find({users:{'$in':[req.user._id]}}, function(err, boards) {
+		Board.find({users:{'$in':[req.user.username]}}, function(err, boards) {
 			if(!err) {
 				if(boards) {
 					res.json(boards);

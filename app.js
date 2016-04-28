@@ -128,6 +128,7 @@ var accessor = require('./passport/accessor.js');
 app.get('/', accessor.isLoggedIn, index.home);
 app.get('/currentUser', user.currentUser);
 app.get('/draw/:boardId', accessor.canAccessBoard, index.draw);
+app.get('/boardUsers/:boardId', board.getBoardUsers);
 app.get('/svg/:boardId', svgRoutes.getSvg);
 app.get('/me', user.currentUser);
 app.get('/users/:username', user.getUser);
