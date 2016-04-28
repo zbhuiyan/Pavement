@@ -16,6 +16,18 @@ boardRoutes.addUser = function(req,res) {
 	})
 };
 
+boardRoutes.removeUser = function(req, res) {
+	var boardId = req.params.boardId;
+	var user = req.params.userId;
+	Board.findOneAndUpdate({_id:boardId}, {$pull: {users: user}}, {new:true}, function(err, board)  {
+		if(!err) {
+			res.json(board);
+		} else {
+			res.status(500).send('could not remove user from the board');
+		}
+	});
+};
+
 boardRoutes.getBoardUsers = function(req, res) {
 	var boardId = req.params.boardId;
 

@@ -38,6 +38,7 @@ var UserList = React.createClass({
 		$.ajax({
 			url:'/boardUsers/' + this.props.boardId,
 			success:function(result) {
+				console.log(result);
 				this.setState({currentUsers:result.users});
 			}.bind(this)
 		});
@@ -55,15 +56,18 @@ var UserList = React.createClass({
 		});
 
 		// TODO Change addUsers to take username instead of id
-		// var currentNodes = this.state.currentUsers.map(function(element) {
-		// 	return (
-		// 		<UserCurrentElement boardId={boardId} username={element.username} 
-		// 	)
-		// });
+		var currentNodes = this.state.currentUsers.map(function(element) {
+			return (
+				<UserCurrentElement boardId={boardId} username={element} key={element} />
+			)
+		});
 
 		return (
 			<div id='userlist'>
+				<h1>Add a User</h1>
 				{addNodes}
+				<h1>Current Users</h1>
+				{currentNodes}
 			</div>
 		)
 	}
@@ -86,6 +90,26 @@ var UserAddElement = React.createClass({
 				<div onClick={this.handleClick} id={this.props.username}>
 					{this.props.username}
 				</div>
+			</div>
+		)
+	}
+});
+
+var UserCurrentElement = React.createClass({
+	displayName:'UserCurrentElement',
+	handleClick: function() {
+		$.ajax({
+			url:'/removeUser/' + this.props.boardId + '/' + this.props.username,
+			method:'delete',
+			success:function() {
+				alert('Removed user: ' + this.props.username);
+			}.bind(this)
+		})
+	},
+	render:function() {
+		return (
+			<div className='UserCurrentElement'>
+				{this.props.username} <button onClick={this.handleClick}>Remove</button>
 			</div>
 		)
 	}
