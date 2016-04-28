@@ -43,8 +43,7 @@ var UserList = React.createClass({
 			}.bind(this)
 		});
 	},
-	handleAdd: function(e) {
-		var username = e.target.innerHTML;
+	handleAdd: function(username) {
 		$.ajax({
 			url: '/addUser/' + this.props.boardId + '/' + username,
 			method:'PUT',
@@ -54,9 +53,15 @@ var UserList = React.createClass({
 			}.bind(this)
 		});
 	},
-	handleRemove: function(e) {
-		var username = e.target.innerHTML;
-
+	handleRemove: function(username) {
+		$.ajax({
+			url:'/removeUser/' + this.props.boardId + '/' + username,
+			method:'delete',
+			success:function(result) {
+				alert('Removed user: ' + username);
+				this.setState({currentUsers:result});
+			}.bind(this)
+		})
 	},
 	render: function() {
 		var users = this.state.currentUsers;
@@ -72,7 +77,7 @@ var UserList = React.createClass({
 		// TODO Change addUsers to take username instead of id
 		var currentNodes = this.state.currentUsers.map(function(element) {
 			return (
-				<UserCurrentElement boardId={this.props.boardId} username={element} key={element} />
+				<UserCurrentElement boardId={this.props.boardId} username={element} key={element} handle={this.handleRemove} />
 			)
 		}.bind(this));
 
@@ -89,11 +94,14 @@ var UserList = React.createClass({
 
 var UserAddElement = React.createClass({
 	displayName:'UserAddElement',
+	handleClick: function() {
+		this.props.handle(this.props.username);
+	},
 	render: function() {
 		return (
 			<div className='userElement'>
-				<div onClick={this.props.handle} id={this.props.username}>
-					{this.props.username}
+				<div id={this.props.username}>
+					{this.props.username} <button onClick={this.handleClick}>Add</button>
 				</div>
 			</div>
 		)
@@ -103,13 +111,7 @@ var UserAddElement = React.createClass({
 var UserCurrentElement = React.createClass({
 	displayName:'UserCurrentElement',
 	handleClick: function() {
-		$.ajax({
-			url:'/removeUser/' + this.props.boardId + '/' + this.props.username,
-			method:'delete',
-			success:function() {
-				alert('Removed user: ' + this.props.username);
-			}.bind(this)
-		})
+		this.props.handle(this.props.username);
 	},
 	render:function() {
 		return (
