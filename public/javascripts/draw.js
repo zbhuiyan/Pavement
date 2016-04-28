@@ -32,6 +32,12 @@ var Canvas = React.createClass({
 		this.setupReceiver();
 	},
 
+	componentDidUpdate: function() {
+		if(this.state.activeIndex !== ACTIVE_INDEX.SELECT) {
+			this.emitEvent('deselect', {});
+		}
+	},
+
 	loadLatestSVG: function () {
 		$.ajax({
 			url: '/svg/' + this.props.boardId,
@@ -467,6 +473,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('deleteItem', pavement.deleteItem);
 		this.props.socket.on('select', pavement.select);
 		this.props.socket.on('move', pavement.move);
+		this.props.socket.on('deselect', pavement.deselect);
 	},
 
 	render: function () {
