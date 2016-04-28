@@ -43,8 +43,20 @@ var UserList = React.createClass({
 			}.bind(this)
 		});
 	},
-	handleAdd: function(username) {
-		console.log(username);
+	handleAdd: function(e) {
+		var username = e.target.innerHTML;
+		$.ajax({
+			url: '/addUser/' + this.props.boardId + '/' + username,
+			method:'PUT',
+			success:function(result) {
+				alert('Successfully added user: ' + username);
+				this.setState({currentUsers:result});
+			}.bind(this)
+		});
+	},
+	handleRemove: function(e) {
+		var username = e.target.innerHTML;
+
 	},
 	render: function() {
 		var users = this.state.currentUsers;
@@ -77,15 +89,6 @@ var UserList = React.createClass({
 
 var UserAddElement = React.createClass({
 	displayName:'UserAddElement',
-	handleClick:function() {
-		$.ajax({
-			url: '/addUser/' + this.props.boardId + '/' + this.props.username,
-			method:'PUT',
-			success:function(result) {
-				alert('Successfully added user: ' + this.props.username);
-			}.bind(this)
-		});
-	},
 	render: function() {
 		return (
 			<div className='userElement'>
