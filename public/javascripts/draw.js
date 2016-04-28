@@ -32,8 +32,12 @@ var Canvas = React.createClass({
 		this.setupReceiver();
 	},
 
+	componentWillUpdate: function() {
+		this.shouldSendDeselect = this.state.activeIndex === ACTIVE_INDEX.SELECT;
+	},
+
 	componentDidUpdate: function() {
-		if(this.state.activeIndex !== ACTIVE_INDEX.SELECT) {
+		if(this.state.activeIndex !== ACTIVE_INDEX.SELECT && this.shouldSendDeselect) {
 			this.emitEvent('deselect', {});
 		}
 	},
