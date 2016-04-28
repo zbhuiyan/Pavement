@@ -22,7 +22,7 @@ var pavement = new PavementWrapper(myCanvas);
 var Canvas = React.createClass({
 
 	getInitialState: function() {
-		return {tool: this.usePencil(), activeIndex:ACTIVE_INDEX.PENCIL, strokeWidth:1, edits:[]};
+		return {tool: this.usePencil(), activeIndex:ACTIVE_INDEX.PENCIL, strokeWidth:1};
 	},
 
 	componentDidMount: function () {
@@ -36,10 +36,23 @@ var Canvas = React.createClass({
 		$.ajax({
 			url: '/svg/' + this.props.boardId,
 			success: function(result) {
-				pavement.startProjectFromSVG (result.data);
-			}
+				pavement.startProjectFromSVG(result.data);
+				this.getLatestEdits();
+			}.bind(this)
 		});
-	}, 
+	},
+
+	getLatestEdits: function() {
+		$.ajax({
+			url: '/edits/' + this.props.boardId,
+			success: function(result) {
+				console.log(result);
+				for(var index = 0; index < result.length; index++) {
+					pavement.applyEdit(result[index]);
+				}
+			}.bind(this)
+		});
+	},
 
 	onMouseDown: function (event) {
 		var data = {};

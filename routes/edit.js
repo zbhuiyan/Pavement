@@ -5,7 +5,6 @@ var editMethods = {};
 editMethods.getEdits = function(req, res) {
 	var boardId = req.params.boardId;
 
-
 	Edit.find({boardId:boardId}).sort({timestamp: -1}).exec(function(err, edits) {
 		if(!err) {
 			res.json(edits);
