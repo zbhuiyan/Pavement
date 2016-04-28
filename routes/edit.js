@@ -1,4 +1,4 @@
-var Edit = require('../editModel.js');
+var Edit = require('../models/editModel.js');
 
 var editMethods = {};
 

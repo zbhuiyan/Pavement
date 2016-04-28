@@ -451,23 +451,23 @@ var Canvas = React.createClass({
 	setupReceiver: function(data) {
 		// These are all of the receiver functions
 
-		// this.props.socket.on('setPath', pavement.setPath);
-		// this.props.socket.on('drawPencil', pavement.drawPencil);
-		// this.props.socket.on('drawText', pavement.drawText);
-		// this.props.socket.on('drawCloud', pavement.drawCloud);
-		// this.props.socket.on('drawCircle', pavement.drawCircle);
-		// this.props.socket.on('drawPrettyCircle', pavement.drawPrettyCircle);
-		// this.props.socket.on('drawPrettyRectangle', pavement.drawPrettyRectangle);
-		// this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipses);
-		// this.props.socket.on('drawSingleCircle', pavement.drawSingleCircle);
-		// this.props.socket.on('drawSingleRectangle', pavement.drawSingleRectangle);
-		// this.props.socket.on('drawSingleEllipse', pavement.drawSingleEllipse);
-		// this.props.socket.on('erase', pavement.erase);
-		// this.props.socket.on('clear', pavement.clearProject);
-		// this.props.socket.on('importSVG', pavement.importSVG);
-		// this.props.socket.on('deleteItem', pavement.deleteItem);
-		// this.props.socket.on('select', pavement.select);
-		// this.props.socket.on('move', pavement.move);
+		this.props.socket.on('setPath', pavement.setPath);
+		this.props.socket.on('drawPencil', pavement.drawPencil);
+		this.props.socket.on('drawText', pavement.drawText);
+		this.props.socket.on('drawCloud', pavement.drawCloud);
+		this.props.socket.on('drawCircle', pavement.drawCircle);
+		this.props.socket.on('drawPrettyCircle', pavement.drawPrettyCircle);
+		this.props.socket.on('drawPrettyRectangle', pavement.drawPrettyRectangle);
+		this.props.socket.on('drawPrettyEllipse', pavement.drawPrettyEllipses);
+		this.props.socket.on('drawSingleCircle', pavement.drawSingleCircle);
+		this.props.socket.on('drawSingleRectangle', pavement.drawSingleRectangle);
+		this.props.socket.on('drawSingleEllipse', pavement.drawSingleEllipse);
+		this.props.socket.on('erase', pavement.erase);
+		this.props.socket.on('clear', pavement.clearProject);
+		this.props.socket.on('importSVG', pavement.importSVG);
+		this.props.socket.on('deleteItem', pavement.deleteItem);
+		this.props.socket.on('select', pavement.select);
+		this.props.socket.on('move', pavement.move);
 	},
 
 	render: function () {
