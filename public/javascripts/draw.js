@@ -498,8 +498,7 @@ var Canvas = React.createClass({
 						<li><Button setTool={this.useCircle} active={this.state.activeIndex===ACTIVE_INDEX.COOL_CIRCLE} tool={"Circle"} /></li>
 						
 						<li><Button setTool={this.pickHexColor} icon={"icon-palette"}  tool={"Color"} /></li>
-						<li><Button setTool={this.select} active={this.state.activeIndex===ACTIVE_INDEX.SELECT} tool={'Select'} /></li>
-						<li><Button setTool={this.editItem} active={this.state.activeIndex===ACTIVE_INDEX.EDIT_ITEM} tool={'Edit Item'} /></li>
+						<li><Button setTool={this.select} active={this.state.activeIndex===ACTIVE_INDEX.SELECT} tool={'Select & Move'} /></li>
 
 						<li><Button setTool={this.colorBlack} tool={"Black"} /></li>
 						<li><Button setTool={this.colorBlue} tool={"Blue"} /></li>
