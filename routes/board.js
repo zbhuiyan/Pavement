@@ -149,4 +149,16 @@ boardRoutes.deleteBoard = function(req,res) {
 	// })
 };
 
+boardRoutes.getBoardPublic = function(req, res) {
+	var boardId = req.params.boardId;
+
+	Board.findOne({_id:boardId}).select('isPublic').exec(function(err, board) {
+		if(!err) {
+			res.json(board);
+		} else {
+			res.status(500).send('Error getting public/not public of board');
+		}
+	});
+};
+
 module.exports = boardRoutes;

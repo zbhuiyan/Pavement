@@ -136,6 +136,7 @@ app.get('/messages/:boardId', chat.getChat);
 app.get('/dashboard', accessor.isLoggedIn, index.dashboard);
 app.get('/myBoards', board.getAvailablePrivateBoards);
 app.get('/publicBoards', board.getPublic);
+app.get('/public/:boardId', board.getBoardPublic);
 app.get('/logout', function(req, res) {
 	req.logout();
 	res.redirect('/');
