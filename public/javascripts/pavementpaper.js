@@ -330,6 +330,14 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
+	this.deselect = function(data) {
+		if(moveObjects[data.id] !== undefined) {
+			moveObjects[data.id].selected = false;
+			moveObjects[data.id] = undefined;
+			paper.view.draw();
+		}
+	}
+
 
 	/**
 	* Erases a point in the path
