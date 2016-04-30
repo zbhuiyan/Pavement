@@ -2,8 +2,21 @@ var AddUser = React.createClass({
 	displayName:'AddUser',
 	getInitialState: function() {
 		return {
-			users:[]
+			users:[],
+			isPublic:false
 		}
+	},
+	getPublic: function() {
+		$.ajax({
+			url:'/public/' + this.props.boardId,
+			success:function(result) {
+				console.log(result);
+				this.setState({isPublic:result.isPublic});
+			}.bind(this)
+		})
+	},
+	componentDidMount: function() {
+		this.getPublic();
 	},
 	handleChange: function(e) {
 		if(e.target.value !== '') {
@@ -18,12 +31,20 @@ var AddUser = React.createClass({
 		}
 	},
 	render: function() {
-		return (
-			<div id='users'>
-				<input type='text' onChange={this.handleChange} />
-				<UserList data={this.state.users} boardId={this.props.boardId} />
-			</div>
-		)
+		if(!this.state.isPublic) {
+			return (
+				<div id='users'>
+					<input type='text' onChange={this.handleChange} />
+					<UserList data={this.state.users} boardId={this.props.boardId} />
+				</div>
+			)
+		} else {
+			return (
+				<div id='users'>
+					Enjoy Pavement!
+				</div>
+			)
+		}
 	}
 });
 
