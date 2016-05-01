@@ -1,4 +1,7 @@
 var Board = require('../models/boardModel.js');
+var SVG = require('../models/svgModel.js');
+var Edit = require('../models/editModel.js');
+var Chat = require('../models/chatModel.js');
 
 // wrapping up all the methods
 var boardRoutes = {};
@@ -52,36 +55,20 @@ boardRoutes.add = function(req,res) {
 		timestamp: new Date()
 	});
 
-	dbBoard.save(function (err) {
-		if (err) {
-			res.status(500).send('could not add board');
-		// } else {
-		// 	return 201; // resource created
-		// }
-	}});
-	res.json(dbBoard);
-
-};
-
-boardRoutes.getUserBoards = function(req,res) {
-	var user = req.params.user;
-
-	Board.find({owner: user}).exec(function (err,boards) {
-		if (err) {
-			res.status(500).send('could not get any boards for that user');
+	dbBoard.save(function (err, savedBoard) {
+		if (!err) {
+			res.json(savedBoard); 
 		} else {
-			if (boards) {
-				res.json(boards);
-			} else {
-				res.status(404).send('you do not appear to own any boards');
-			}
+			res.status(500).send('could not add board');
 		}
 	});
+
+
 };
 
 boardRoutes.getAvailablePrivateBoards = function(req, res) {
 	if(req.user != null) {
-		Board.find({users:{'$in':[req.user.username]}}, function(err, boards) {
+		Board.find({isPublic:false, users:{'$in':[req.user.username]}}, function(err, boards) {
 			if(!err) {
 				if(boards) {
 					res.json(boards);
@@ -113,14 +100,6 @@ boardRoutes.getPublic = function(req,res) {
 
 };
 
-boardRoutes.getByTag = function(req,res) {
-	var tags = req.params.tags.split;
-	Board.find({"tags": {$all: tags}}, function (err, tagged) {
-		res.json(tagged);
-	});
-
-};
-
 boardRoutes.getByName = function(req,res) {
 	var name = req.params.name;
 	Board.find({"name": name}).exec(function (err, match) {
@@ -133,20 +112,33 @@ boardRoutes.getByName = function(req,res) {
 };
 
 boardRoutes.deleteBoard = function(req,res) {
-	// var board = req.params.name;
-	// var owner = req.params.owner;
 	var board = req.params;
-	Board.remove({name: board.name, owner: board.owner}, function (err) {
-        if (err) res.status(500).send('Error deleting page');
-    });
-    res.end();
+	var removedAll = [];
 
-	// Board.findOneAndRemove({
-	// 	$and: [{'name':board}, {'owner':owner}]
-	// }).exec(function (err, done) {
-	// 	// res.status(200).send(); // not sure what to do here/send here
-	// 	res.end();
-	// })
+	var confirmRemoved = function(index, res) {
+		removedAll[index] = true;
+
+		if(removedAll.length === 3 && removedAll.indexOf(null) === -1) {
+			res.status(200).json(removedAll);
+		} 
+	}
+
+	Board.remove({_id: board.boardId, owner: board.owner}, function (err) {
+        if(!err) {
+        	Edit.remove({boardId:board.boardId}, function(err) {
+        		confirmRemoved(0, res);
+        	});
+        	SVG.remove({boardId:board.boardId}, function(err) {
+        		confirmRemoved(1, res);
+        	});
+        	Chat.remove({boardId:board.boardId}, function(err) {
+        		confirmRemoved(2, res); 
+        	});
+        } else {
+        	res.status(500).send('error removing board');
+        }
+
+    });
 };
 
 boardRoutes.getBoardPublic = function(req, res) {
