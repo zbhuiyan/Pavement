@@ -1,3 +1,4 @@
+// Node Requirements
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -7,18 +8,22 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var redis = require('redis');
 var nr = require('node-resque');
-var initPassport = require('./passport/initPassport.js');
 var expressSession = require('express-session');
+var paper = require('paper');
+
+// Pavement functionality
 var auth = require('./auth.js');
 var hasher = require('./passport/hasher.js');
+var socketHelper = require('./functions/sockethelper.js');
+// var jobs = require('./functions/redisjobs.js');
+var initPassport = require('./passport/initPassport.js');
+var pavementWrapper = require('./public/javascripts/pavementpaper.js');
+var redisManager = require('./redis/redismanager.js');
 
+// Server requirements
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
-var paper = require('paper');
-
-var pavementWrapper = require('./public/javascripts/pavementpaper.js');
 
 app.use(expressSession({secret: "notReallyASecret",
 	resave:false,
@@ -37,86 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //TODO: replace with new URI and link via auth file instead?
 mongoose.connect('mongodb://jwei:jwei@ds025459.mlab.com:25459/pavement');
 
-var socketHelper = require('./functions/sockethelper.js');
-
-var redisClient = redis.createClient();
-var resqueConnectionDetails = {redis: redisClient};
-
-var jobs = {
-	"saveState": {
-		perform: function(room, callback) {
-			socketHelper.getEdits(room, function(data) {
-				if (data.length > 0) {
-					socketHelper.getSvg(room, function(svgdata) {
-						var canvas = new paper.Canvas(1000, 1000);
-						var wrapper = new pavementWrapper(canvas);
-
-						if(svgdata !== undefined && svgdata.data !== undefined) {
-							wrapper.startProjectFromSVG(svgdata.data);
-						}
-
-						for(var index = 0; index < data.length; index++) {
-							var editData = data[index].data;
-
-							wrapper.applyEdit(editData);
-						}
-
-						socketHelper.addSvg(room, wrapper.exportSVG(), function() {
-							if (svgdata !== undefined &&svgdata._id !== undefined) {
-								socketHelper.removeSvg(svgdata._id);
-							}
-							for(var index = 0; index < data.length; index++) {
-								socketHelper.removeEdit(data[index]._id);
-							}
-						});
-						callback(null, 'replaced SVG');
-					});
-				} else {
-					callback(null, 'no edits to apply');
-				}
-			});
-		}
-	}
-};
-
-var scheduler = new nr.scheduler({connection: resqueConnectionDetails});
-scheduler.connect(function() {
-	scheduler.start();
-});
-
-var worker = new nr.worker({connection: resqueConnectionDetails}, jobs);
-worker.connect(function() {
-	worker.workerCleanup();
-	worker.start();
-});
-
-/////////////////////////
-// REGISTER FOR EVENTS //
-/////////////////////////
-
-worker.on('start',           function(){ console.log("worker started"); });
-worker.on('end',             function(){ console.log("worker ended"); });
-worker.on('cleaning_worker', function(worker, pid){ console.log("cleaning old worker " + worker); });
-worker.on('poll',            function(queue){ console.log("worker polling " + queue); });
-worker.on('job',             function(queue, job){ console.log("working job " + queue + " " + JSON.stringify(job)); });
-worker.on('reEnqueue',       function(queue, job, plugin){ console.log("reEnqueue job (" + plugin + ") " + queue + " " + JSON.stringify(job)); });
-worker.on('success',         function(queue, job, result){ console.log("job success " + queue + " " + JSON.stringify(job) + " >> " + result); });
-worker.on('failure',         function(queue, job, failure){ console.log("job failure " + queue + " " + JSON.stringify(job) + " >> " + failure); });
-worker.on('error',           function(queue, job, error){ console.log("error " + queue + " " + JSON.stringify(job) + " >> " + error); });
-worker.on('pause',           function(){ console.log("worker paused"); });
-
-scheduler.on('start',             function(){ console.log("scheduler started"); });
-scheduler.on('end',               function(){ console.log("scheduler ended"); });
-//scheduler.on('poll',              function(){ console.log("scheduler polling"); });
-scheduler.on('master',            function(state){ console.log("scheduler became master"); });
-scheduler.on('error',             function(error){ console.log("scheduler error >> " + error); });
-scheduler.on('working_timestamp', function(timestamp){ console.log("scheduler working timestamp " + timestamp); });
-scheduler.on('transferred_job',   function(timestamp, job){ console.log("scheduler enquing job " + timestamp + " >> " + JSON.stringify(job)); });
-
-var queue = new nr.queue({connection:resqueConnectionDetails}, jobs);
-queue.on('error', function(error) {
-	console.log(error);
-});
+redisManager.initialize();
 
 var index = require('./routes/index.js');
 var user = require('./routes/user.js');
@@ -136,6 +62,7 @@ app.get('/messages/:boardId', chat.getChat);
 app.get('/dashboard', accessor.isLoggedIn, index.dashboard);
 app.get('/myBoards', board.getAvailablePrivateBoards);
 app.get('/publicBoards', board.getPublic);
+app.get('/public/:boardId', board.getBoardPublic);
 app.get('/logout', function(req, res) {
 	req.logout();
 	res.redirect('/');
@@ -155,7 +82,7 @@ app.post('/signup', passport.authenticate('signup', {
 app.post('/board/add', board.add);
 app.post('/dashboard', index.dashboard);
 
-app.delete('/board/:name/:owner', board.deleteBoard);
+app.delete('/board/:boardId/:owner', board.deleteBoard);
 app.delete('/removeUser/:boardId/:userId', board.removeUser);
 
 app.put('/addUser/:boardId/:userId', board.addUser);
@@ -167,10 +94,11 @@ io.on('connection', function(socket) {
 		var roomId = userInfo.boardId;
 		openConnections[socket.id] = userInfo;
 		socket.join(roomId);
-		queue.connect(function() {
-			queue.enqueue('board' + roomId, 'saveState', roomId, function(message) {
+
+		redisManager.queueJob(roomId, function(err, message) {
+			if(!err) {
 				console.log(message);
-			});
+			}
 		});
 	});
 
@@ -210,10 +138,10 @@ io.on('connection', function(socket) {
 			var roomId = openConnections[socket.id].boardId;
 			delete openConnections[socket.id];
 
-			queue.connect(function() {
-				queue.enqueue('board' + roomId, 'saveState', roomId, function(err, message) {
+			redisManager.queueJob(roomId, function(err, message) {
+				if(!err) {
 					console.log(message);
-				});
+				}
 			});
 		}
 	});

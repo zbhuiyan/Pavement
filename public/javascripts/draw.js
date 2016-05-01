@@ -32,6 +32,16 @@ var Canvas = React.createClass({
 		this.setupReceiver();
 	},
 
+	componentWillUpdate: function() {
+		this.shouldSendDeselect = this.state.activeIndex === ACTIVE_INDEX.SELECT;
+	},
+
+	componentDidUpdate: function() {
+		if(this.state.activeIndex !== ACTIVE_INDEX.SELECT && this.shouldSendDeselect) {
+			this.emitEvent('deselect', {});
+		}
+	},
+
 	loadLatestSVG: function () {
 		$.ajax({
 			url: '/svg/' + this.props.boardId,
@@ -467,6 +477,7 @@ var Canvas = React.createClass({
 		this.props.socket.on('deleteItem', pavement.deleteItem);
 		this.props.socket.on('select', pavement.select);
 		this.props.socket.on('move', pavement.move);
+		this.props.socket.on('deselect', pavement.deselect);
 	},
 
 	render: function () {
@@ -487,8 +498,7 @@ var Canvas = React.createClass({
 						<li><Button setTool={this.useCircle} active={this.state.activeIndex===ACTIVE_INDEX.COOL_CIRCLE} tool={"Circle"} /></li>
 						
 						<li><Button setTool={this.pickHexColor} icon={"icon-palette"}  tool={"Color"} /></li>
-						<li><Button setTool={this.select} active={this.state.activeIndex===ACTIVE_INDEX.SELECT} tool={'Select'} /></li>
-						<li><Button setTool={this.editItem} active={this.state.activeIndex===ACTIVE_INDEX.EDIT_ITEM} tool={'Edit Item'} /></li>
+						<li><Button setTool={this.select} active={this.state.activeIndex===ACTIVE_INDEX.SELECT} tool={'Select & Move'} /></li>
 
 						<li><Button setTool={this.colorBlack} tool={"Black"} /></li>
 						<li><Button setTool={this.colorBlue} tool={"Blue"} /></li>
