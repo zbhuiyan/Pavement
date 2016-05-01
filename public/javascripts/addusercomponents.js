@@ -36,6 +36,7 @@ var AddUser = React.createClass({
 		if(!this.state.isPublic) {
 			return (
 				<div id='users'>
+					<h1 className='addUser'>Add a User</h1>
 					<input type='text' onChange={this.handleChange} />
 					<UserList data={this.state.users} boardId={this.props.boardId} />
 				</div>
@@ -107,7 +108,6 @@ var UserList = React.createClass({
 
 		return (
 			<div id='userlist'>
-				<h1>Add a User</h1>
 				{addNodes}
 				<h1>Current Users</h1>
 				{currentNodes}
