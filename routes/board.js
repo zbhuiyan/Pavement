@@ -55,31 +55,15 @@ boardRoutes.add = function(req,res) {
 		timestamp: new Date()
 	});
 
-	dbBoard.save(function (err) {
-		if (err) {
-			res.status(500).send('could not add board');
-		// } else {
-		// 	return 201; // resource created
-		// }
-	}});
-	res.json(dbBoard);
-
-};
-
-boardRoutes.getUserBoards = function(req,res) {
-	var user = req.params.user;
-
-	Board.find({owner: user}).exec(function (err,boards) {
-		if (err) {
-			res.status(500).send('could not get any boards for that user');
+	dbBoard.save(function (err, savedBoard) {
+		if (!err) {
+			res.json(savedBoard); 
 		} else {
-			if (boards) {
-				res.json(boards);
-			} else {
-				res.status(404).send('you do not appear to own any boards');
-			}
+			res.status(500).send('could not add board');
 		}
 	});
+
+
 };
 
 boardRoutes.getAvailablePrivateBoards = function(req, res) {
@@ -113,14 +97,6 @@ boardRoutes.getPublic = function(req,res) {
 		}
 	});
 
-
-};
-
-boardRoutes.getByTag = function(req,res) {
-	var tags = req.params.tags.split;
-	Board.find({"tags": {$all: tags}}, function (err, tagged) {
-		res.json(tagged);
-	});
 
 };
 
