@@ -4,7 +4,8 @@ var SVG = require('../models/svgModel.js');
 
 var socketFunctions = {};
 
-// Chat Methods
+
+// ***** Chat Methods *****
 
 socketFunctions.addMessage = function(chatObj) {
 	/*
@@ -15,9 +16,7 @@ socketFunctions.addMessage = function(chatObj) {
 	*/
 
 	chatObj.timestamp = new Date();
-
 	dbChat = new Chat(chatObj);
-
 	dbChat.save(function(err, addedChat) {
 		if(!err) {
 			return addedChat; // resource created
@@ -27,8 +26,11 @@ socketFunctions.addMessage = function(chatObj) {
 	});
 };
 
-// Edit Methods
 
+
+// ***** Edit Methods *****
+
+//Get edits (any changes to the canvas) made by a user
 socketFunctions.getEdits = function(boardId, callback) {
 	Edit.find({boardId:boardId}).sort({timestamp:1}).exec(function(err, edits) {
 		if(!err) {
@@ -57,7 +59,9 @@ socketFunctions.removeEdit = function(editId) {
 	});
 };
 
-// SVG Methods
+
+
+// ***** SVG Methods *****
 
 socketFunctions.getSvg = function(boardId, callback) {
 	SVG.find({boardId:boardId}).sort({timestamp: -1}).exec(function(err, svg) {

@@ -14,10 +14,10 @@ userRoutes.getUser = function(req, res) {
 			if(users) {
 				res.json(users);
 			} else {
-				res.status(404).send('could not find any users for that username');
+				res.status(404).send('Could not find any users for that username');
 			}
 		} else {
-			res.status(500).send('database error occurred');
+			res.status(500).send('Database error occurred');
 		}
 	});
 }

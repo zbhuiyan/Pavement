@@ -1,4 +1,4 @@
-//this is our parent client-side component
+//Parent client-side component
 
 var App = React.createClass({
 

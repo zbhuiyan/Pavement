@@ -3,7 +3,7 @@ var SVG = require('../models/svgModel.js');
 var Edit = require('../models/editModel.js');
 var Chat = require('../models/chatModel.js');
 
-// wrapping up all the methods
+// Wrapping up all the methods
 var boardRoutes = {};
 
 boardRoutes.addUser = function(req,res) {

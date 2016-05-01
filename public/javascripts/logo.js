@@ -1,4 +1,5 @@
-//module to display name of website
+// Module to display name of website
+
 var Logo = React.createClass({
 
 	render: function () {

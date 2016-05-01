@@ -1,3 +1,5 @@
+// ***** All Board Components *****
+
 var BoardListContainer = React.createClass({
 	displayName:'BoardListContainer',
 	getInitialState: function() {
