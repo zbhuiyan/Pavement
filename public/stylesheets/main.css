@@ -79,6 +79,13 @@ input[type="submit"]:hover {
 /************
 ***Top Bar***
 ************/
+
+.pavement{
+    text-decoration: none;
+    cursor: pointer;
+    color: black;
+}
+
 .mainNav {
     vertical-align: middle;
     float: right;
