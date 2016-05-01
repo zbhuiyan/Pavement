@@ -1,4 +1,7 @@
 var Board = require('../models/boardModel.js');
+var SVG = require('../models/svgModel.js');
+var Edit = require('../models/editModel.js');
+var Chat = require('../models/chatModel.js');
 
 // wrapping up all the methods
 var boardRoutes = {};
@@ -81,7 +84,7 @@ boardRoutes.getUserBoards = function(req,res) {
 
 boardRoutes.getAvailablePrivateBoards = function(req, res) {
 	if(req.user != null) {
-		Board.find({users:{'$in':[req.user.username]}}, function(err, boards) {
+		Board.find({isPublic:false, users:{'$in':[req.user.username]}}, function(err, boards) {
 			if(!err) {
 				if(boards) {
 					res.json(boards);
@@ -133,20 +136,33 @@ boardRoutes.getByName = function(req,res) {
 };
 
 boardRoutes.deleteBoard = function(req,res) {
-	// var board = req.params.name;
-	// var owner = req.params.owner;
 	var board = req.params;
-	Board.remove({name: board.name, owner: board.owner}, function (err) {
-        if (err) res.status(500).send('Error deleting page');
-    });
-    res.end();
+	var removedAll = [];
 
-	// Board.findOneAndRemove({
-	// 	$and: [{'name':board}, {'owner':owner}]
-	// }).exec(function (err, done) {
-	// 	// res.status(200).send(); // not sure what to do here/send here
-	// 	res.end();
-	// })
+	var confirmRemoved = function(index, res) {
+		removedAll[index] = true;
+
+		if(removedAll.length === 3 && removedAll.indexOf(null) === -1) {
+			res.status(200).json(removedAll);
+		} 
+	}
+
+	Board.remove({_id: board.boardId, owner: board.owner}, function (err) {
+        if(!err) {
+        	Edit.remove({boardId:board.boardId}, function(err) {
+        		confirmRemoved(0, res);
+        	});
+        	SVG.remove({boardId:board.boardId}, function(err) {
+        		confirmRemoved(1, res);
+        	});
+        	Chat.remove({boardId:board.boardId}, function(err) {
+        		confirmRemoved(2, res); 
+        	});
+        } else {
+        	res.status(500).send('error removing board');
+        }
+
+    });
 };
 
 module.exports = boardRoutes;

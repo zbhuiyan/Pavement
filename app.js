@@ -81,7 +81,7 @@ app.post('/signup', passport.authenticate('signup', {
 app.post('/board/add', board.add);
 app.post('/dashboard', index.dashboard);
 
-app.delete('/board/:name/:owner', board.deleteBoard);
+app.delete('/board/:boardId/:owner', board.deleteBoard);
 app.delete('/removeUser/:boardId/:userId', board.removeUser);
 
 app.put('/addUser/:boardId/:userId', board.addUser);
