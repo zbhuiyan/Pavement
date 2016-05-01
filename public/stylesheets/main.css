@@ -197,7 +197,10 @@ canvas {
 }
 
 .chatBox {
-    /*float: right;*/
+    display: inline-block;
+    float: left;
+    margin-bottom: 10px;
+    margin-right: 25px;
 }
 
 .chatList {
@@ -210,4 +213,13 @@ canvas {
 .chatAuthor {
     font-weight: bolder;
     background-color: #e6e6e6;
+}
+
+.addUser {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.users {
+    overflow: auto;
 }
