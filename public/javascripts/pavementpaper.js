@@ -1,3 +1,5 @@
+//***** Wrapper *****
+
 if(typeof require !== 'undefined') {
 	var paper = require('paper');
 }

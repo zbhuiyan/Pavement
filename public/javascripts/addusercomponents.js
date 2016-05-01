@@ -1,3 +1,5 @@
+
+//Add user to the board unless on a public board
 var AddUser = React.createClass({
 	displayName:'AddUser',
 	getInitialState: function() {
@@ -48,6 +50,7 @@ var AddUser = React.createClass({
 	}
 });
 
+//List of users on board (unless it's a public board)
 var UserList = React.createClass({
 	displayName:'UserList',
 	getInitialState: function() {
@@ -95,7 +98,7 @@ var UserList = React.createClass({
 			}
 		}.bind(this));
 
-		// TODO Change addUsers to take username instead of id
+		
 		var currentNodes = this.state.currentUsers.map(function(element) {
 			return (
 				<UserCurrentElement boardId={this.props.boardId} username={element} key={element} handle={this.handleRemove} />
@@ -112,6 +115,7 @@ var UserList = React.createClass({
 		)
 	}
 });
+
 
 var UserAddElement = React.createClass({
 	displayName:'UserAddElement',

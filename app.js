@@ -11,7 +11,7 @@ var nr = require('node-resque');
 var expressSession = require('express-session');
 var paper = require('paper');
 
-// Pavement functionality
+// ***** Pavement functionality *****
 var auth = require('./auth.js');
 var hasher = require('./passport/hasher.js');
 var socketHelper = require('./functions/sockethelper.js');
@@ -20,7 +20,7 @@ var initPassport = require('./passport/initPassport.js');
 var pavementWrapper = require('./public/javascripts/pavementpaper.js');
 var redisManager = require('./redis/redismanager.js');
 
-// Server requirements
+// ***** Server requirements and configuration stuff ******
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -39,11 +39,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//TODO: replace with new URI and link via auth file instead?
+
 mongoose.connect('mongodb://jwei:jwei@ds025459.mlab.com:25459/pavement');
 
 redisManager.initialize();
 
+//***** Route stuff *****
 var index = require('./routes/index.js');
 var user = require('./routes/user.js');
 var chat = require('./routes/chat.js');
@@ -69,7 +70,6 @@ app.get('/logout', function(req, res) {
 });
 
 app.post('/login', passport.authenticate('signin', {
-	// WE SHOULD PROBABLY DO SOMETHING ABOUT THIS
 	successRedirect:'/',
 	failureRedirect:'/'
 }));
@@ -86,7 +86,10 @@ app.delete('/board/:boardId/:owner', board.deleteBoard);
 app.delete('/removeUser/:boardId/:userId', board.removeUser);
 
 app.put('/addUser/:boardId/:userId', board.addUser);
-// DO SOCKET STUFF HERE
+
+
+// ***** SOCKET STUFF ***** 
+
 var openConnections = {};
 
 io.on('connection', function(socket) {
