@@ -6,23 +6,23 @@ Pavement is a real-time collaborative drawing application where people can creat
 Within private boards, users can add/delete users with board access, and board owners have the ability to delete any boards they create.
 
 In terms of drawing functionalities, the tools/functionalities available include:
--- Pencil
--- Cloud
--- Circle
--- Single Rectangle
--- Single Ellipse
--- Eraser
--- Text
--- Pretty Circles
--- Pretty Rectangles
--- Pretty Ellipses
--- Circle (where acceleration of mouse affects the size)
--- Color Picking (using hex values or specified colors i.e. black, blue, red, white)
--- Select & Move
--- Download SVG
--- Clear Canvas
--- Import SVG
--- Stroke Width (applies for pencil and cloud)
+* Pencil
+* Cloud
+* Circle
+* Single Rectangle
+* Single Ellipse
+* Eraser
+* Text
+* Pretty Circles
+* Pretty Rectangles
+* Pretty Ellipses
+* Circle (where acceleration of mouse affects the size)
+* Color Picking (using hex values or specified colors i.e. black, blue, red, white)
+* Select & Move
+* Download SVG
+* Clear Canvas
+* Import SVG
+* Stroke Width (applies for pencil and cloud)
 
 
 ### Project Schedule
