@@ -1,25 +1,51 @@
 var Board = require('../models/boardModel.js');
+var SVG = require('../models/svgModel.js');
+var Edit = require('../models/editModel.js');
+var Chat = require('../models/chatModel.js');
 
 // wrapping up all the methods
 var boardRoutes = {};
 
 boardRoutes.addUser = function(req,res) {
-	var board = req.params.board;
+	var boardId = req.params.boardId;
 	var user = req.params.userId;
-	Board.findOneAndUpdate({_id:BoardId}, {$push: {users: user}}, {new:true}, function (err, board) {
-		if (err) {
-			res.status(500).send('could not add the user to the board');
+	Board.findOneAndUpdate({_id:boardId}, {$push: {users: user}}, {new:true}, function (err, board) {
+		if (!err) {
+			res.json(board.users);
 		}
 		else {
-			res.json(board);
+			res.status(500).send('could not add the user to the board');
 		}
 	})
-	res.json(board.users.append(user));
+};
+
+boardRoutes.removeUser = function(req, res) {
+	var boardId = req.params.boardId;
+	var user = req.params.userId;
+	Board.findOneAndUpdate({_id:boardId}, {$pull: {users: user}}, {new:true}, function(err, board)  {
+		if(!err) {
+			res.json(board.users);
+		} else {
+			res.status(500).send('could not remove user from the board');
+		}
+	});
+};
+
+boardRoutes.getBoardUsers = function(req, res) {
+	var boardId = req.params.boardId;
+
+	Board.findOne({_id:boardId}).select('users').exec(function(err, board) {
+		if(!err) {
+			res.json(board);
+		} else {
+			res.status(500).send('could not get board');
+		}
+	});
 };
 
 boardRoutes.add = function(req,res) {
 	dbBoardReq = req.body;
-	var user = req.user._id;
+	var user = req.user.username;
 	dbBoard = new Board({
 		users: [user], 
 		owner: user, 
@@ -29,36 +55,20 @@ boardRoutes.add = function(req,res) {
 		timestamp: new Date()
 	});
 
-	dbBoard.save(function (err) {
-		if (err) {
-			res.status(500).send('could not add board');
-		// } else {
-		// 	return 201; // resource created
-		// }
-	}});
-	res.json(dbBoard);
-
-};
-
-boardRoutes.getUserBoards = function(req,res) {
-	var user = req.params.user;
-
-	Board.find({owner: user}).exec(function (err,boards) {
-		if (err) {
-			res.status(500).send('could not get any boards for that user');
+	dbBoard.save(function (err, savedBoard) {
+		if (!err) {
+			res.json(savedBoard); 
 		} else {
-			if (boards) {
-				res.json(boards);
-			} else {
-				res.status(404).send('you do not appear to own any boards');
-			}
+			res.status(500).send('could not add board');
 		}
 	});
+
+
 };
 
 boardRoutes.getAvailablePrivateBoards = function(req, res) {
 	if(req.user != null) {
-		Board.find({users:{'$in':[req.user._id]}}, function(err, boards) {
+		Board.find({isPublic:false, users:{'$in':[req.user.username]}}, function(err, boards) {
 			if(!err) {
 				if(boards) {
 					res.json(boards);
@@ -90,14 +100,6 @@ boardRoutes.getPublic = function(req,res) {
 
 };
 
-boardRoutes.getByTag = function(req,res) {
-	var tags = req.params.tags.split;
-	Board.find({"tags": {$all: tags}}, function (err, tagged) {
-		res.json(tagged);
-	});
-
-};
-
 boardRoutes.getByName = function(req,res) {
 	var name = req.params.name;
 	Board.find({"name": name}).exec(function (err, match) {
@@ -110,20 +112,33 @@ boardRoutes.getByName = function(req,res) {
 };
 
 boardRoutes.deleteBoard = function(req,res) {
-	// var board = req.params.name;
-	// var owner = req.params.owner;
 	var board = req.params;
-	Board.remove({name: board.name, owner: board.owner}, function (err) {
-        if (err) res.status(500).send('Error deleting page');
-    });
-    res.end();
+	var removedAll = [];
 
-	// Board.findOneAndRemove({
-	// 	$and: [{'name':board}, {'owner':owner}]
-	// }).exec(function (err, done) {
-	// 	// res.status(200).send(); // not sure what to do here/send here
-	// 	res.end();
-	// })
+	var confirmRemoved = function(index, res) {
+		removedAll[index] = true;
+
+		if(removedAll.length === 3 && removedAll.indexOf(null) === -1) {
+			res.status(200).json(removedAll);
+		} 
+	}
+
+	Board.remove({_id: board.boardId, owner: board.owner}, function (err) {
+        if(!err) {
+        	Edit.remove({boardId:board.boardId}, function(err) {
+        		confirmRemoved(0, res);
+        	});
+        	SVG.remove({boardId:board.boardId}, function(err) {
+        		confirmRemoved(1, res);
+        	});
+        	Chat.remove({boardId:board.boardId}, function(err) {
+        		confirmRemoved(2, res); 
+        	});
+        } else {
+        	res.status(500).send('error removing board');
+        }
+
+    });
 };
 
 module.exports = boardRoutes;

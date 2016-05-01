@@ -42,6 +42,7 @@ var BoardListContainer = React.createClass({
 			dataType:'json',
 			cache:false,
 			success: function(data) {
+				console.log('private boards ', data);
 				this.setState({privateBoards:data});
 			}.bind(this),
 			error: function(xhr, status, err) {
@@ -107,19 +108,20 @@ var BoardListContainer = React.createClass({
 		var boards;
 		console.log(this.state.user);
         $.ajax({
-        	url: '/board/' + board.name + '/' + this.state.user._id,
+        	url: '/board/' + board.id + '/' + this.state.user.username,
         	type: 'DELETE',
-        	success: function () {
+        	success: function (result) {
+        		console.log(result);
         		if (board.isPublic) {
         			boards = this.state.publicBoards;
         			var newPublicBoards = boards.filter(function (element) {
-        				return !(element.name === board.name && element.owner === this.state.user._id);
+        				return !(element._id === board.id && element.owner === this.state.user.username);
         			}.bind(this));
         			this.setState({publicBoards: newPublicBoards});
         		} else {
         			boards = this.state.privateBoards;
         			var newPrivateBoards = boards.filter(function (element) {
-        				return !(element.name === board.name && element.owner === this.state.user._id);
+        				return !(element._id === board.id && element.owner === this.state.user.username);
         			}.bind(this));
         			this.setState({privateBoards: newPrivateBoards}) 
         		}
@@ -168,12 +170,12 @@ var BoardElement = React.createClass({
 		window.location.href = '/draw/' + this.props.id;
 	},
 	handleDelete: function (e) {
-		this.props.onBoardDelete({name: this.props.name, isPublic: this.props.isPublic});
+		this.props.onBoardDelete({id:this.props.id, isPublic: this.props.isPublic});
 	},
 
 	render:function() {
 		var content = (<p></p>);
-		if (this.props.owner === this.props.user._id) {
+		if (this.props.owner === this.props.user.username) {
 			content = (
 				<button onClick={this.handleDelete}>Delete</button>
 			);

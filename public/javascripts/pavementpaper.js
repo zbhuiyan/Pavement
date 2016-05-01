@@ -304,7 +304,11 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
-
+	/**
+	* Selects an item
+	* @param {Object} data
+	* @return {null}
+	*/
 	this.select = function(data){
 		var matches = this.matches({x:data.oldPoint[1], y:data.oldPoint[2]});
 
@@ -322,6 +326,11 @@ var PavementWrapper = function(canvas) {
 
 	}.bind(this)
 
+	/**
+	* Moves an object to another point
+	* @param {Object} data
+	* @return {null}
+	*/
 	this.move = function(data) {
 		if(moveObjects[data.id] !== undefined) {
 			moveObjects[data.id].position = new paper.Point(data.x, data.y);
@@ -401,11 +410,21 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
+	/**
+	* Finds all of the objects near a certain point where the mouse clicked
+	* @param {paper.Point} point
+	* @return {Array} list of objects
+	*/
 	this.matches = function(point) {
 		var matchRectangle = new paper.Path.Rectangle(new paper.Point(point.x, point.y), new paper.Point(point.x+5, point.y+5));
 		return paper.project.getItems({overlapping: matchRectangle.bounds});
 	}
 
+	/**
+	* Finds the first Path element from a list of matches or returns the first match
+	* @param {Array} matches
+	* @return {paper.Path} matches[index]
+	*/
 	this.findPathMatches = function(matches) {
 		for(var index = 0; index < matches.length; index++) {
 			if(matches[index].children === undefined) {
