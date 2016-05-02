@@ -1,3 +1,16 @@
+/**
+ * board.js contains all the board methods, including:
+ * - addUser
+ * - removeUser
+ * - getBoardUsers
+ * - add
+ * - getAvailablePrivateBoards
+ * - getPublic
+ * - getByName
+ * - deleteBoard
+ * - getBoardPublic
+ */
+
 var Board = require('../models/boardModel.js');
 var SVG = require('../models/svgModel.js');
 var Edit = require('../models/editModel.js');
@@ -62,8 +75,6 @@ boardRoutes.add = function(req,res) {
 			res.status(500).send('could not add board');
 		}
 	});
-
-
 };
 
 boardRoutes.getAvailablePrivateBoards = function(req, res) {
@@ -82,7 +93,7 @@ boardRoutes.getAvailablePrivateBoards = function(req, res) {
 	} else {
 		res.status(403).send('not logged in');
 	}
-}
+};
 
 boardRoutes.getPublic = function(req,res) {
 	Board.find({"isPublic": true}, function (err, publicBoards) {
@@ -96,8 +107,6 @@ boardRoutes.getPublic = function(req,res) {
 			res.status(500).send('error on finding public boards');
 		}
 	});
-
-
 };
 
 boardRoutes.getByName = function(req,res) {
@@ -137,7 +146,6 @@ boardRoutes.deleteBoard = function(req,res) {
         } else {
         	res.status(500).send('error removing board');
         }
-
     });
 };
 

@@ -1,3 +1,7 @@
+/**
+ * chat.js contains getChat which searches for all chat messages associated with the board
+ */
+
 var Chat = require('../models/chatModel.js');
 
 var chatMethods = {};
