@@ -66,6 +66,7 @@ var BoardListContainer = React.createClass({
 	handleBoardSubmit: function (board) {
 		var boards;
 		if (board.isPublic) {
+			console.log(board);
 			var boards = this.state.publicBoards;
 
 			$.ajax({
@@ -205,7 +206,7 @@ var CreateBoardForm = React.createClass({
 	},
 
 	handlePublicChange: function (e) {
-		this.setState({isPublic:e.target.value});
+		this.setState({isPublic:e.target.checked});
 	},
 
 	handleUsersChange: function (e) {
