@@ -147,6 +147,10 @@ button {
     border-radius: 5px;
 }
 
+button:hover {
+    background-color: #85e0e0;
+}
+
 /**************
 ***Pavement***
 **************/
