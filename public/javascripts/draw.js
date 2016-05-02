@@ -1,5 +1,6 @@
 // ***** Drawing Stuff *****
 
+// active indicies for which toolbar button has been selected
 var ACTIVE_INDEX = {
 		PENCIL: 0,
 		CLOUD: 1,
