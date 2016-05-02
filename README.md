@@ -1,4 +1,4 @@
-# Pavement.js
+# [Pavement.js](http://pavementjs.herokuapp.com/)
 
 ### Project Description
 Pavement is a real-time collaborative drawing application where people can create and chat about drawings. Users can sign up and create a board or join one (either public or private).
@@ -25,9 +25,7 @@ In terms of drawing functionalities, the tools/functionalities available include
 * Stroke Width (applies for pencil and cloud)
 
 ### Technologies Used
-In addition to plain Javascript, HTML, and CSS, Pavement also utilizes Paper.js (drawing framework), Socket.io (real-time framework), and Redis (ds store). *** For our app, we recommend using Google Chrome as your internet browser.
-
-
+In addition to plain Javascript, HTML, and CSS, Pavement also utilizes Paper.js (drawing framework), Socket.io (real-time framework), and Redis (ds store). To improve the efficiency of the app, we setup a server specifically for redis, and the repository dedicated to that can be found [here] (https://github.com/adeaver/ResquePavement). *** For our app, we recommend using Google Chrome as your internet browser.
 
 
 ### Project Schedule
