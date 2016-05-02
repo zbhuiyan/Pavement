@@ -23,7 +23,6 @@ methods.initialize = function() {
 methods.queueJob = function(roomId, callback) {
 	if(queue !== undefined) {
 		queue.connect(function() {
-			console.log(queue);
 			queue.enqueue('board' + roomId, 'saveState', roomId, callback);
 		});
 	}
