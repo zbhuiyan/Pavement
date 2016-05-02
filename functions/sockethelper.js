@@ -1,3 +1,14 @@
+/**
+ * sockethelper.js contains the following methods: 
+ * - addMessage
+ * - getEdits
+ * - addEdit
+ * - removeEdit
+ * - getSvg
+ * - addSvg
+ * - removeSvg
+ */
+
 var Chat = require('../models/chatModel.js');
 var Edit = require('../models/editModel.js');
 var SVG = require('../models/svgModel.js');
@@ -19,7 +30,7 @@ socketFunctions.addMessage = function(chatObj) {
 	dbChat = new Chat(chatObj);
 	dbChat.save(function(err, addedChat) {
 		if(!err) {
-			return addedChat; // resource created
+			return addedChat; // Resource created
 		} else {
 			return null; // Internal server error
 		}
