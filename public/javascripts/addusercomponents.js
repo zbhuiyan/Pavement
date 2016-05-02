@@ -1,4 +1,17 @@
-
+/**
+ * addusercomponents.js contains the following components:
+ * - AddUser
+ * -- getPublic
+ * -- handleChange
+ * - UserList
+ * -- handleAdd
+ * -- handleRemove
+ * - UserAddElement
+ * -- handleClick (add users to private boards)
+ * - UserCurrentElement (remove users from private boards)
+ * -- handleClick
+ */
+ 
 //Add user to the board unless on a public board
 var AddUser = React.createClass({
 	displayName:'AddUser',
