@@ -1,4 +1,4 @@
-// Node Requirements
+// ***** Node requirements *****
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -20,7 +20,7 @@ var initPassport = require('./passport/initPassport.js');
 var pavementWrapper = require('./public/javascripts/pavementpaper.js');
 var redisManager = require('./redis/redismanager.js');
 
-// ***** Server requirements and configuration stuff ******
+// ***** Server requirements and configuration setup *****
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -39,12 +39,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 mongoose.connect('mongodb://jwei:jwei@ds025459.mlab.com:25459/pavement');
 
 redisManager.initialize();
 
-//***** Route stuff *****
+// ***** Routes setup *****
 var index = require('./routes/index.js');
 var user = require('./routes/user.js');
 var chat = require('./routes/chat.js');
@@ -87,8 +86,7 @@ app.delete('/removeUser/:boardId/:userId', board.removeUser);
 
 app.put('/addUser/:boardId/:userId', board.addUser);
 
-
-// ***** SOCKET STUFF ***** 
+// ***** Socket setup ***** 
 
 var openConnections = {};
 
@@ -111,7 +109,6 @@ io.on('connection', function(socket) {
 		var sendMsg = {user:socketInfo.userId,
 			msg:message,
 			_id:hasher(message+socketInfo.userId)};
-
 
 		console.log('socketConnected', socketInfo);
 
