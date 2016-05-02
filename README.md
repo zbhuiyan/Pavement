@@ -16,7 +16,7 @@ In terms of drawing functionalities, the tools/functionalities available include
 * Pretty Circles
 * Pretty Rectangles
 * Pretty Ellipses
-* Circle (where acceleration of mouse affects the size)
+* Circle (where location of mouse affects the size)
 * Color Picking (using hex values or specified colors i.e. black, blue, red, white)
 * Select & Move
 * Download SVG
