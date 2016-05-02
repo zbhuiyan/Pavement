@@ -1,4 +1,8 @@
-// ***** All Chat Components *****
+/**
+ * chatcomponents.js contains all the chat components (list, form, message) 
+ * and has methods for setting up the chat, retrieving old messages, interfacing 
+ * with Socket, and rendering
+ */
 
 var ChatBox = React.createClass({displayName:'ChatBox',
 	getInitialState: function() {
