@@ -1,3 +1,7 @@
+/**
+ * board.js renders the board
+ */
+
 var BoardApp = React.createClass({
 	render: function() {
 		return (
