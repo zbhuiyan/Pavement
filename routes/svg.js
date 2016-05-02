@@ -1,3 +1,7 @@
+/**
+ * svg.js searches for the svgs associated with the boardId and returns the latest one
+ */
+ 
 var SVG = require('../models/svgModel.js');
 
 var svgMethods = {};
