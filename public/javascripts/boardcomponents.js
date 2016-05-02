@@ -199,7 +199,6 @@ var CreateBoardForm = React.createClass({
 		return {
 			name: '',
 			isPublic: false,
-			users: []
 		};
 	},
 
@@ -211,22 +210,17 @@ var CreateBoardForm = React.createClass({
 		this.setState({isPublic:e.target.checked});
 	},
 
-	handleUsersChange: function (e) {
-		this.setState({users: e.target.value.split(', ')});
-	},
-
 	handleSubmit: function (e) {
 		e.preventDefault();
 		var name = this.state.name.trim();
 		var isPublic = this.state.isPublic;
-		var users = this.state.users;
 
 		if (!name) {
 			return;
 		}
 
-		this.props.onBoardSubmit({name: name, isPublic: isPublic, users: users});
-		this.setState({name: '', isPublic: false, users: []});
+		this.props.onBoardSubmit({name: name, isPublic: isPublic});
+		this.setState({name: '', isPublic: false});
 	},
 
 	render: function () {
@@ -246,12 +240,6 @@ var CreateBoardForm = React.createClass({
 					<input type='submit'
 							value='Create'
 							className='submitButton' />
-					<br />
-					<input type='text'
-							placeholder='private members'
-							name='users'
-							value={this.state.users}
-							onChange={this.handleUsersChange} />
 				</form>
 			</div>
 		);
