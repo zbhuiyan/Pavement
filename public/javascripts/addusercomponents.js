@@ -1,3 +1,5 @@
+
+//Add user to the board unless on a public board
 var AddUser = React.createClass({
 	displayName:'AddUser',
 	getInitialState: function() {
@@ -34,20 +36,21 @@ var AddUser = React.createClass({
 		if(!this.state.isPublic) {
 			return (
 				<div id='users'>
-					<input type='text' onChange={this.handleChange} />
+					<h1 className='addUser'>Add a User</h1>
+					<input type='text' placeholder='username' onChange={this.handleChange} />
 					<UserList data={this.state.users} boardId={this.props.boardId} />
 				</div>
 			)
 		} else {
 			return (
-				<div id='users'>
-					Enjoy Pavement!
+				<div>
 				</div>
 			)
 		}
 	}
 });
 
+//List of users on board (unless it's a public board)
 var UserList = React.createClass({
 	displayName:'UserList',
 	getInitialState: function() {
@@ -95,7 +98,7 @@ var UserList = React.createClass({
 			}
 		}.bind(this));
 
-		// TODO Change addUsers to take username instead of id
+		
 		var currentNodes = this.state.currentUsers.map(function(element) {
 			return (
 				<UserCurrentElement boardId={this.props.boardId} username={element} key={element} handle={this.handleRemove} />
@@ -104,7 +107,6 @@ var UserList = React.createClass({
 
 		return (
 			<div id='userlist'>
-				<h1>Add a User</h1>
 				{addNodes}
 				<h1>Current Users</h1>
 				{currentNodes}
@@ -112,6 +114,7 @@ var UserList = React.createClass({
 		)
 	}
 });
+
 
 var UserAddElement = React.createClass({
 	displayName:'UserAddElement',

@@ -1,3 +1,5 @@
+// ***** All Chat Components *****
+
 var ChatBox = React.createClass({displayName:'ChatBox',
 	getInitialState: function() {
 		return {

@@ -1,3 +1,4 @@
+
 if(typeof require !== 'undefined') {
 	var paper = require('paper');
 }
@@ -64,12 +65,13 @@ var PavementWrapper = function(canvas) {
 		}
 	}.bind(this);
 
+
 	/**
 	* Takes in svg and applies it to the current project
 	* @param {String} svg
 	* @return {null}
 	*/
-
+	
 	this.startProjectFromSVG = function(svg, callback) {
 		paper.project.importSVG(svg);
 		paper.view.draw();
@@ -77,23 +79,23 @@ var PavementWrapper = function(canvas) {
 		callback;
 	}
 
+
 	/**
 	* Sets new path object given a data package
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.setPath = function(data) {
 		paths[data.id] = new paper.Path();
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 	};
+
 
 	/**
 	* Draws a pencil to a predefined path object
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawPencil = function(data) {
 		if(paths[data.id] === undefined) {
 			paths[data.id] = new paper.Path();
@@ -105,12 +107,12 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	};
 
+
 	/**
 	* Draws an arc between two points on the current path
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawCloud = function(data) {
 		paths[data.id].strokeColor = data.strokeColor;
 		paths[data.id].strokeWidth = data.strokeWidth;
@@ -118,12 +120,12 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
+
 	/**
 	* Draws a circle at the cursor location on click
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawSingleCircle = function (data) {
 
 		var x = data.x1;
@@ -138,12 +140,13 @@ var PavementWrapper = function(canvas) {
 	    paper.view.draw();
 	}
 
+
+
 	/**
 	* Draws a rectangle at the cursor location on click
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawSingleRectangle = function (data) {
 
 		var x = data.x;
@@ -168,12 +171,12 @@ var PavementWrapper = function(canvas) {
 		}
 	}
 
+
 	/**
 	* Draws an ellipse at the cursor location on click
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawSingleEllipse = function (data) {
 		var x = data.x;
 		var y = data.y;
@@ -200,12 +203,12 @@ var PavementWrapper = function(canvas) {
 		}
 	}
 
+
 	/**
 	* Draws circle based on cursor location 
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawCircle = function(data) {
 		// unpack the data
 		var x = data.x;
@@ -222,12 +225,12 @@ var PavementWrapper = function(canvas) {
 		
 	}
 
+
 	/**
 	* Draws circles that are filled with color
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawPrettyCircle = function(data) {
 		// unpack the data
 		var x = data.x;
@@ -242,12 +245,12 @@ var PavementWrapper = function(canvas) {
 	    paper.view.draw();
 	}
 
+
 	/**
 	* Draws rectangles that are filled with color
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawPrettyRectangle = function(data) {
 		// unpack the data
 		var x = data.x;
@@ -262,12 +265,12 @@ var PavementWrapper = function(canvas) {
 	    paper.view.draw();
 	}
 
+
 	/**
 	* Draws ellipses that are filled with color
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawPrettyEllipses = function(data) {
 		// unpack the data
 		var x = data.x;
@@ -284,14 +287,6 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
-	/**
-	* Edits segments of an item
-	* @param {Object} data
-	* @return {null}
-	*/
-	// this.editItem = function(data){
-	// 	paper.view.draw();
-	// }
 
 
 	/**
@@ -305,6 +300,7 @@ var PavementWrapper = function(canvas) {
 		}
 		paper.view.draw();
 	}
+
 
 	/**
 	* Selects an item
@@ -328,8 +324,10 @@ var PavementWrapper = function(canvas) {
 
 	}.bind(this)
 
+
+
 	/**
-	* Moves an object to another point
+	* Moves an object to another point and deselects
 	* @param {Object} data
 	* @return {null}
 	*/
@@ -367,33 +365,33 @@ var PavementWrapper = function(canvas) {
 		paper.view.draw();
 	}
 
+
 	/**
 	* Clears the project
 	* @param {null}
 	* @return {null}
 	*/
-
 	this.clearProject = function() {
 		paper.project.clear();
 		paper.view.draw();
 	}
+
 
 	/**
 	* Returns the svg
 	* @param {null}
 	* @return {String} svg
 	*/
-
 	this.exportSVG = function() {
 		return paper.project.exportSVG({asString:true});
 	}
+
 
 	/* 
 	* Adds text starting at the point clicked
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.drawText = function(data) {
 		var input = data.text;
 		var text = new paper.PointText(new paper.Point(data.startX, data.startY));
@@ -406,19 +404,20 @@ var PavementWrapper = function(canvas) {
 			
 		paper.view.draw();
 	}
+
 	
 	/*
 	* Adds an svg to the project
 	* @param {Object} data
 	* @return {null}
 	*/
-
 	this.importSVG = function(data) {
 		paper.project.clear();
 
 		paper.project.importSVG(data.svg);
 		paper.view.draw();
 	}
+
 
 	/**
 	* Finds all of the objects near a certain point where the mouse clicked
@@ -429,6 +428,7 @@ var PavementWrapper = function(canvas) {
 		var matchRectangle = new paper.Path.Rectangle(new paper.Point(point.x, point.y), new paper.Point(point.x+5, point.y+5));
 		return paper.project.getItems({overlapping: matchRectangle.bounds});
 	}
+
 
 	/**
 	* Finds the first Path element from a list of matches or returns the first match

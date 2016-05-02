@@ -1,3 +1,5 @@
+// ***** Drawing Stuff *****
+
 var ACTIVE_INDEX = {
 		PENCIL: 0,
 		CLOUD: 1,
@@ -70,11 +72,16 @@ var Canvas = React.createClass({
 
 	},
 
+
+
 	// ***** STATE EVENTS *****
 
 	setStrokeWidth: function(e) {
 		this.setState({strokeWidth:e.target.value});
 	},
+
+
+
 
 	// ***** EMITTING EVENTS *****
 
@@ -92,7 +99,7 @@ var Canvas = React.createClass({
 			data.strokeColor = colorPicked;
 			data.strokeWidth = this.state.strokeWidth;
 
-			// emiting the data
+			// emitting the data
 			this.emitEvent('drawPencil', data);
 		}.bind(this);
 
@@ -318,39 +325,6 @@ var Canvas = React.createClass({
 		this.emitEvent('clear', {});
 	},
 
-	// editItem: function(){
-	// 	this.setState({activeIndex: ACTIVE_INDEX.EDIT_ITEM});
-	// 	this.tool.activate();
-	// 	var data = {};
-
-	// 	this.tool.onMouseDown = function(event) {
-	// 		data._path = event.item;
-	// 		data._path.fullySelected = true;
-	// 		data.handle = null;
-	// 		var hitResult = data._path.hitTest(event.point, {handles:true, selected: true, segments:true, selectedSegments:true, tolerance: 20});
-	// 		if (hitResult) {
-	// 			if (hitResult.type == 'handle-in'){
-	// 				console.log('handlein');
-	// 				data.handle = hitResult.segment.handleIn;
-	// 			} else {
-	// 				console.log('handleout');
-	// 				data.handle = hitResult.segment.handleOut;
-	// 			};
-	// 		}
-	// 	}
-	// 	this.tool.onMouseDrag = function(event){
-	// 		if (data.handle){
-	// 			data.handle.x += event.delta.x;
-	// 			data.handle.y += event.delta.y;
-	// 		};
-	// 	}
-
-	// 	this.tool.onMouseUp = function(event){
-	// 		data._path.fullySelected = false;
-	// 	}
-
-	// 	this.emitEvent('editItem', {});
-	// },
 
 	select: function() {
 		this.setState({activeIndex:ACTIVE_INDEX.SELECT});
@@ -380,6 +354,7 @@ var Canvas = React.createClass({
 			this.emitEvent('move', data);
 		}.bind(this);
 	},
+
 
 
 	// ***** ADDITIONAL NON-COLLABORATIVE FUNCTIONALITY *****
@@ -422,6 +397,7 @@ var Canvas = React.createClass({
 	},
 
 
+
 	// ***** RECEIVING FUNCTIONALITY *****
 
 	/*
@@ -437,6 +413,8 @@ var Canvas = React.createClass({
 			colorPicked = input;
 		}
 	}, 
+
+
 
 	// ***** STATIC COLOR FUNCTIONALITY *****
 
@@ -459,6 +437,8 @@ var Canvas = React.createClass({
 		this.tool.activate();
 		colorPicked = "#FFFFFF"; 
 	},
+
+
 
 	// ***** SOCKET FUNCTIONALITY *****
 
@@ -509,20 +489,16 @@ var Canvas = React.createClass({
 						<li><Button setTool={this.usePrettyRectangle} active={this.state.activeIndex===ACTIVE_INDEX.PRETTY_RECTANGLE} tool={"Pretty Rectangles"} /></li>
 						<li><Button setTool={this.usePrettyEllipse} active={this.state.activeIndex===ACTIVE_INDEX.PRETTY_ELLIPSE} tool={"Pretty Ellipses"} /></li>
 						<li><Button setTool={this.useCircle} active={this.state.activeIndex===ACTIVE_INDEX.COOL_CIRCLE} tool={"Circle"} /></li>
-						
 						<li><Button setTool={this.pickHexColor} icon={"icon-palette"}  tool={"Color"} /></li>
 						<li><Button setTool={this.select} active={this.state.activeIndex===ACTIVE_INDEX.SELECT} tool={'Select & Move'} /></li>
-
 						<li><Button setTool={this.colorBlack} tool={"Black"} /></li>
 						<li><Button setTool={this.colorBlue} tool={"Blue"} /></li>
 						<li><Button setTool={this.colorRed} tool={"Red"} /></li>
-						<li><Button setTool={this.colorWhite} tool={"White"} /></li>
-						
+						<li><Button setTool={this.colorWhite} tool={"White"} /></li>	
 						<li><Button setTool={this.download} icon={'icon-download'} tool={"Download SVG"} /></li>
 						<li><Button setTool={this.clearCanvas} tool={"Clear Canvas"} /></li>
 						<li><Button input id ="svgFile" type ="file" name = "svgFile" setTool={this.sendSVG} icon={"icon-publish"} tool={'Import SVG'}/></li>
 						<li><input id="upload" type="file" name="upload" style={{visibility: 'hidden'}} setTool={this.sendSVG}/><br /></li>
-
 						<li><input type="range" value={this.state.strokeWidth} min="1" max="50" onChange={this.setStrokeWidth}/></li>
 						<li><span>Stroke Width: {this.state.strokeWidth}</span></li>
 					</ul>

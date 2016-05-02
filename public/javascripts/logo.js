@@ -1,7 +1,9 @@
-//module to display name of website
+// Module to display name of website
+
 var Logo = React.createClass({
+
 	render: function () {
-		var logout = (<p></p>);
+		var logout = (<span></span>);
 		var home = (<span></span>);
 
 		if (this.props.isLoggedIn) {
@@ -13,7 +15,7 @@ var Logo = React.createClass({
 		}
 		return (
 			<div className='header'>
-				<span className='pavement'>Pavement</span>
+				<a className='pavement' href='/'>Pavement</a>
 				{logout}
 				{home}
 			</div>

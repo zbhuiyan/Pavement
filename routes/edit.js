@@ -1,5 +1,9 @@
 var Edit = require('../models/editModel.js');
 
+/**
+ * edit.js contains getEdits which searches for edits based on the boardId 
+ */
+
 var editMethods = {};
 
 editMethods.getEdits = function(req, res) {
@@ -13,9 +17,5 @@ editMethods.getEdits = function(req, res) {
 		}
 	});
 };
-
-// THESE METHODS ARE BEING USED BY THE SERVER
-
-
 
 module.exports = editMethods;

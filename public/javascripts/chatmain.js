@@ -1,5 +1,4 @@
 var socket = io();
-
 var windowPathComponents = window.location.pathname.split('/');
 var boardId = windowPathComponents[windowPathComponents.length-1];
 
