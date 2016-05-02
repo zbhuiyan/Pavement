@@ -1,3 +1,7 @@
+/**
+ * chatmain.js contains code for rendering the board
+ */
+
 var socket = io();
 var windowPathComponents = window.location.pathname.split('/');
 var boardId = windowPathComponents[windowPathComponents.length-1];
