@@ -1,3 +1,7 @@
+/**
+ * user.js contains methods to get the current user and to search for a specific user
+ */
+ 
 var User = require('../models/userModel.js');
 
 userRoutes = {};
