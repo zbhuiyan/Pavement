@@ -2,6 +2,7 @@ var Chat = require('../models/chatModel.js');
 
 var chatMethods = {};
 
+// *** Method used by server ***
 chatMethods.getChat = function(req, res) {
 	var boardId = req.params.boardId;
 

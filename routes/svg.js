@@ -2,6 +2,7 @@ var SVG = require('../models/svgModel.js');
 
 var svgMethods = {};
 
+//*** Method used by server ***
 svgMethods.getSvg = function(req, res) {
 	var boardId = req.params.boardId;
 
