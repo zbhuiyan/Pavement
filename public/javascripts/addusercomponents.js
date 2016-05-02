@@ -37,7 +37,7 @@ var AddUser = React.createClass({
 			return (
 				<div id='users'>
 					<h1 className='addUser'>Add a User</h1>
-					<input type='text' onChange={this.handleChange} />
+					<input type='text' placeholder='username' onChange={this.handleChange} />
 					<UserList data={this.state.users} boardId={this.props.boardId} />
 				</div>
 			)
