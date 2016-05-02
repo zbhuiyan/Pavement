@@ -172,7 +172,6 @@ var Canvas = React.createClass({
 			data.x = event.middlePoint.x;
 			data.y = event.middlePoint.y;
 			data.radius = (data.x-data.y)/2;
-			// console.log(data.radius);
 			data.color = colorPicked;
 			this.emitEvent('drawCircle', data);
 		}.bind(this);

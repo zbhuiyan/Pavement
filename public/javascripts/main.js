@@ -11,11 +11,7 @@ var App = React.createClass({
         $.ajax({
             url: '/currentUser',
             success: function(data) {
-                // if (data !== null) {
-                	console.log('user:');
-                	console.log(data);
                     this.setState({user: data});   
-                // }
             }.bind(this)
         });
     },
