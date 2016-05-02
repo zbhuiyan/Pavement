@@ -70,9 +70,11 @@ var PavementWrapper = function(canvas) {
 	* @return {null}
 	*/
 
-	this.startProjectFromSVG = function(svg) {
+	this.startProjectFromSVG = function(svg, callback) {
 		paper.project.importSVG(svg);
 		paper.view.draw();
+
+		callback;
 	}
 
 	/**

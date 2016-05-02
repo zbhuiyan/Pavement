@@ -46,8 +46,7 @@ var Canvas = React.createClass({
 		$.ajax({
 			url: '/svg/' + this.props.boardId,
 			success: function(result) {
-				pavement.startProjectFromSVG(result.data);
-				this.getLatestEdits();
+				pavement.startProjectFromSVG(result.data, this.getLatestEdits());
 			}.bind(this)
 		});
 	},
@@ -58,7 +57,7 @@ var Canvas = React.createClass({
 			success: function(result) {
 				console.log(result);
 				for(var index = 0; index < result.length; index++) {
-					pavement.applyEdit(result[index]);
+					pavement.applyEdit(result[index].data);
 				}
 			}.bind(this)
 		});
