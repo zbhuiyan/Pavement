@@ -7,7 +7,7 @@ var App = React.createClass({
 	},
 
 	componentWillMount: function () {
-		//check if the user is logged in or not by making a get request to /user
+		// Check if the user is logged in or not by making a get request to /user
         $.ajax({
             url: '/currentUser',
             success: function(data) {
