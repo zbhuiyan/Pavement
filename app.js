@@ -15,9 +15,9 @@ var paper = require('paper');
 var auth = require('./auth.js');
 var hasher = require('./passport/hasher.js');
 var socketHelper = require('./functions/sockethelper.js');
+
 // var jobs = require('./functions/redisjobs.js');
 var initPassport = require('./passport/initPassport.js');
-var pavementWrapper = require('./public/javascripts/pavementpaper.js');
 var redisManager = require('./redis/redismanager.js');
 
 // ***** Server requirements and configuration setup *****
