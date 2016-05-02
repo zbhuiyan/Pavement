@@ -19,9 +19,4 @@ editMethods.getEdits = function(req, res) {
 	});
 };
 
-<<<<<<< HEAD
-
 module.exports = editMethods;
-=======
-module.exports = editMethods;
->>>>>>> d3bdc3bbdb0043356b93d3638239a06e585e4af4
