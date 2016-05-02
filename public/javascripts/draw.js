@@ -48,10 +48,22 @@ var Canvas = React.createClass({
 		$.ajax({
 			url: '/svg/' + this.props.boardId,
 			success: function(result) {
-				pavement.startProjectFromSVG (result.data);
-			}
+				pavement.startProjectFromSVG(result.data, this.getLatestEdits());
+			}.bind(this)
 		});
-	}, 
+	},
+
+	getLatestEdits: function() {
+		$.ajax({
+			url: '/edits/' + this.props.boardId,
+			success: function(result) {
+				console.log(result);
+				for(var index = 0; index < result.length; index++) {
+					pavement.applyEdit(result[index].data);
+				}
+			}.bind(this)
+		});
+	},
 
 	onMouseDown: function (event) {
 		var data = {};
@@ -439,6 +451,7 @@ var Canvas = React.createClass({
 
 	setupReceiver: function(data) {
 		// These are all of the receiver functions
+
 		this.props.socket.on('setPath', pavement.setPath);
 		this.props.socket.on('drawPencil', pavement.drawPencil);
 		this.props.socket.on('drawText', pavement.drawText);
