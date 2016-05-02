@@ -14,7 +14,7 @@ var App = React.createClass({
                 // if (data !== null) {
                 	console.log('user:');
                 	console.log(data);
-                    this.setState({user: data});    //TODO: FIX THIS COMMENT store the user and begin getting the weather
+                    this.setState({user: data});   
                 // }
             }.bind(this)
         });
