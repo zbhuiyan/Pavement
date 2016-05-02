@@ -1,4 +1,20 @@
-// ***** All Board Components *****
+/**
+ * boardcomponents.js contains the following board list components: 
+ * - board components:
+ * -- getUser
+ * -- getPrivateBoards
+ * -- getPublicBoards
+ * -- handleBoardSubmit
+ * -- handleBoardDelete
+ * - board list
+ * - board element components: 
+ * -- handleClick
+ * -- handleDelete
+ * - create board form components:
+ * -- handleNameChange
+ * -- handlePublicChange
+ * -- handleSubmit
+ */
 
 var BoardListContainer = React.createClass({
 	displayName:'BoardListContainer',
@@ -242,7 +258,6 @@ var CreateBoardForm = React.createClass({
 			</div>
 		);
 	}
-
 });
 
 window.BoardListContainer = BoardListContainer;
