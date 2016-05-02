@@ -1,4 +1,4 @@
-//Parent client-side component
+// Parent client-side component
 
 var App = React.createClass({
 
@@ -7,20 +7,21 @@ var App = React.createClass({
 	},
 
 	componentWillMount: function () {
-		//check if the user is logged in or not by making a get request to /user
-        $.ajax({
-            url: '/currentUser',
-            success: function(data) {
-                // if (data !== null) {
-                	console.log('user:');
-                	console.log(data);
-                    this.setState({user: data});   
-                // }
-            }.bind(this)
-        });
-    },
+		// Check if the user is logged in or not by making a get request to /user
+	        $.ajax({
+	            url: '/currentUser',
+	            success: function(data) {
+	                // if (data !== null) {
+	                	console.log('user:');
+	                	console.log(data);
+	                    this.setState({user: data});   
+	                // }
+	            }.bind(this)
+	        });
+    	},
 
     render: function () {
+    	// Rendered view based on whether user is logged in or not
         var loggedIn = false;
         if (this.state.user) {
         	var content = (
