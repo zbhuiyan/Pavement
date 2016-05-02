@@ -2,7 +2,6 @@ var redis = require('redis');
 var nr = require('node-resque');
 var url = require('url');
 
-var jobs = require('./redisjobs.js');
 var queue;
 
 var methods = {}

@@ -9,7 +9,6 @@ var passport = require('passport');
 var redis = require('redis');
 var nr = require('node-resque');
 var expressSession = require('express-session');
-var paper = require('paper');
 
 // ***** Pavement functionality *****
 var auth = require('./auth.js');
