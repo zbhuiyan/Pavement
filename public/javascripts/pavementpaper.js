@@ -1,3 +1,8 @@
+/**
+ * pavementpaper.js contains all the paperjs tool/functionality methods with an 'applyEdit' method to determine which 
+ * tool/functionality method to use
+ */
+
 
 if(typeof require !== 'undefined') {
 	var paper = require('paper');
@@ -138,7 +143,6 @@ var PavementWrapper = function(canvas) {
 	}
 
 
-
 	/**
 	* Draws a rectangle at the cursor location on click
 	* @param {Object} data
@@ -180,7 +184,7 @@ var PavementWrapper = function(canvas) {
 		var color = data.color;
 		var size = parseInt(data.size);
 
-		// create the object
+		// Create the object
 		if(typeof Path !== 'undefined') {
 			var ellipse = new Shape.Ellipse({
 				point: [x,y],
@@ -207,19 +211,18 @@ var PavementWrapper = function(canvas) {
 	* @return {null}
 	*/
 	this.drawCircle = function(data) {
-		// unpack the data
+		// Unpack the data
 		var x = data.x;
 		var y = data.y;
 		var radius = data.radius;
 		var color = data.color;
 
-		// create the object
+		// Create the object
 		var circle = new paper.Path.Circle(new paper.Point(x,y), radius);
 	    circle.strokeColor = new paper.Color(color);
 
 	    // Refresh the view, so we always get an update, even if the tab is not in focus
 	    paper.view.draw();
-		
 	}
 
 
@@ -229,13 +232,13 @@ var PavementWrapper = function(canvas) {
 	* @return {null}
 	*/
 	this.drawPrettyCircle = function(data) {
-		// unpack the data
+		// Unpack the data
 		var x = data.x;
 		var y = data.y;
 		var radius = data.radius;
 		var color = data.color;
 
-		// create the object
+		// Create the object
 		var circle = new paper.Path.Circle(new paper.Point(x, y), radius);
 	    circle.fillColor = new paper.Color(color.red, color.green, color.blue, color.alpha);
 
@@ -249,12 +252,12 @@ var PavementWrapper = function(canvas) {
 	* @return {null}
 	*/
 	this.drawPrettyRectangle = function(data) {
-		// unpack the data
+		// Unpack the data
 		var x = data.x;
 		var y = data.y;
 		var color = data.color;
 
-		// create the object
+		// Create the object
 		var rectangle = new paper.Rectangle(new paper.Point(x, y), new paper.Point(x+60,y+80));
 		var path = new paper.Path.Rectangle(rectangle);
 	    path.fillColor = new paper.Color(color.green, color.red, color.blue, color.alpha);
@@ -269,21 +272,19 @@ var PavementWrapper = function(canvas) {
 	* @return {null}
 	*/
 	this.drawPrettyEllipses = function(data) {
-		// unpack the data
+		// Unpack the data
 		var x = data.x;
 		var y = data.y;
 		var color = data.color;
 
-		// create the object
+		// Create the object
 		var ellipse = new paper.Shape.Ellipse({
 			point: [x,y],
 			size: [180,60],
 			fillColor: new paper.Color(color.green, color.red, color.blue, color.alpha)
 		});
-
 		paper.view.draw();
 	}
-
 
 
 	/**
@@ -297,7 +298,7 @@ var PavementWrapper = function(canvas) {
 		}
 		paper.view.draw();
 	}
-
+	
 
 	/**
 	* Selects an item
@@ -307,7 +308,7 @@ var PavementWrapper = function(canvas) {
 	this.select = function(data){
 		var matches = this.matches({x:data.oldPoint[1], y:data.oldPoint[2]});
 
-		// deselect previous move object and select new one
+		// Deselect previous move object and select new one
 		if(moveObjects[data.id] !== undefined) {
 			moveObjects[data.id].selected = false;
 			moveObjects[data.id] = undefined;
@@ -317,8 +318,7 @@ var PavementWrapper = function(canvas) {
 		moveObjects[data.id].selected = true;
 
 		paper.view.draw();
-
-
+		
 	}.bind(this)
 
 
@@ -351,12 +351,12 @@ var PavementWrapper = function(canvas) {
 	* @return {null}
 	*/
 	this.erase = function(data) {
-		// set up path object
+		// Set up path object
 		paths[data.id].strokeWidth = 30;
 		paths[data.id].strokeColor = 'black';
 		paths[data.id].blendMode = 'destination-out';
 
-		// add the point
+		// Add the point
 		paths[data.id].add({x:data.toPoint[1], y:data.toPoint[2]});
 
 		paper.view.draw();

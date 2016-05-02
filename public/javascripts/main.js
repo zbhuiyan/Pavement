@@ -1,4 +1,4 @@
-//Parent client-side component
+// Parent client-side component
 
 var App = React.createClass({
 
@@ -11,16 +11,13 @@ var App = React.createClass({
         $.ajax({
             url: '/currentUser',
             success: function(data) {
-                // if (data !== null) {
-                	console.log('user:');
-                	console.log(data);
-                    this.setState({user: data});   
-                // }
+                this.setState({user: data});   
             }.bind(this)
         });
     },
 
     render: function () {
+    	// Rendered view based on whether user is logged in or not
         var loggedIn = false;
         if (this.state.user) {
         	var content = (

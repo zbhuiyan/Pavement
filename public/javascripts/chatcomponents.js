@@ -17,7 +17,6 @@ var ChatBox = React.createClass({displayName:'ChatBox',
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.log(xhr);
-				//console.log('../messages/' + this.state.boardId, status, err.toString());
 			}.bind(this)
 		});
 	},

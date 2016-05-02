@@ -5,6 +5,7 @@ var Edit = require('../editModel.js');
 
 var editMethods = {};
 
+//*** Method used by server ***
 editMethods.getEdits = function(req, res) {
 	var boardId = req.params.boardId;
 

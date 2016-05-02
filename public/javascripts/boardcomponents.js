@@ -13,9 +13,7 @@ var BoardListContainer = React.createClass({
 		$.ajax({
             url: '/currentUser',
             success: function(data) {
-                // if (data !== null) {
-                    this.setState({user: data});
-                // }
+                this.setState({user: data});
             }.bind(this)
         });
 	},
