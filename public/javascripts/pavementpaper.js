@@ -3,7 +3,6 @@
  * tool/functionality method to use
  */
 
-
 if(typeof require !== 'undefined') {
 	var paper = require('paper');
 }
