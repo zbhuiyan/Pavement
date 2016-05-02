@@ -3,7 +3,7 @@
 var Logo = React.createClass({
 
 	render: function () {
-		var logout = (<p></p>);
+		var logout = (<span></span>);
 		var home = (<span></span>);
 
 		if (this.props.isLoggedIn) {

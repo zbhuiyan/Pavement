@@ -43,8 +43,7 @@ var AddUser = React.createClass({
 			)
 		} else {
 			return (
-				<div id='users'>
-					Enjoy Pavement!
+				<div>
 				</div>
 			)
 		}

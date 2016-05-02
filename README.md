@@ -24,6 +24,9 @@ In terms of drawing functionalities, the tools/functionalities available include
 * Import SVG
 * Stroke Width (applies for pencil and cloud)
 
+### Technologies Used
+In addition to plain Javascript, HTML, and CSS, Pavement also utilizes Paper.js (drawing framework), Socket.io (real-time framework), and Redis (ds store).
+
 
 ### Project Schedule
 Week # | Date | Objective
