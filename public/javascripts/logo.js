@@ -1,4 +1,6 @@
-// Module to display name of website
+/**
+ * logo.js contains code for the header of the page
+ */
 
 var Logo = React.createClass({
 

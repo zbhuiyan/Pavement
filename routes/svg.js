@@ -1,7 +1,12 @@
+/**
+ * svg.js searches for the svgs associated with the boardId and returns the latest one
+ */
+ 
 var SVG = require('../models/svgModel.js');
 
 var svgMethods = {};
 
+//*** Method used by server ***
 svgMethods.getSvg = function(req, res) {
 	var boardId = req.params.boardId;
 

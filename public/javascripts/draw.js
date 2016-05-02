@@ -1,5 +1,6 @@
 // ***** Drawing Stuff *****
 
+// active indicies for which toolbar button has been selected
 var ACTIVE_INDEX = {
 		PENCIL: 0,
 		CLOUD: 1,
@@ -184,7 +185,6 @@ var Canvas = React.createClass({
 			data.x = event.middlePoint.x;
 			data.y = event.middlePoint.y;
 			data.radius = (data.x-data.y)/2;
-			// console.log(data.radius);
 			data.color = colorPicked;
 			this.emitEvent('drawCircle', data);
 		}.bind(this);

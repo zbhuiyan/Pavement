@@ -124,24 +124,26 @@ boardRoutes.deleteBoard = function(req,res) {
 	var board = req.params;
 	var removedAll = [];
 
-	var confirmRemoved = function(index, res) {
-		removedAll[index] = true;
-
-		if(removedAll.length === 3 && removedAll.indexOf(null) === -1) {
-			res.status(200).json(removedAll);
-		} 
-	}
-
 	Board.remove({_id: board.boardId, owner: board.owner}, function (err) {
         if(!err) {
         	Edit.remove({boardId:board.boardId}, function(err) {
-        		confirmRemoved(0, res);
-        	});
-        	SVG.remove({boardId:board.boardId}, function(err) {
-        		confirmRemoved(1, res);
-        	});
-        	Chat.remove({boardId:board.boardId}, function(err) {
-        		confirmRemoved(2, res); 
+        		if(!err) {
+					SVG.remove({boardId:board.boardId}, function(err) {
+						if(!err) {
+				        	Chat.remove({boardId:board.boardId}, function(err) {
+				        		if(!err) {
+				        			res.status(204).send('removed all board information');
+				        		} else {
+				        			res.status(500).send('error removing chats');
+				        		}
+				        	});
+						} else {
+							res.status(500).send('error removing associated svgs');
+						}
+					});
+        		} else {
+        			res.status(500).send('error removing edits');
+        		}
         	});
         } else {
         	res.status(500).send('error removing board');

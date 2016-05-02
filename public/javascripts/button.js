@@ -1,3 +1,4 @@
+// ***** Toolbar Button Class *****
 var Button = React.createClass({
 	render: function () {
 

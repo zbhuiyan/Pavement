@@ -16,7 +16,7 @@ In terms of drawing functionalities, the tools/functionalities available include
 * Pretty Circles
 * Pretty Rectangles
 * Pretty Ellipses
-* Circle (where acceleration of mouse affects the size)
+* Circle (where location of mouse affects the size)
 * Color Picking (using hex values or specified colors i.e. black, blue, red, white)
 * Select & Move
 * Download SVG
@@ -25,7 +25,9 @@ In terms of drawing functionalities, the tools/functionalities available include
 * Stroke Width (applies for pencil and cloud)
 
 ### Technologies Used
-In addition to plain Javascript, HTML, and CSS, Pavement also utilizes Paper.js (drawing framework), Socket.io (real-time framework), and Redis (ds store).
+In addition to plain Javascript, HTML, and CSS, Pavement also utilizes Paper.js (drawing framework), Socket.io (real-time framework), and Redis (ds store). *** For our app, we recommend using Google Chrome as your internet browser.
+
+
 
 
 ### Project Schedule

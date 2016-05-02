@@ -1,3 +1,5 @@
+// ***** Login and Signup Forms *****
+
 var FormViewControl = React.createClass({
 	displayName:'FormViewControl',
 	render: function() {

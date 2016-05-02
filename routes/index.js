@@ -1,3 +1,7 @@
+/**
+ * index.js contains methods for routing to home, drawing, and dashboard
+ */
+
 var path = require('path');
 
 var routes = {};
@@ -15,4 +19,3 @@ routes.dashboard = function(req, res) {
 }
 
 module.exports = routes;
-
