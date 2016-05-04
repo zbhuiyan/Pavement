@@ -71,6 +71,7 @@ app.get('/logout', function(req, res) {
 
 app.post('/login', passport.authenticate('signin', {
 	successRedirect:'/',
+	// both to "/"?
 	failureRedirect:'/'
 }));
 
@@ -89,6 +90,12 @@ app.put('/addUser/:boardId/:userId', board.addUser);
 
 // ***** Socket setup ***** 
 
+// You should move your socket logic away from the app.js architecture
+// In addition to that, something with the sockets seems to me a bit funky. After an edit
+// change on an svg, if I go back a page, the drawing/text on the svg is lost..
+
+// Really appreciate the use of your sockethelper.js - made a lot of the things you do clear yet you have
+// not added any commenting and documentation which makes it hard to perceive with fastness what is happening
 var openConnections = {};
 
 io.on('connection', function(socket) {
@@ -133,6 +140,7 @@ io.on('connection', function(socket) {
 	});
 
 	socket.on('disconnect', function() {
+		// Log statements better not be present in production code
 		console.log('disconnecting...');
 
 		if(openConnections[socket.id] !== undefined) {
