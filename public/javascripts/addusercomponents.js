@@ -11,8 +11,9 @@
  * - UserCurrentElement (remove users from private boards)
  * -- handleClick
  */
- 
+
 //Add user to the board unless on a public board
+// It might be nice to specify what kind of element each of these components are, are they buttons, lists, forms?
 var AddUser = React.createClass({
 	displayName:'AddUser',
 	getInitialState: function() {
@@ -103,7 +104,8 @@ var UserList = React.createClass({
 	render: function() {
 		var users = this.state.currentUsers;
 
-		var addNodes = this.props.data.map(function(element) { 
+        // nice use of fuctional tools (map)
+		var addNodes = this.props.data.map(function(element) {
 			if(users.indexOf(element.username) === -1) {
 				return (
 					<UserAddElement boardId={this.props.boardId} username={element.username} key={element._id} handle={this.handleAdd} />
@@ -111,7 +113,7 @@ var UserList = React.createClass({
 			}
 		}.bind(this));
 
-		
+
 		var currentNodes = this.state.currentUsers.map(function(element) {
 			return (
 				<UserCurrentElement boardId={this.props.boardId} username={element} key={element} handle={this.handleRemove} />

@@ -87,7 +87,7 @@ app.delete('/removeUser/:boardId/:userId', board.removeUser);
 
 app.put('/addUser/:boardId/:userId', board.addUser);
 
-// ***** Socket setup ***** 
+// ***** Socket setup *****
 
 var openConnections = {};
 
@@ -111,6 +111,7 @@ io.on('connection', function(socket) {
 			msg:message,
 			_id:hasher(message+socketInfo.userId)};
 
+        // might want to remove debugging logs
 		console.log('socketConnected', socketInfo);
 
 		//socket.to(socketInfo.boardId).emit('send_message', sendMsg);
