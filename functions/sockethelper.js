@@ -1,5 +1,6 @@
+// might have a better name for this directory, maybe utilities
 /**
- * sockethelper.js contains the following methods: 
+ * sockethelper.js contains the following methods:
  * - addMessage
  * - getEdits
  * - addEdit
@@ -53,6 +54,7 @@ socketFunctions.getEdits = function(boardId, callback) {
 };
 
 socketFunctions.addEdit = function(boardId, data) {
+    // might want to use Edit.create()
 	newEdit = new Edit({
 		boardId:boardId,
 		data:data,

@@ -1,6 +1,6 @@
 /**
- * chatcomponents.js contains all the chat components (list, form, message) 
- * and has methods for setting up the chat, retrieving old messages, interfacing 
+ * chatcomponents.js contains all the chat components (list, form, message)
+ * and has methods for setting up the chat, retrieving old messages, interfacing
  * with Socket, and rendering
  */
 
@@ -81,8 +81,8 @@ var ChatForm = React.createClass({displayName:'ChatForm',
 	render:function() {
 		return (
 			<form className='chatForm' onSubmit={this.handleSubmit} >
-				<input type='text' 
-				placeholder='message' 
+				<input type='text'
+				placeholder='message'
 				value={this.state.message}
 				onChange={this.handleMessageChange} />
 
